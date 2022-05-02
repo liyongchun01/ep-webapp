@@ -10,6 +10,7 @@ import ProForm, {
 } from "@ant-design/pro-form";
 import { SnippetsOutlined, DeleteOutlined } from '@ant-design/icons';
 import { Button, Card, message } from "antd";
+import { selectOptions } from "@/configuration";
 import moment from 'moment';
 import axios from "axios";
 
@@ -30,13 +31,10 @@ export default ({ options, userId, modifyField, formRef, anyId, fetchDetail, set
     const submitData = async (data) => {
         await axios.post(`/api/upload/${options === "create" ? "add" : "update"}`, {
             ...data
-        }).then((res) => {
-            if (options === "modified") {
-                fetchDetail(anyId)
-            }
-        }).catch((err) => {
-            console.log(err)
         })
+        if (options === "modified") {
+            fetchDetail(anyId)
+        }
     }
 
     // 经纬度转换
@@ -61,6 +59,7 @@ export default ({ options, userId, modifyField, formRef, anyId, fetchDetail, set
 
     }
 
+    // 经纬度数组转换
     const addressArrResolution = async (address) => {
         for (let { name } of address) {
             const { data } = await axios.get(`/ws/geocoder/v1/`, {
@@ -75,12 +74,11 @@ export default ({ options, userId, modifyField, formRef, anyId, fetchDetail, set
     }
 
     const onFinish = async (val) => {
-        console.log(val)
         let postData = {
             ...val,
             uploadTime: formattime,
             type: selectKey,
-            userId: userId.id,
+            userId: userId?.id,
             typeId: anyId?.typeId,
             orderId: anyId?.orderId
         }
@@ -98,12 +96,6 @@ export default ({ options, userId, modifyField, formRef, anyId, fetchDetail, set
             postData.jingdu = getAddress[0]?.lng
             postData.weidu = getAddress[0]?.lat
             delete postData.dateRange
-            submitData(postData)
-            setGetAddress([])
-            formRef.current?.reload()
-            setGetAddress([])
-            setSelectKey(1)
-            return true
         } else if (val.type === 3) {
             await addressResolution(val.gelidianPosition)
             postData.enddate = val?.dateRange.split(" ")[0].toString()
@@ -111,12 +103,6 @@ export default ({ options, userId, modifyField, formRef, anyId, fetchDetail, set
             postData.jingdu = getAddress[0]?.lng
             postData.weidu = getAddress[0]?.lat
             delete postData.dateRange
-            submitData(postData)
-            setGetAddress([])
-            formRef.current?.reload()
-            setGetAddress([])
-            setSelectKey(1)
-            return true
         } else if (val.type === 4) {
             await addressArrResolution(val.guijiArray)
             postData.guiji = val.guijiArray.map((item, index) => ({
@@ -127,15 +113,6 @@ export default ({ options, userId, modifyField, formRef, anyId, fetchDetail, set
                 weidu: getAddress[index]?.lat,
             }))
             delete postData.guijiArray
-            setDetailVisible(false)
-            submitData(postData)
-            setGetAddress([])
-            formRef.current?.reload()
-            setSelectKey(1)
-            return true
-        }
-
-        if (modifyField === 4) {
             setDetailVisible(false)
         }
         submitData(postData)
@@ -162,24 +139,7 @@ export default ({ options, userId, modifyField, formRef, anyId, fetchDetail, set
                 }}
             >
                 <ProFormSelect
-                    request={async () => [
-                        {
-                            value: 1,
-                            label: '核酸检测',
-                        },
-                        {
-                            value: 2,
-                            label: '疫苗接种',
-                        },
-                        {
-                            value: 3,
-                            label: '隔离地点',
-                        },
-                        {
-                            value: 4,
-                            label: '轨迹上传',
-                        },
-                    ]}
+                    request={async () => selectOptions}
                     width="md"
                     name="type"
                     label="上传类型: "
@@ -206,7 +166,6 @@ export default ({ options, userId, modifyField, formRef, anyId, fetchDetail, set
                             placeholder="请输入核酸地点"
                             width="md"
                             initialValue={modifyField?.hesuanPosition}
-                        // onBlur={(e) => addressChange(e)}
                         />
                         <ProFormText
                             name="renshu"
@@ -240,7 +199,6 @@ export default ({ options, userId, modifyField, formRef, anyId, fetchDetail, set
                             name="yimiaoPosition"
                             label="接种地点（县/区、镇/街道）: "
                             placeholder="请输入疫苗接种地点"
-                            // onBlur={(e) => addressChange(e)}
                             width="md"
                             initialValue={modifyField?.yimiaoPosition}
                         />
@@ -290,7 +248,6 @@ export default ({ options, userId, modifyField, formRef, anyId, fetchDetail, set
                             name="gelidianPosition"
                             label="隔离地点（县/区、镇/街道）: "
                             placeholder="请输入隔离地点"
-                            // onBlur={(e) => addressChange(e)}
                             width="md"
                             initialValue={modifyField?.gelidianPosition}
                         />
@@ -369,7 +326,6 @@ export default ({ options, userId, modifyField, formRef, anyId, fetchDetail, set
                                         name="name"
                                         label="地点录入（县/区、镇/街道）"
                                         width="sm"
-                                    // onBlur={(e) => addressChange(e)}
                                     />
                                     <ProFormDateTimeRangePicker
                                         name="datetime"

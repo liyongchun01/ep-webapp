@@ -2,28 +2,11 @@ import React, { useState } from 'react'
 import { PageContainer } from '@ant-design/pro-layout';
 import { Card } from 'antd';
 import MainMap from '@/components/MainMap';
+import { tabList } from '@/configuration';
 
 //核酸检测页面
 export default () => {
     const [key, setKey] = useState(1)
-    const tabList = [
-        {
-            key: 1,
-            tab: '核酸检测'
-        },
-        {
-            key: 2,
-            tab: '疫苗接种'
-        },
-        {
-            key: 3,
-            tab: '隔离地点',
-        },
-        {
-            key: 4,
-            tab: '轨迹查询'
-        }
-    ]
 
     const onTabChange = (key) => {
         setKey(key)

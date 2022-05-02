@@ -3,13 +3,6 @@ import * as mapUtils from '@/components/TMapGL'
 import axios from 'axios';
 import markerLogo from './img/markerLogo.png'
 
-const searchObj = {
-    1: "核酸",
-    2: "疫苗",
-    3: "隔离",
-    4: "轨迹"
-}
-
 export default ({ lngLat, type }) => {
     const mapId = useRef() //  地图实例
 
@@ -17,20 +10,8 @@ export default ({ lngLat, type }) => {
         mainMap()
     }, [type])
 
-    // 节流函数
-    const throttle = (fn, time) => {
-        let lasttime = 0;
-        return () => {
-            let nowtime = Date.now();
-            if (nowtime - lasttime > time) {
-                fn.call(this);
-                lasttime = nowtime;
-            }
-        }
-    }
-
-    // 防抖开始
-    const debounce = (fn, delay) => { // fn -> showTop函数; delay延时时间
+    // 防抖函数
+    const debounce = (fn, delay) => {
         let t = null;
         return function () {
             if (t !== null) {
@@ -105,7 +86,6 @@ export default ({ lngLat, type }) => {
 
                 locate();
                 const infoWindowList = Array(10);
-                // const search = new TMap.service.Search({ pageSize: 10 })
 
                 const getLocationList = async ({ dbWeiDu, dbJingDu, xnWeiDu, xnJingDu }) => {
                     await axios.get(`http://localhost:8083/map/index`, {
@@ -116,7 +96,6 @@ export default ({ lngLat, type }) => {
                             xnJingDu
                         }
                     }).then(({ data }) => {
-                        // console.log(data)
                         data[type]?.forEach((item, index) => {
                             console.log(item)
                             const infoContent = {
