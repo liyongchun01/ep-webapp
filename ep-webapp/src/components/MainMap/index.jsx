@@ -3,7 +3,7 @@ import * as mapUtils from '@/components/TMapGL'
 import axios from 'axios';
 import markerLogo from './img/markerLogo.png'
 
-export default ({ lngLat, type }) => {
+export default ({ type }) => {
     const mapId = useRef() //  地图实例
 
     useEffect(() => {
@@ -47,13 +47,7 @@ export default ({ lngLat, type }) => {
                             //焦点在图片中的像素位置，一般大头针类似形式的图片以针尖位置做为焦点，圆形点以圆心位置为焦点
                             "anchor": { x: 16, y: 32 }
                         })
-                    },
-                    geometries: lngLat[type]?.map((item) => (
-                        {
-                            id: item.id,
-                            position: formatLatLng(item.x, item.y)
-                        }
-                    )),
+                    }
                 });
 
                 // 定位
@@ -97,7 +91,6 @@ export default ({ lngLat, type }) => {
                         }
                     }).then(({ data }) => {
                         data[type]?.forEach((item, index) => {
-                            console.log(item)
                             const infoContent = {
                                 1: {
                                     content: `  核酸检测信息 <br/> <h3>${item.hesuanPosition}</h3> ${item.hesuanName} <br/> 工作时间：${item.starttime} - ${item.endtime} <br /> 最新时间: ${item.area} 人数: ${item.renshu}`,
@@ -125,7 +118,6 @@ export default ({ lngLat, type }) => {
                                 id: String(index), // 点标注数据数组
                                 position: formatLatLng(item.weidu, item.jindu),
                             });
-                            console.log(type)
                             marker.updateGeometries(geometries); // 绘制地点标注
                             marker.on('click', (e) => {
                                 let a = e.geometry.id
