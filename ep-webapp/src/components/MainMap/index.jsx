@@ -1,9 +1,11 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as mapUtils from '@/components/TMapGL'
 import axios from 'axios';
 import markerLogo from './img/markerLogo.png'
+import { Spin } from 'antd';
 
 export default ({ type }) => {
+    const [isLoading, setIsloading] = useState(true)
     const mapId = useRef() //  地图实例
 
     useEffect(() => {
@@ -127,7 +129,10 @@ export default ({ type }) => {
                                 infoWindowList[Number(a)]?.open();
                             }); // 点击标注显示信息窗体
                         });
-                    });
+                        setIsloading(false)
+                    }).catch((err) => {
+                        setIsloading(false)
+                    })
                 }
 
                 map.on("bounds_changed", debounce(() => {
@@ -150,12 +155,14 @@ export default ({ type }) => {
 
     return (
         <>
-            <div id='container'></div>
-            <div id="panel" style={{ display: 'none' }}>
-                <p><input type='text' id='ipInput' placeholder="输入IP地址(默认为请求端的IP)" size='30' /><input type='button' id='locate'
-                    value='搜索所在位置' /></p>
-                <p id="ipLocationResult"></p>
-            </div>
+            <Spin spinning={isLoading}>
+                <div id='container'></div>
+                <div id="panel" style={{ display: 'none' }}>
+                    <p><input type='text' id='ipInput' placeholder="输入IP地址(默认为请求端的IP)" size='30' /><input type='button' id='locate'
+                        value='搜索所在位置' /></p>
+                    <p id="ipLocationResult"></p>
+                </div>
+            </Spin>
         </>
     );
 };

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Alert, Button } from 'antd';
+import { Card, Alert, Button, Skeleton } from 'antd';
 import MainMap from '@/components/MainMap';
 import { tabList } from '@/configuration';
 import { TextLoop } from 'react-text-loop-next';
@@ -12,12 +12,12 @@ export default () => {
     const [newList, setNewList] = useState([])
 
     const getNewsList = async () => {
-        const { data } = await axios.get("http://api.tianapi.com/ncov/index", {
+        const { data: newone } = await axios.get("http://api.tianapi.com/ncov/index", {
             params: {
                 key: "d334721cf6eba2d619a5855420ec352c"
             }
         })
-        setNewList(data?.newslist[0].news)
+        setNewList(newone?.newslist[0].news)
     }
 
     useEffect(() => {
@@ -45,6 +45,10 @@ export default () => {
                         }
                     />
                 </>
+            )
+        } else {
+            return (
+                <Skeleton.Input size='large' active block loading={newList.length !== 0} style={{ height: 48 }} />
             )
         }
     }
