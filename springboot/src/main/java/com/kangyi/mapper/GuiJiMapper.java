@@ -29,4 +29,6 @@ public interface GuiJiMapper {
     int updateByPrimaryKey(GuiJi record);
 
     List<GuiJi> selectByOrderStatusAndExample(GuiJiExample guiJiExample);
+
+    int insertList(List<GuiJi> listGuiji);
 }

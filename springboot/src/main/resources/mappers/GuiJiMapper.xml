@@ -124,8 +124,28 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
+
+
+  <insert id="insertList" parameterType="java.util.List">
+    replace into t_guiji (guiji_id, area, starttime,
+    endtime, enddate, weidu,
+    jindu, guiji_position, user_id,
+    order_id)
+    values
+    <foreach collection="list" item="i" index="index" separator="," >
+      (#{i.guijiId,jdbcType=BIGINT}, #{i.area,jdbcType=VARCHAR}, #{i.starttime,jdbcType=TIMESTAMP},
+      #{i.endtime,jdbcType=TIMESTAMP}, #{i.enddate,jdbcType=TIMESTAMP}, #{i.weidu,jdbcType=DECIMAL},
+      #{i.jindu,jdbcType=DECIMAL}, #{i.guijiPosition,jdbcType=VARCHAR}, #{i.userId,jdbcType=BIGINT},
+      #{i.orderId,jdbcType=BIGINT})
+    </foreach>
+
+  </insert>
+
+
+
+
   <insert id="insert" parameterType="com.kangyi.pojo.GuiJi">
-    insert into t_guiji (guiji_id, area, starttime, 
+    replace into t_guiji (guiji_id, area, starttime,
       endtime, enddate, jindu, 
       weidu, guiji_position, user_id, 
       order_id)

@@ -58,10 +58,10 @@
                 <!--<table tableName="t_permission" domainObjectName="Permission" ></table>-->
                 <!--<table tableName="t_role_permission" domainObjectName="RolePermission" ></table>-->
                 <!--<table tableName="t_log" domainObjectName="Log" ></table>-->
-                <table tableName="t_hesuan" domainObjectName="HeSuan" ></table>
-                <table tableName="t_yimiao" domainObjectName="YiMiao" ></table>
+                <!--<table tableName="t_hesuan" domainObjectName="HeSuan" ></table>-->
+                <!--<table tableName="t_quartz_bean" domainObjectName="QuartzBean" ></table>-->
                 <!--<table tableName="t_order" domainObjectName="Order" ></table>-->
-                <!--<table tableName="t_" domainObjectName="GeLi" ></table>-->
+                <table tableName="t_order123" domainObjectName="Order123" ></table>
                 <!--<table tableName="t_" domainObjectName="GeLi" ></table>-->
     </context>
 </generatorConfiguration>

@@ -12,6 +12,8 @@ public interface OrderService {
 
     long insertOrder(Long userId, int type);
 
+    long insertOrder(Long userId, int type,int status,String ydata);
+
     int updateTypeIdOrderById(long orderId, long typeId);
 
     int updateAllOrderById(Order order);

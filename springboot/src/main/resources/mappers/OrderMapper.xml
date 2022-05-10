@@ -114,7 +114,7 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
 
-    insert into t_order (order_id, user_id, type_id,
+    replace into t_order (order_id, user_id, type_id,
       handle_user_id, status, insert_time,
       update_time, user_remark, handel_remark,
       handle_time, type)

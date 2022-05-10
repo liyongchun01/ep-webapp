@@ -55,7 +55,7 @@ public class AMapController {
          BigDecimal smalJingDu = new BigDecimal( xnJingDu );
 
 
-             System.out.println("@#$bjingdu"+bigWeiDu);
+//             System.out.println("@#$bjingdu"+bigWeiDu);
 
 //             List<Long> orders=OrderService.selectOrderByStatus(2);
 
