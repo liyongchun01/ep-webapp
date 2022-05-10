@@ -28,7 +28,8 @@ public interface GeLiMapper {
 
     int updateByPrimaryKey(GeLi record);
 
-    void insertAndGetId(GeLi geLi);
+    int insertAndGetId(GeLi geLi);
+
 
     List<GeLi> selectByOrderStatusAndExample(GeLiExample geLiExample);
 }

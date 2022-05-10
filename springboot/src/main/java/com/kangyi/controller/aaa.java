@@ -27,7 +27,7 @@ public class aaa {
     @RequestMapping("/map")
     public Map<String, Object> getMap() {
         Map<String, Object> map = new HashMap<>(3);
-//        User user = new User(1, "倪升武", "123456");
+//        User user = new User(1, "", "123456");
 //        map.put("作者信息", user);
         map.put("博客地址", "http://blog.itcodai.com");
         map.put("CSDN地址", "http://blog.csdn.net/eson_15");

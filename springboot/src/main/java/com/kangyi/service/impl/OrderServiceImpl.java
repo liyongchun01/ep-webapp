@@ -49,11 +49,9 @@ public class OrderServiceImpl implements OrderService {
             System.out.println("@#$orderlist type "+type);
         }
 
-
-
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date beginTimeDate = null;
-        if(btime.trim().length()>0||btime!=null){
+        if(btime!=null){
             beginTimeDate=YMDmToDate(btime);
 //            btime = btime + " 00:00:00";
 //            try {
@@ -65,8 +63,7 @@ public class OrderServiceImpl implements OrderService {
 //            criteria.andInsertTimeGreaterThanOrEqualTo(beginTimeDate);
         }
         Date endTimeDate = null;
-        if(etime.trim().length()>0||etime!=null){
-
+        if(etime!=null){
             endTimeDate=YMDmToDate(etime);
 //            etime = etime + " 23:59:59";
 //            try {
@@ -80,19 +77,14 @@ public class OrderServiceImpl implements OrderService {
 //            }
 //            criteria.andInsertTimeLessThanOrEqualTo(endTimeDate);
         }
-
                 if(beginTimeDate != null && endTimeDate != null){
             criteria.andInsertTimeBetween( beginTimeDate,endTimeDate );
         }
 
-
-
-        if(sortField.trim().length()>0){
+        if(sortField!=null&&sortField.trim().length()>0){
             oe.setOrderByClause( ChangeChar.camelToUnderline(sortField,2) +" " +sortType);
 
         }
-
-
 
         List<Order> orders = orderMapper.selectByExample( oe );
 
@@ -119,6 +111,29 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.insertAndGetId( order );
         Long orderId = order.getOrderId();
 
+        return orderId;
+    }
+
+    @Override
+    public long insertOrder(Long userId, int type,int status,String ydata) {
+
+//        System.out.println("@#$!!!");
+        Order order = new Order();
+        order.setHandelRemark( ydata );
+        if (ydata.length()<100){
+            order.setUserRemark( ydata.substring( 0, ydata.length()-1 ) );
+
+        }else {
+            order.setUserRemark( ydata.substring( 0, 100 ) );
+        }
+//        System.out.println("@#$2"+order);
+        order.setUserId( userId );
+        order.setType( type );
+        order.setStatus( status );
+        order.setInsertTime( new Date(  ) );
+        orderMapper.insertAndGetId( order );
+        Long orderId = order.getOrderId();
+//        System.out.println("@#$2"+orderId);
 
         return orderId;
     }

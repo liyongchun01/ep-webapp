@@ -108,7 +108,7 @@ public class UserServiceImpl  implements UserService {
 
             u = (User)currentUser.getPrincipals().getPrimaryPrincipal();
             request.getSession().setAttribute("userInfo",u);
-            System.out.println("login@@@@@getId1 :"+request.getSession().getId());
+//            System.out.println("login@@@@@getId1 :"+request.getSession().getId());
 
 
         }catch (UnknownAccountException e) {
