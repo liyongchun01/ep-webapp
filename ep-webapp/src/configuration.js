@@ -1,3 +1,4 @@
+import { SyncOutlined, MinusCircleOutlined} from '@ant-design/icons';
 export const tagObject = {
     1: {
         color: "blue",
@@ -11,6 +12,19 @@ export const tagObject = {
         color: "red",
         label: "已驳回"
     },
+}
+
+export const statusObj = {
+    1: {
+        color: "blue",
+        label: "运行中",
+        icon: <SyncOutlined spin />
+    },
+    0: {
+        color: "red",
+        label: "已停止",
+        icon: <MinusCircleOutlined />
+    }
 }
 
 export const selectOptions = [

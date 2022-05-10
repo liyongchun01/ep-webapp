@@ -13,6 +13,12 @@ export default [
     component: './UserManagement',
   },
   {
+    name: '定时任务',
+    icon: 'HistoryOutlined',
+    path: '/timed-task',
+    component: './TimedTask',
+  },
+  {
     name: '疫情地图',
     icon: 'FundOutlined',
     path: '/map-service',

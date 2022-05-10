@@ -1,5 +1,5 @@
 export function TMapGL() {
-  // if (window.TMap) return Promise.resolve()
+  if (window.TMap) return Promise.resolve()
   return new Promise(function (resolve, reject) {
     var script = document.createElement('script')
     script.type = 'text/javascript'
