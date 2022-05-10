@@ -9,38 +9,6 @@ import styles from './styles.less'
 
 export default () => {
     const formRef = useRef()
-    const dataSource = [
-        {
-            jobName: '任务1',
-            status: 1,
-            jobId: 10001,
-            cronExpression: 'haeohfohu112ncnkes'
-        },
-        {
-            jobName: '任务2',
-            status: 0,
-            jobId: 10002,
-            cronExpression: 'aehofuh2893hafl'
-        },
-        {
-            jobName: '任务3',
-            status: 0,
-            jobId: 10003,
-            cronExpression: 'iuahf183bkafb'
-        },
-        {
-            jobName: '任务4',
-            status: 1,
-            jobId: 10004,
-            cronExpression: 'aufhw81bakjebf'
-        },
-        {
-            jobName: '任务5',
-            status: 0,
-            jobId: 10005,
-            cronExpression: 'nifuah3982h3fhi'
-        }
-    ]
 
     // 获取列表
     const fetchList = async (params, sort, filter) => {
@@ -56,35 +24,35 @@ export default () => {
         })
 
         return {
-            data: list?.order,
+            data: list?.quartzBeans,
             total: list?.count
         }
     }
 
     // 调用一次方法
-    const startOnceMission = async ({ jobId }) => {
-        const { data } = await axios.get(`http://localhost:8083/quartz/runOnce?jobId=${jobId}`)
+    const startOnceMission = async ({ id }) => {
+        const { data } = await axios.get(`http://localhost:8083/quartz/runOnce?jobId=${id}`)
         console.log(data)
         formRef.current?.reload()
     }
 
     // 启动方法
-    const startUpMission = async ({ jobId }) => {
-        const { data } = await axios.get(`http://localhost:8083/quartz/resume?jobId=${jobId}`)
+    const startUpMission = async ({ id }) => {
+        const { data } = await axios.get(`http://localhost:8083/quartz/resume?jobId=${id}`)
         console.log(data)
         formRef.current?.reload()
     }
 
     // 暂停方法
-    const stoppingMission = async ({ jobId }) => {
-        const { data } = await axios.get(`http://localhost:8083/quartz/pauseJob?jobId=${jobId}`)
+    const stoppingMission = async ({ id }) => {
+        const { data } = await axios.get(`http://localhost:8083/quartz/pauseJob?jobId=${id}`)
         console.log(data)
         formRef.current?.reload()
     }
 
     // 删除方法
-    const deleteMission = async ({ jobId }) => {
-        const { data } = await axios.get(`http://localhost:8083/quartz/delect?jobId=${jobId}`)
+    const deleteMission = async ({ id }) => {
+        const { data } = await axios.get(`http://localhost:8083/quartz/delect?jobId=${id}`)
         console.log(data)
         formRef.current?.reload()
     }
@@ -152,7 +120,6 @@ export default () => {
                     columns={columns}
                     actionRef={formRef}
                     request={fetchList}
-                    dataSource={dataSource}
                     search={{
                         optionRender: (searchConfig, formProps, dom) => [
                             ...dom.reverse(),

@@ -20,7 +20,7 @@ export const statusObj = {
         label: "运行中",
         icon: <SyncOutlined spin />
     },
-    0: {
+    2: {
         color: "red",
         label: "已停止",
         icon: <MinusCircleOutlined />
