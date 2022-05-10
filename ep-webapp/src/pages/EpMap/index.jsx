@@ -1,126 +1,66 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card } from 'antd';
+import { Card, Alert, Button, Skeleton } from 'antd';
 import MainMap from '@/components/MainMap';
+import { tabList } from '@/configuration';
+import { TextLoop } from 'react-text-loop-next';
+import axios from 'axios';
+import styles from './styles.less'
 
-//核酸检测页面
 export default () => {
     const [key, setKey] = useState(1)
-    const tabList = [
-        {
-            key: 1,
-            tab: '核酸检测'
-        },
-        {
-            key: 2,
-            tab: '疫苗接种'
-        },
-        {
-            key: 3,
-            tab: '隔离地点',
-        },
-        {
-            key: 4,
-            tab: '轨迹查询'
-        }
-    ]
+    const [newList, setNewList] = useState([])
 
-    const onTabChange = (key) => {
-        setKey(key)
-    }
-    const lonLat = {
-        1: [
-            // 点标记数据数组
-            {
-                // 标记位置(纬度，经度，高度)
-                x: 34.98210863924864,
-                y: 117.31310899739151,
-                id: 1
+    const getNewsList = async () => {
+        const { data: newone } = await axios.get("http://api.tianapi.com/ncov/index", {
+            params: {
+                key: "d334721cf6eba2d619a5855420ec352c"
             }
-        ],
-        2: [
-            // 点标记数据数组
-            {
-                // 标记位置(纬度，经度，高度)
-                x: 34.98210863924864,
-                y: 117.31310899739151,
-                id: 1
-            },
-            {
-                // 标记位置(纬度，经度，高度)
-                x: 33.98210863924864,
-                y: 116.31310899739151,
-                id: 2
-            }
-        ],
-        3: [
-            // 点标记数据数组
-            {
-                // 标记位置(纬度，经度，高度)
-                x: 34.98210863924864,
-                y: 117.31310899739151,
-                id: 1
-            },
-            {
-                // 标记位置(纬度，经度，高度)
-                x: 33.98210863924864,
-                y: 116.31310899739151,
-                id: 2
-            },
-            {
-                // 标记位置(纬度，经度，高度)
-                x: 31.98210863924864,
-                y: 116.31310899739151,
-                id: 3
-            },
-        ],
-        4: [
-            // 点标记数据数组
-            {
-                // 标记位置(纬度，经度，高度)
-                x: 34.98210863924864,
-                y: 117.31310899739151,
-                id: 1
-            },
-            {
-                // 标记位置(纬度，经度，高度)
-                x: 33.98210863924864,
-                y: 116.31310899739151,
-                id: 2
-            },
-            {
-                // 标记位置(纬度，经度，高度)
-                x: 31.98210863924864,
-                y: 116.31310899739151,
-                id: 3
-            },
-            {
-                // 标记位置(纬度，经度，高度)
-                x: 34.99210863924864,
-                y: 116.31310899739151,
-                id: 4
-            },
-            {
-                // 标记位置(纬度，经度，高度)
-                x: 32.98210863924864,
-                y: 121.31310899739151,
-                id: 5
-            },
-            {
-                // 标记位置(纬度，经度，高度)
-                x: 32.97210863924864,
-                y: 120.31310899739151,
-                id: 6
-            },
-        ]
+        })
+        setNewList(newone?.newslist[0].news)
     }
+
+    useEffect(() => {
+        getNewsList()
+    }, [])
+
+    const newsAlert = () => {
+        if (newList.length !== 0) {
+            return (
+                <>
+                    <Alert
+                        banner
+                        closable
+                        showIcon={false}
+                        type="info"
+                        className={styles.alert_overflow}
+                        message={
+                            <TextLoop
+                                mask
+                                interval={5000}
+                                children={newList.map(item => (
+                                    <Button type='link' key={item.id} href={item.sourceUrl}>{`${item.infoSource}(${item.pubDateStr}): ${item.summary}`}</Button>
+                                ))}
+                            />
+                        }
+                    />
+                </>
+            )
+        } else {
+            return (
+                <Skeleton.Input size='large' active block loading={newList.length !== 0} style={{ height: 48 }} />
+            )
+        }
+    }
+
     return (
         <PageContainer
             tabList={tabList}
-            onTabChange={onTabChange}
+            onTabChange={(key) => setKey(key)}
+            content={newsAlert()}
         >
             <Card>
-                <MainMap type={+key} lngLat={lonLat} key={key} />
+                <MainMap type={+key} key={key} />
             </Card>
         </PageContainer>
     );

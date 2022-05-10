@@ -13,7 +13,7 @@ export const tagObject = {
     },
 }
 
-export const options = [
+export const selectOptions = [
     {
         value: 1,
         label: '核酸检测',
@@ -54,6 +54,25 @@ export const globalOptions = [
         label: '轨迹上传',
     },
 ]
+
+export const tabList = [
+        {
+            key: 1,
+            tab: '核酸检测'
+        },
+        {
+            key: 2,
+            tab: '疫苗接种'
+        },
+        {
+            key: 3,
+            tab: '隔离地点',
+        },
+        {
+            key: 4,
+            tab: '轨迹查询'
+        }
+    ]
 
 export const serviceTypeObject = {
     1: "核酸检测",

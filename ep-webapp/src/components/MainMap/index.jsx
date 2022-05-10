@@ -1,36 +1,19 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import * as mapUtils from '@/components/TMapGL'
 import axios from 'axios';
 import markerLogo from './img/markerLogo.png'
+import { Spin } from 'antd';
 
-const searchObj = {
-    1: "核酸",
-    2: "疫苗",
-    3: "隔离",
-    4: "轨迹"
-}
-
-export default ({ lngLat, type }) => {
+export default ({ type }) => {
+    const [isLoading, setIsloading] = useState(true)
     const mapId = useRef() //  地图实例
 
     useEffect(() => {
         mainMap()
     }, [type])
 
-    // 节流函数
-    const throttle = (fn, time) => {
-        let lasttime = 0;
-        return () => {
-            let nowtime = Date.now();
-            if (nowtime - lasttime > time) {
-                fn.call(this);
-                lasttime = nowtime;
-            }
-        }
-    }
-
-    // 防抖开始
-    const debounce = (fn, delay) => { // fn -> showTop函数; delay延时时间
+    // 防抖函数
+    const debounce = (fn, delay) => {
         let t = null;
         return function () {
             if (t !== null) {
@@ -66,13 +49,7 @@ export default ({ lngLat, type }) => {
                             //焦点在图片中的像素位置，一般大头针类似形式的图片以针尖位置做为焦点，圆形点以圆心位置为焦点
                             "anchor": { x: 16, y: 32 }
                         })
-                    },
-                    geometries: lngLat[type]?.map((item) => (
-                        {
-                            id: item.id,
-                            position: formatLatLng(item.x, item.y)
-                        }
-                    )),
+                    }
                 });
 
                 // 定位
@@ -105,7 +82,6 @@ export default ({ lngLat, type }) => {
 
                 locate();
                 const infoWindowList = Array(10);
-                // const search = new TMap.service.Search({ pageSize: 10 })
 
                 const getLocationList = async ({ dbWeiDu, dbJingDu, xnWeiDu, xnJingDu }) => {
                     await axios.get(`http://localhost:8083/map/index`, {
@@ -116,9 +92,7 @@ export default ({ lngLat, type }) => {
                             xnJingDu
                         }
                     }).then(({ data }) => {
-                        // console.log(data)
                         data[type]?.forEach((item, index) => {
-                            console.log(item)
                             const infoContent = {
                                 1: {
                                     content: `  核酸检测信息 <br/> <h3>${item.hesuanPosition}</h3> ${item.hesuanName} <br/> 工作时间：${item.starttime} - ${item.endtime} <br /> 最新时间: ${item.area} 人数: ${item.renshu}`,
@@ -146,7 +120,6 @@ export default ({ lngLat, type }) => {
                                 id: String(index), // 点标注数据数组
                                 position: formatLatLng(item.weidu, item.jindu),
                             });
-                            console.log(type)
                             marker.updateGeometries(geometries); // 绘制地点标注
                             marker.on('click', (e) => {
                                 let a = e.geometry.id
@@ -156,7 +129,10 @@ export default ({ lngLat, type }) => {
                                 infoWindowList[Number(a)]?.open();
                             }); // 点击标注显示信息窗体
                         });
-                    });
+                        setIsloading(false)
+                    }).catch((err) => {
+                        setIsloading(false)
+                    })
                 }
 
                 map.on("bounds_changed", debounce(() => {
@@ -179,12 +155,14 @@ export default ({ lngLat, type }) => {
 
     return (
         <>
-            <div id='container'></div>
-            <div id="panel" style={{ display: 'none' }}>
-                <p><input type='text' id='ipInput' placeholder="输入IP地址(默认为请求端的IP)" size='30' /><input type='button' id='locate'
-                    value='搜索所在位置' /></p>
-                <p id="ipLocationResult"></p>
-            </div>
+            <Spin spinning={isLoading}>
+                <div id='container'></div>
+                <div id="panel" style={{ display: 'none' }}>
+                    <p><input type='text' id='ipInput' placeholder="输入IP地址(默认为请求端的IP)" size='30' /><input type='button' id='locate'
+                        value='搜索所在位置' /></p>
+                    <p id="ipLocationResult"></p>
+                </div>
+            </Spin>
         </>
     );
 };
