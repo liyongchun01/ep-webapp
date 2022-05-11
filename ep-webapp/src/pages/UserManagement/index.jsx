@@ -3,7 +3,6 @@ import { Button, Popconfirm, Tag, Tooltip, DatePicker, Modal, Form, Input } from
 import { PageContainer } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import { SearchOutlined } from '@ant-design/icons';
-import styles from './styles.less'
 import DetailDrawer from '@/components/DetailDrawer';
 import axios from 'axios';
 import moment from 'moment';
@@ -37,6 +36,7 @@ export default () => {
             sortField: Object.keys(sort)[0],
             btime: filter.insertTime && filter.hasOwnProperty("insertTime") ? moment(filter?.insertTime[0][0]).format('YYYY-MM-DD HH:mm') : null,
             etime: filter.insertTime && filter.hasOwnProperty("insertTime") ? moment(filter?.insertTime[0][1]).format('YYYY-MM-DD HH:mm') : null,
+            id: params?.userType
         })
         setUserId(uId)
 
@@ -44,6 +44,26 @@ export default () => {
             data: list?.order,
             total: list?.count
         }
+    }
+
+    // 查看用户类型
+    const userCheck = async () => {
+        const { data } = await axios.get(`http://localhost:8083/check/userlist`)
+        const formatList = [
+            {
+                label: '非爬取信息',
+                value: 0
+            },
+            {
+                label: '全部信息',
+                value: -1
+            }
+        ].concat(data.map(({ nickname, id }) => ({
+            label: nickname,
+            value: id
+        })))
+
+        return formatList
     }
 
     //查看订单详情
@@ -64,7 +84,6 @@ export default () => {
         } else {
             setRecordList(data)
         }
-
     }
 
     const getColumnSearchProps = dataIndex => ({
@@ -126,12 +145,19 @@ export default () => {
         formRef.current?.reload()
     }
 
-
     const columns = [
+        {
+            title: '用户类型',
+            dataIndex: 'userType',
+            hideInTable: true,
+            valueType: 'select',
+            request: async () => userCheck()
+        },
         {
             title: '类型',
             dataIndex: 'type',
             key: 'type',
+            search: false,
             render: (_, record) => (
                 <>
                     {serviceTypeObject[record?.type]}
@@ -150,6 +176,7 @@ export default () => {
         {
             title: '上传时间',
             dataIndex: 'insertTime',
+            search: false,
             sorter: true,
             key: 'insertTime',
             ...getColumnSearchProps('insertTime'),
@@ -158,6 +185,7 @@ export default () => {
             title: '状态',
             dataIndex: 'status',
             key: 'status',
+            search: false,
             width: 160,
             align: 'center',
             render: (_, record) => (
@@ -177,6 +205,7 @@ export default () => {
             title: '操作',
             width: 200,
             align: 'center',
+            search: false,
             render: (_, record) => (
                 <>
                     <Popconfirm
@@ -202,12 +231,9 @@ export default () => {
         <>
             <PageContainer>
                 <ProTable
-                    className={styles.tableContainer}
                     columns={columns}
-                    // dataSource={dataSource}
                     actionRef={formRef}
                     request={fetchList}
-                    search={false}
                 />
             </PageContainer>
             <Modal

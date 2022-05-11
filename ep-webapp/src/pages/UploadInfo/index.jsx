@@ -183,7 +183,6 @@ export default () => {
                 <ProTable
                     className={styles.tableContainer}
                     columns={columns}
-                    // dataSource={dataSource}
                     request={fetchList}
                     search={false}
                     actionRef={formRef}
