@@ -94,25 +94,29 @@ export default ({ type }) => {
                         }
                     })
                     data[type]?.forEach((item, index) => {
-                        const infoContent = {
-                            1: {
-                                content: `  核酸检测信息 <br/> <h3>${item.hesuanPosition}</h3> ${item.hesuanName} <br/> 工作时间：${item.starttime} - ${item.endtime} <br /> 最新时间: ${item.area} 人数: ${item.renshu}`,
-                            },
-                            2: {
-                                content: `  疫苗接种信息 <br/> <h3>${item.yimiaoPosition}</h3> ${item.yimaioName} <br/>工作时间：${item.starttime} - ${item.endtime}  <br/>所属机构：${item.orgType} <br/> 第${item.batch}批次 <br /> 最新时间: ${item.area} 人数: ${item.renshu}`,
-                            },
-                            3: {
-                                content: ` 隔离地点信息 <br/>  <h3>${item.gelidianPosition}</h3> ${item.gelidianName} <br/>所属机构：${item.geliOrg} <br /> 最新时间: ${item.area} 隔离人数: ${item.grlirenshu} <br /> 联系电话${item.contact}`,
-                            },
-                            4: {
-                                content: ` 排查确诊者轨迹信息 <br/> <h3>${item.guijiPosition}</h3>  时间：${item.starttime} - ${item.endtime}`,
+                        const infoContent = (item) => {
+                            const info = {
+                                1: {
+                                    content: `  核酸检测信息 <br/> <h3>${item.hesuanPosition}</h3> ${item.hesuanName} <br/> 工作时间：${item.starttime} - ${item.endtime} <br /> 最新时间: ${item.area} 人数: ${item.renshu}`,
+                                },
+                                2: {
+                                    content: `  疫苗接种信息 <br/> <h3>${item.yimiaoPosition}</h3> ${item.yimaioName} <br/>工作时间：${item.starttime} - ${item.endtime}  <br/>所属机构：${item.orgType} <br/> 第${item.batch}批次 <br /> 最新时间: ${item.area} 人数: ${item.renshu}`,
+                                },
+                                3: {
+                                    content: ` 隔离地点信息 <br/>  <h3>${item.gelidianPosition}</h3> ${item.gelidianName} <br/>所属机构：${item.geliOrg} <br /> 最新时间: ${item.area} 隔离人数: ${item.grlirenshu} <br /> 联系电话${item.contact}`,
+                                },
+                                4: {
+                                    content: ` 排查确诊者轨迹信息 <br/> <h3>${item.guijiPosition}</h3>  时间：${item.starttime} - ${item.endtime}`,
+                                }
                             }
+                            return info
                         }
                         const geometries = marker.getGeometries()
                         const infoWindow = new TMap.InfoWindow({
                             map: map,
                             position: formatLatLng(item.weidu, item.jindu),
-                            offset: { x: 0, y: -50 }
+                            offset: { x: 0, y: -50 },
+                            id: item.id
                         }) // 新增信息窗体显示地标的名称与地址、电话等信息
                         infoWindow.close()
                         infoWindowList[index] = infoWindow
@@ -123,26 +127,34 @@ export default ({ type }) => {
                         marker.updateGeometries(geometries) // 绘制地点标注
                         setIsloading(false)
                         marker.on('click', (e) => {
-                            let a = e.geometry.id
+                            infoWindow.close()
+                            let formatId = e.geometry.id
                             if (isNaN(+e.geometry.id)) {
-                                a = a.split("-")[0]
+                                formatId = formatId.split("-")[0]
                             }
-                            infoWindowList[Number(a)]?.setContent(
-                                infoContent[type].content
-                            )
-                            infoWindowList[Number(a)]?.open()
+                            if (formatId == index) {
+                                console.log(infoContent(item)[type].content)
+                                infoWindowList[Number(formatId)]?.setContent(
+                                    infoContent(item)[type].content
+                                )
+                            }
+                            infoWindowList[Number(formatId)]?.open()
                         }) // 点击标注显示信息窗体
                         if (type === 4) {
                             marker.on('rightclick', (e) => {
                                 infoWindow.close()
-                                let a = e.geometry.id
+                                let formatId = e.geometry.id
                                 if (isNaN(+e.geometry.id)) {
-                                    a = a.split("-")[0]
+                                    formatId = formatId.split("-")[0]
                                 }
-                                infoWindowList[Number(a)]?.setContent(
-                                    '123123123'
-                                )
-                                infoWindowList[Number(a)]?.open()
+                                if (formatId == index) {
+                                    // 返回行为信息方法及操作
+                                    console.log(item)
+                                    infoWindowList[Number(formatId)]?.setContent(
+                                        '123123123' // 返回行为的占位符
+                                    )
+                                    infoWindowList[Number(formatId)]?.open()
+                                }
                             })// 右键单击显示行为信息   
                         }
                     })
