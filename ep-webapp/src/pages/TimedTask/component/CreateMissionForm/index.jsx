@@ -19,7 +19,7 @@ export default ({ options, record, formRef }) => {
             await axios.get("http://localhost:8083/quartz/update", {
                 params: {
                     ...val,
-                    jobJd: record?.id
+                    jobId: record?.id
                 }
             })
         }

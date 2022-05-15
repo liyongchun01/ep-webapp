@@ -324,7 +324,7 @@ export default ({ options, userId, modifyField, formRef, anyId, fetchDetail, set
                                     <ProFormText
                                         key="useMode"
                                         name="name"
-                                        label="地点录入（县/区、镇/街道）"
+                                        label="地点录入（县/区、镇/街道）："
                                         width="sm"
                                     />
                                     <ProFormDateTimeRangePicker

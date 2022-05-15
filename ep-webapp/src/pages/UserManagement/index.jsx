@@ -151,7 +151,8 @@ export default () => {
             dataIndex: 'userType',
             hideInTable: true,
             valueType: 'select',
-            request: async () => userCheck()
+            request: async () => userCheck(),
+            initialValue: 0
         },
         {
             title: '类型',

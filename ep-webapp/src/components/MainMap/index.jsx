@@ -43,9 +43,9 @@ export default ({ type }) => {
                     styles: {
                         //创建一个styleId为"myStyle"的样式（styles的子属性名即为styleId）
                         "centerStyle": new TMap.MarkerStyle({
-                            "width": 32,  // 点标记样式宽度（像素）
+                            "width": 32, // 点标记样式宽度（像素）
                             "height": 32, // 点标记样式高度（像素）
-                            "src": markerLogo,  //图片路径
+                            "src": markerLogo, //图片路径
                             //焦点在图片中的像素位置，一般大头针类似形式的图片以针尖位置做为焦点，圆形点以圆心位置为焦点
                             "anchor": { x: 16, y: 32 }
                         })
@@ -93,6 +93,7 @@ export default ({ type }) => {
                             xnJingDu
                         }
                     })
+                    setIsloading(false)
                     data[type]?.forEach((item, index) => {
                         const infoContent = (item) => {
                             const info = {
@@ -125,7 +126,6 @@ export default ({ type }) => {
                             position: formatLatLng(item.weidu, item.jindu),
                         })
                         marker.updateGeometries(geometries) // 绘制地点标注
-                        setIsloading(false)
                         marker.on('click', (e) => {
                             infoWindow.close()
                             let formatId = e.geometry.id

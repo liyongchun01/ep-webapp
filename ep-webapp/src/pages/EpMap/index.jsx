@@ -39,7 +39,7 @@ export default () => {
                                 mask
                                 interval={5000}
                                 children={newList.map(item => (
-                                    <Button type='link' key={item.id} href={item.sourceUrl}>{`${item.infoSource}(${item.pubDateStr}): ${item.summary}`}</Button>
+                                    <Button type='link' key={item.id} target="_blank" href={item.sourceUrl}>{`${item.infoSource}(${item.pubDateStr}): ${item.summary}`}</Button>
                                 ))}
                             />
                         }
