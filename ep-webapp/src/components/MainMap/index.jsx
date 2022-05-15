@@ -36,29 +36,14 @@ export default ({ type }) => {
                     rotation: 0    //设置地图旋转角度
                 })
 
-                const ipLocation = new TMap.service.IPLocation()
-                const markerCluster = new TMap.MarkerCluster({
-                    id: 'cluster',
-                    map: map,
-                    enableDefaultStyle: true, // 启用默认样式
-                    minimumClusterSize: 2, // 形成聚合簇的最小个数
-                    geometries: [],
-                    zoomOnClick: false, // 点击簇时放大至簇内点分离
-                    gridSize: 60, // 聚合算法的可聚合距离
-                    averageCenter: true, // 每个聚和簇的中心是否应该是聚类中所有标记的平均值
-                    maxZoom: 10, // 采用聚合策略的最大缩放级别
-                });
-
                 // 定位
-                const locate = () => {
-                    ipLocation
-                        .locate()
-                        .then(({ result }) => {
-                            map.setCenter(result.location)
-                        })
-                }
+                const ipLocation = new TMap.service.IPLocation()
+                ipLocation
+                    .locate()
+                    .then(({ result }) => {
+                        map.setCenter(result.location)
+                    })
 
-                locate()
                 const infoWindowList = Array(10)
 
                 const infoContent = (item) => {
@@ -81,6 +66,17 @@ export default ({ type }) => {
 
                 const getLocationList = async ({ dbWeiDu, dbJingDu, xnWeiDu, xnJingDu }) => {
                     setIsloading(true)
+                    const markerCluster = new TMap.MarkerCluster({
+                        id: 'cluster',
+                        map: map,
+                        enableDefaultStyle: true, // 启用默认样式
+                        minimumClusterSize: 2, // 形成聚合簇的最小个数
+                        geometries: [],
+                        zoomOnClick: false, // 点击簇时放大至簇内点分离
+                        gridSize: 60, // 聚合算法的可聚合距离
+                        averageCenter: true, // 每个聚和簇的中心是否应该是聚类中所有标记的平均值
+                        maxZoom: 10, // 采用聚合策略的最大缩放级别
+                    });
                     const { data } = await axios.get(`http://localhost:8083/map/index`, {
                         params: {
                             dbWeiDu,
