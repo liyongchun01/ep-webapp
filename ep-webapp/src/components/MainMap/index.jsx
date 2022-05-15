@@ -67,7 +67,6 @@ export default ({ type }) => {
                 const getLocationList = async ({ dbWeiDu, dbJingDu, xnWeiDu, xnJingDu }) => {
                     setIsloading(true)
                     const markerCluster = new TMap.MarkerCluster({
-                        id: 'cluster',
                         map: map,
                         enableDefaultStyle: true, // 启用默认样式
                         minimumClusterSize: 2, // 形成聚合簇的最小个数
@@ -95,14 +94,17 @@ export default ({ type }) => {
                             id: item.id
                         }) // 新增信息窗体显示地标的名称与地址、电话等信息
                         infoWindow.close()
+                        infoWindow.setZIndex(1)
                         infoWindowList[index] = infoWindow
                         geometries.push({
                             id: String(index), // 点标注数据数组
                             position: formatLatLng(item.weidu, item.jindu),
                         })
                         markerCluster.updateGeometries(geometries) // 绘制地点标注
-                        markerCluster.on('click', ({ cluster }) => {
+                        map.on("click", () => {
                             infoWindow.close()
+                        })
+                        markerCluster.on('click', ({ cluster }) => {
                             let formatId = cluster.geometries[0].id
                             if (isNaN(+formatId)) {
                                 formatId = formatId.split("-")[0]
@@ -111,8 +113,9 @@ export default ({ type }) => {
                                 infoWindowList[Number(formatId)]?.setContent(
                                     infoContent(item)[type].content
                                 )
-                                infoWindowList[Number(formatId)]?.open()
                             }
+                            infoWindow.close()
+                            infoWindowList[Number(formatId)]?.open()
                         })
                     })
                 }
