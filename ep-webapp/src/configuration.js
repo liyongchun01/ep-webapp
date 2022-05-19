@@ -95,4 +95,62 @@ export const serviceTypeObject = {
     4: "轨迹信息"
 }
 
+export const callbackFieldsKeys = {
+    1: "hesuan",
+    2: "yimiao", 
+    3: "gelidian",
+    4: "guiji"
+}
+
+export const callbackFieldsPositionKeys = {
+    1: "hesuanPosition",
+    2: "yimiaoPosition",
+    3: "gelidianPosition",
+    4: "guijiPosition"
+}
+
+export const callbackFieldsNameKeys = {
+    1: "hesuanName",
+    2: "yimaioName",
+    3: "gelidianName",
+    4: "guiji"
+}
+
+
+export const messageTab = [
+    {
+        tab: "全部",
+        key: "-1"
+    },
+    {
+        tab: "评论",
+        key: "1"
+    },
+    {
+        tab: "回复",
+        key: "2"
+    },
+    {
+        tab: "申请",
+        key: "3"
+    },
+    {
+        tab: "系统",
+        key: "0"
+    }
+]
+
+export const messageTabObj = {
+    "0": "系统",
+    "-1": "全部",
+    "1": "评论",
+    "2": "回复",
+    "3":  "申请"
+}
+
+export const readObj = {
+    0: "未读",
+    1: "已读"
+}
+
 

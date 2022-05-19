@@ -19,6 +19,24 @@ export default [
     component: './TimedTask',
   },
   {
+    name: '博客',
+    icon: 'AlignLeftOutlined',
+    path: '/blog',
+    component: './Blog',
+  },
+  {
+    name: '消息',
+    icon: 'CommentOutlined',
+    path: '/message',
+    component: './MyMessage',
+  },
+  {
+    name: '申请管理',
+    icon: 'AuditOutlined',
+    path: '/join-management',
+    component: './JoinManagement',
+  },
+  {
     name: '疫情地图',
     icon: 'FundOutlined',
     path: '/map-service',
