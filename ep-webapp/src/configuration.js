@@ -109,6 +109,13 @@ export const callbackFieldsPositionKeys = {
     4: "guijiPosition"
 }
 
+export const callbackFieldsId = {
+    1: "hesuanId",
+    2: "yimiaoId",
+    3: "geliId",
+    4: "guijiId"
+}
+
 export const callbackFieldsNameKeys = {
     1: "hesuanName",
     2: "yimaioName",

@@ -3,6 +3,7 @@ import * as mapUtils from '@/components/TMapGL'
 import { history } from 'umi';
 import axios from 'axios'
 import { Spin } from 'antd'
+import { callbackFieldsId } from '@/configuration';
 
 export default ({ type }) => {
     const [isLoading, setIsloading] = useState(true)
@@ -54,7 +55,7 @@ export default ({ type }) => {
                         query: {
                             type: params.type,
                             orderId: params.orderId,
-                            typeId: params.typeId
+                            typeId: params[callbackFieldsId[type]]
                         },
                     });
                 }
