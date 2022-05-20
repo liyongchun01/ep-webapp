@@ -43,11 +43,11 @@ public class ThreadAddOneGuiji implements Callable<GuiJi> {
                 JSONObject jsonObject = JSONObject.fromObject( htmlJson );
 //                while (!"0".equals(  jsonObject.getString( "status" ))) {
                     if ("347".equals( jsonObject.getString( "status" ) )) {
-                        System.out.println( "@#$$ThreadHandlerRequest    " + this.requestParams.getString( "requestUrl" ) );
+                        System.out.println( jsonObject.toString()+"@#$$ThreadHandlerRequest    " + this.requestParams.getString( "requestUrl" ) );
 //                        break;
                     }
                     if ("348".equals( jsonObject.getString( "status" ) )) {
-                        System.out.println( "@#$$ThreadHandlerRequest    " + this.requestParams.getString( "requestUrl" ) );
+                        System.out.println( jsonObject.toString()+"@#$$ThreadHandlerRequest    " + this.requestParams.getString( "requestUrl" ) );
 //                        break;
                     }
 //                }

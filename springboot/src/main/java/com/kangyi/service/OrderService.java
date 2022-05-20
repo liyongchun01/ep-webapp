@@ -1,9 +1,7 @@
 package com.kangyi.service;
 
 import com.kangyi.pojo.Order;
-import com.kangyi.util.PageResult;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -23,4 +21,6 @@ public interface OrderService {
     int updateManyAllOrderById(List<Order> orderList);
 
     Order selectOneById(Long orderId);
+
+    Map<String, Object> getListForPageByIdList(Integer type, String btime, String etime, Integer pno, Integer psize, List<Long> orderList, String sortField, String sortType, String gOrj);
 }

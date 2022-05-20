@@ -126,7 +126,7 @@ public class LoginController {
         User u = (User) session.getAttribute("userInfo");
 //        User u = userService.login(username,password,request);
 //        HashMap<String, Object> map = new HashMap<>();
-        System.err.println(u);
+        System.err.println("当前用户 ："+u);
 
         if (u == null){
             u = new User();

@@ -31,4 +31,6 @@ public interface GuiJiMapper {
     List<GuiJi> selectByOrderStatusAndExample(GuiJiExample guiJiExample);
 
     int insertList(List<GuiJi> listGuiji);
+
+    int updateListByPrimaryKeySelective(List<GuiJi> listGuiji);
 }

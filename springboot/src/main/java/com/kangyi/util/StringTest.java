@@ -31,6 +31,69 @@ public class StringTest {
         return map;
     }
 
+    public static String StringChangeJSON(String str) throws Exception {
+        if (str == null || str.length() == 0) {
+            throw new Exception( "解析字串为空!" );
+        }//判空
+        if(!str.contains( "【" )) {
+            throw new Exception( str+"少了中括号!" );
+        }
+
+        /**
+         * 创建结果集合
+         */
+        ArrayList<String> dataString = new ArrayList<>();//日期集合
+        ArrayList<String> finalString = new ArrayList<>();//结果集
+        Map<String, String> map = new HashMap<>( 3 );
+
+        boolean flag = checkDataStr( str ); //比较日期与开始日期是否一致（长度）
+
+        String s = str.substring( str.indexOf( "】" ) + 1 );
+        Pattern p = Pattern.compile( "((\\d{1,2})月(\\d{1,2})日\\-(\\d{1,2})日)|((\\d{1,2})月(\\d{1,2})日)" );
+        Matcher m = p.matcher( s );
+
+        while (m.find()) {
+            //按照日期进行匹配并转换为fuck
+            s = s.replace( m.group(), "fuck" );
+            s = s.replace( "，", "" );
+            dataString.add( m.group() );//加入日期集合
+        }
+        String[] v = s.split( "fuck" );
+        int index = 0;
+        if(!flag){
+//            System.out.println("nn");
+            //日期与开始日期不一致（长度）
+            Pattern p1 = Pattern.compile( "((.*?县))|((.*?市))|((.{1,2}?区))|((.{1,2}?服务区))|((.*?宾馆))|((.*?医院))|((.*?公寓))|((.*?超市))|((.*?城))|((.*?镇))|((.*?街))" );//拆分格式
+            for (String st : v) {
+                if (st.length() != 0) {
+                    Matcher m1 = p1.matcher( st );//matcher方法进行格式匹配
+                    if (m1.find()) {
+                        //匹配到的按拆分值加入
+//                    finalString.add( dataString.get( index++ ) + ":" + m1.group( 0 ) );
+                        map.put( m1.group( 0 ) , dataString.get( index++ ));
+                    } else {
+                        //匹配不到直接加
+//                    finalString.add( dataString.get( index++ ) + ":" + st );
+                        map.put( st,dataString.get( index++ ) );
+                    }
+                }
+            }
+        }else {
+//            System.out.println("yy");
+//        日期与开始日期一致（长度）
+            for(String st:v){
+//        直接拆分写入
+                if(st.length()!=0){
+//                    finalString.add(dataString.get(index++)+":"+st);
+                    map.put( st,dataString.get( index++ ) );
+                }
+            }
+        }
+        return JSONArray.toJSONString(map);
+    }
+
+
+
     public static Map<String,String> StringChange(String str) throws Exception {
         if (str == null || str.length() == 0) {
             throw new Exception( "解析字串为空!" );

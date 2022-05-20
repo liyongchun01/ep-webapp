@@ -4,18 +4,20 @@ import com.kangyi.mapper.QuartzBeanMapper;
 import com.kangyi.pojo.QuartzBean;
 import com.kangyi.quartz.QuartzUtils;
 import com.kangyi.service.QuartzBeanService;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @Controller
-@RequestMapping("/quartz/")
-@CrossOrigin(origins = {"http://localhost:8000"},allowCredentials = "true",allowedHeaders = {"X-Custom-Header"},
-        maxAge = 3600L, methods={RequestMethod.GET,RequestMethod.POST,RequestMethod.HEAD})
+@RequestMapping("/quartz")
+//@CrossOrigin(origins = {"http://localhost:8000"},allowCredentials = "true",allowedHeaders = {"X-Custom-Header"},
+//        maxAge = 3600L, methods={RequestMethod.GET,RequestMethod.POST,RequestMethod.HEAD})
 public class QuartzController {
     //注入任务调度
     @Autowired
@@ -24,12 +26,14 @@ public class QuartzController {
     @Autowired
     QuartzBeanService quartzBeanService;
 
-    @RequestMapping("/list")
-    @GetMapping
-    @PostMapping
+
+//    @GetMapping
+//    @PostMapping
     @ResponseBody
+    @RequestMapping(path = "/list")
     public Map<String, Object> getList(
-            @RequestBody  Map<String, Object> map,
+//            @RequestBody
+                    Map<String, Object> map,
             HttpSession session
     ) {
 
@@ -70,6 +74,7 @@ public class QuartzController {
         }
 
         Map<String, Object> listForPage = quartzBeanService.getListForPage( status, JobName, pno1, psize1);
+//        System.out.println("@#$111111"+listForPage);
 //        List<Order> orders = (List<Order>)listForPage.get( "order" );
         return  listForPage;
     }
@@ -80,12 +85,14 @@ public class QuartzController {
     public String  createJob(String jobName,String cronExpression)  {
         try {
             //进行测试所以写死
-            jobName="test3";
-            cronExpression="* 27 20 */1 * ?";
+//            jobName="test3";
+//            cronExpression="* 27 20 */1 * ?";
 
+            System.out.println("@#$time :"+cronExpression);
             QuartzBean quartzBean=new QuartzBean();
             quartzBean.setJobClass("com.kangyi.quartz.GuijiQuartz");
             quartzBean.setJobName(jobName);
+            quartzBean.setStatus( 1 );
             quartzBean.setCronExpression(cronExpression);
             quartzBeanService.insertOne( quartzBean );
             QuartzUtils.createScheduleJob(scheduler,quartzBean);
@@ -96,48 +103,88 @@ public class QuartzController {
     }
 
 
+    @Transactional
     @RequestMapping("/pauseJob")
     @ResponseBody
     public String  pauseJob(int jobId)  {
         try {
             QuartzBean quartzBean = quartzBeanService.selectOne( jobId );
+            quartzBean.setStatus( 2 );
+            quartzBeanService.updateOne( quartzBean );
+            boolean b = scheduler.checkExists( JobKey.jobKey( quartzBean.getJobName() ) );
+            if(!b) {
+                quartzBeanService.delectOne(jobId);
+                createJob(quartzBean.getJobName(),quartzBean.getCronExpression());
+            }
             QuartzUtils.pauseScheduleJob (scheduler,quartzBean.getJobName());
         } catch (Exception e) {
             return "暂停失败";
         }
         return "暂停成功";
     }
-
+    @Transactional
     @RequestMapping("/delect")
     @ResponseBody
     public String  delect(int jobId)  {
         try {
             QuartzBean quartzBean = quartzBeanService.selectOne( jobId );
-            QuartzUtils.deleteScheduleJob (scheduler,quartzBean.getJobName());
+//            System.out.println("@#$1 "+jobId);
+            int a=quartzBeanService.delectOne(jobId);
+//            System.out.println("3");
+            if(a<1){throw new Exception( "sql失败" );}
+            boolean b = scheduler.checkExists( JobKey.jobKey( quartzBean.getJobName() ) );
+            if(b) {
+//                System.out.println("@#$2");
+                QuartzUtils.deleteScheduleJob( scheduler, quartzBean.getJobName() );
+            }else {
+                return "删除成功";
+            }
         } catch (Exception e) {
-            return "删除失败";
+            return "删除失败"+e;
         }
         return "删除成功";
     }
 
+    @Transactional
     @RequestMapping("/runOnce")
     @ResponseBody
     public String  runOnce(int jobId)  {
         try {
             QuartzBean quartzBean = quartzBeanService.selectOne( jobId );
+            quartzBean.setStatus( 1 );
+            boolean b = scheduler.checkExists( JobKey.jobKey( quartzBean.getJobName() ) );
+            if(b) {
+                int i = quartzBeanService.updateOne( quartzBean );
+                if(i<1){throw new Exception( "sql失败" );}
+            }else {
+                quartzBeanService.delectOne(jobId);
+                createJob(quartzBean.getJobName(),quartzBean.getCronExpression());
+            }
             QuartzUtils.runOnce (scheduler,quartzBean.getJobName());
+
         } catch (Exception e) {
             return "运行一次失败";
         }
         return "运行一次成功";
     }
-
+    @Transactional
     @RequestMapping("/resume")
     @ResponseBody
     public String  resume(int jobId)  {
         try {
             QuartzBean quartzBean = quartzBeanService.selectOne( jobId );
+            quartzBean.setStatus( 1 );
+            boolean b = scheduler.checkExists( JobKey.jobKey( quartzBean.getJobName() ) );
+            if(b) {
+                int i = quartzBeanService.updateOne( quartzBean);
+                if(i<1){throw new Exception( "sql失败" );}
+
+            }else {
+                quartzBeanService.delectOne(jobId);
+                createJob(quartzBean.getJobName(),quartzBean.getCronExpression());
+            }
             QuartzUtils.resumeScheduleJob(scheduler,quartzBean.getJobName());
+
         } catch (Exception e) {
             return "启动失败";
         }
@@ -146,19 +193,30 @@ public class QuartzController {
 
     @RequestMapping("/update")
     @ResponseBody
-    public String  update(String jobName,String cronTime,int jobId)  {
+    public String  update(String jobName,String cronExpression,Integer jobId)  {
         //进行测试所以写死
 //            quartzBean.setJobName("test1");
 //            quartzBean.setCronExpression("10 * * * * ?");
-        QuartzBean quartzBean = new QuartzBean();
-        quartzBean.setJobName( jobName );
-        quartzBean.setId( jobId );
-        quartzBean.setCronExpression( cronTime );
-        quartzBean.setJobClass("com.hjljy.blog.Quartz.GuijiQuartz");
-        quartzBeanService.updateOne( quartzBean );
+        System.out.println(jobId+" @#$ "+jobName+"   " +cronExpression);
         try {
 
-            QuartzUtils.updateScheduleJob(scheduler,quartzBean);
+            QuartzBean quartzBean = new QuartzBean();
+            quartzBean.setJobName( jobName );
+            quartzBean.setId( jobId );
+            quartzBean.setStatus( 1 );
+            quartzBean.setCronExpression( cronExpression );
+            quartzBean.setJobClass("com.hjljy.blog.Quartz.GuijiQuartz");
+            int i = quartzBeanService.updateOne( quartzBean );
+            if(i<1){throw new Exception( "sql失败" );}
+            boolean b = scheduler.checkExists( JobKey.jobKey( quartzBean.getJobName() ) );
+            if(b) {
+                QuartzUtils.updateScheduleJob(scheduler,quartzBean);
+            }else {
+                quartzBeanService.delectOne(jobId);
+                createJob(quartzBean.getJobName(),quartzBean.getCronExpression());
+            }
+
+
         } catch (Exception e) {
             return "修改启动失败";
         }

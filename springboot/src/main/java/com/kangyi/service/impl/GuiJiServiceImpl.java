@@ -4,8 +4,10 @@ import com.kangyi.mapper.GuiJiMapper;
 import com.kangyi.pojo.GeLi;
 import com.kangyi.pojo.GuiJi;
 import com.kangyi.pojo.GuiJiExample;
+import com.kangyi.redisRepository.GuijiRepository;
 import com.kangyi.service.GeLiService;
 import com.kangyi.service.GuiJiService;
+import com.kangyi.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +23,13 @@ public class GuiJiServiceImpl implements GuiJiService {
 
     @Autowired
     GuiJiMapper guiJiMapper;
-//    @Override
+
+    @Autowired
+    RedisUtil redisUtil;
+
+    @Autowired
+    GuijiRepository guijiRepository;
+    @Override
     public int insertListGuiJi(ArrayList<GuiJi> listGuiJi, long orderId, Long userId, int type) {
 //        GuiJi guiJi = new GuiJi();
         int i=0;
@@ -35,14 +43,15 @@ public class GuiJiServiceImpl implements GuiJiService {
             Date date = new Date();
             Calendar cal = Calendar.getInstance();
             cal.setTime(endtime);
-            cal.add(Calendar.DATE, 14);
+            cal.add(Calendar.DATE, 30);
             Date enddate =cal.getTime();
             guiJi.setEnddate( enddate );
             guiJi.setArea( YNDhmNewDateString() );
-            i+=guiJiMapper.insert( guiJi );
+//            i+=guiJiMapper.insert( guiJi );
             System.out.println(guiJi);
-
+//            listGuiJi.add( guiJi );
         }
+         i = guiJiMapper.insertList( listGuiJi );
 
 
         return i;
@@ -122,5 +131,26 @@ public class GuiJiServiceImpl implements GuiJiService {
 
 
         return guiJiList;
+    }
+
+    @Override
+    public GuiJi selectOneById(Long typeId) {
+        GuiJi guiJi=null;
+        String key="guiji:"+typeId;
+        System.out.println(key);
+        if (guijiRepository.exists( key )){
+//            System.out.println("ok");
+//            guiJi= (GuiJi) redisUtil.get( key );
+            guiJi= (GuiJi) guijiRepository.getObject( key );
+//            System.out.println(object);
+
+        }else {
+             guiJi = guiJiMapper.selectByPrimaryKey( typeId );
+            redisUtil.set( key,guiJi );
+            guijiRepository.saveObject( key,guiJi );
+//            System.out.println("no");
+
+        }
+        return guiJi;
     }
 }

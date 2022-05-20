@@ -6,11 +6,10 @@ import moment from 'moment';
 import { callbackFieldsKeys } from '@/configuration';
 
 const { TextArea } = Input;
-export default ({ autoSize, style, blogInfo, userId, record, messageType, setInputVisible, formRef }) => {
+export default ({ autoSize, style, blogInfo, userInfo, record, messageType, setInputVisible, formRef }) => {
     const [form] = Form.useForm()
     const timestamp = moment(new Date()).valueOf();
     const createTime = moment(timestamp).format('YYYY-MM-DD HH:mm:ss');
-
     const onFinish = async ({ content }) => {
         messageType === 2 && setInputVisible(false)
         await axios.post(`http://localhost:8083/boke/addComment`, {
@@ -18,8 +17,8 @@ export default ({ autoSize, style, blogInfo, userId, record, messageType, setInp
             createTime,
             messageType,
             parentId: record?.parentId,
-            sendId: userId.id,
-            userName: userId?.username,
+            sendId: userInfo.id,
+            userName: userInfo?.nickname,
             parentName: record?.parentName,
             commentLouzhu: blogInfo?.louzhu,
             typeName: record?.typeName,

@@ -123,6 +123,10 @@ public class futureUtil {
     public static List<GuiJi> addGuijiListOnThrea(JSONArray r,String time,ArrayList<Long> orderIdList) throws InterruptedException {
         //组合线程请求参数
         JSONArray result = r;
+        if(r.size()==0){
+            System.out.println(r+" "+result.size());
+            return null;
+        }
         ExecutorService execPool = Executors.newFixedThreadPool(result.size());
 //        List<Future<JSONObject>> futures = new ArrayList<Future<JSONObject>>();
 //        List<ThreadHandlerRequest> list = new ArrayList<ThreadHandlerRequest>();
@@ -133,21 +137,17 @@ public class futureUtil {
         else if(100<result.size()&&result.size()<=150){a=3;}
         else if(150<result.size()&&result.size()<=250){a=2;}
 
+
         for (int i=0;i<result.size();i++){
             JSONObject singleobje=result.getJSONObject(i);
             //每10个减a级
             if(i%10==0){ j=j-a; }
             if(j<1){ j=10; }
-            if(orderIdList.get( i )!=0) {
                 ThreadAddOneGuiji one = new ThreadAddOneGuiji( singleobje, time, j, orderIdList.get( i ) );
                 list.add(one);
-            }else {
-                System.out.println("重复了"+singleobje);
-            }
-
         }
 
-        System.out.println(result.size()+" 主线程发起异步任务请求"+a);
+        System.out.println(result.size()+"个线程 主线程发起异步任务请求，策略是"+a);
         long startTime = System.currentTimeMillis();
         List<Future<GuiJi>> futures2 = execPool.invokeAll(list);
         System.out.println("22调用API耗时 : " + (System.currentTimeMillis() - startTime) );

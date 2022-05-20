@@ -17,4 +17,6 @@ public interface GuiJiService {
     int delectManyByOrderId(Long orderId);
 
     List<GuiJi> selectManyByJingWeiDu(BigDecimal bigWeiDu, BigDecimal smallWeiDu, BigDecimal bigJingDu, BigDecimal smalJingDu);
+
+    GuiJi selectOneById(Long typeId);
 }

@@ -1,10 +1,19 @@
 package com.kangyi;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.server.session.DefaultWebSessionManager;
 
@@ -15,6 +24,7 @@ import javax.servlet.SessionTrackingMode;
 import java.util.Collections;
 
 @SpringBootApplication
+@EnableCaching
 @EnableTransactionManagement
 //@ComponentScan({"com.*"})
 @MapperScan(basePackages = "com.kangyi.mapper")
@@ -39,5 +49,8 @@ public class Kangyi01Application  {
     public static void main(String[] args) {
         SpringApplication.run( Kangyi01Application.class, args );
     }
+
+
+
 
 }

@@ -27,7 +27,7 @@ public class GuijiJingWeiDU {
             guiJi.setGuijiPosition( city + json_result.getString( "title" ) );
             guiJi.setStarttime( YRDateString( time, "00:00" ) );
             guiJi.setEndtime( YRDateString( time, "23:59" ) );
-            guiJi.setEnddate( dateAddTian( guiJi.getEndtime(), 14 ) );
+            guiJi.setEnddate( dateAddTian( guiJi.getEndtime(), 30 ) );
 //                       guiJi.setEndtime(  );
 //                       System.out.println("@#$!!"+guiJi);
 //            guiJiList.add( guiJi );

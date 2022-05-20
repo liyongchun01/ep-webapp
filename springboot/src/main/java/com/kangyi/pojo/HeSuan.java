@@ -2,11 +2,12 @@ package com.kangyi.pojo;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.util.Date;
-
+@Data
 public class HeSuan {
 
     private String handelRemark;
@@ -45,7 +46,7 @@ public class HeSuan {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date processTime;
 
-    public int getStatus() {
+    public Integer getStatus() {
         return status;
     }
 

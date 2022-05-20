@@ -48,6 +48,11 @@ public class AUploadController {
         @Autowired
         UserService userService;
 
+    @Autowired
+    GuanzhuService guanzhuService;
+
+    @Autowired
+    CommentService commentService;
 
      @GetMapping
     @PostMapping
@@ -62,7 +67,7 @@ public class AUploadController {
             HttpSession session
             ) {
 
-         System.out.println("  !" +map.toString());
+//         System.out.println("  !" +map.toString());
          String sortField="insertTime";
          String sortType="desc";
 
@@ -72,8 +77,7 @@ public class AUploadController {
          Integer type1=(Integer)map.get( "type" );
          Integer pno1=(Integer)map.get( "pno" );
          Integer psize1=(Integer)map.get( "psize" );
-//         System.out.println("@#$ :"+psize1);
-//         System.out.println("@#$2 :"+map.get( "psize" ));
+
          Long userId=null;
          if (map.get( "userId" )!=null){
          userId= Long.parseLong( map.get( "userId" ).toString() );
@@ -100,7 +104,7 @@ public class AUploadController {
          }
 
          Map<String, Object> listForPage = orderService.getListForPage( type1, btime, etime, pno1, psize1, userId, sortField, sortType );
-         List<Order> orders = (List<Order>)listForPage.get( "order" );
+//         List<Order> orders = (List<Order>)listForPage.get( "order" );
          return  listForPage;
      }
 
@@ -123,8 +127,8 @@ public class AUploadController {
         Map<String, Object> map = new HashMap<>(3);
         Integer type = Integer.valueOf( String.valueOf( data.get( "type" ) ) );
         Long userId = (Long) session.getAttribute("userId");
-        System.out.println("$$  !! userId: "+userId);
-        System.out.println("$$  !! data: "+data.toString());
+        System.out.println("$$add  !! userId: "+userId);
+        System.out.println("$$add  !! data: "+data.toString());
 
          if(type==1) {
              if (data.get( "jingdu" ) != null || data.get( "weidu" ) != null) {
@@ -136,8 +140,8 @@ public class AUploadController {
                //获取当前时间，格式为yy-mm-dd hh:mm
                  heSuan.setArea( YNDhmNewDateString() );
 
-                 System.out.println("  @#$11 String hesuan: "+hesuanSt);
-                 System.out.println("  @#$11 String heSuan: "+heSuan);
+//                 System.out.println("  @#$11 String hesuan: "+hesuanSt);
+//                 System.out.println("  @#$11 String heSuan: "+heSuan);
 
 
 
@@ -334,6 +338,14 @@ public class AUploadController {
         Map<String, Object> map = new HashMap<>(3);
         Integer type = Integer.valueOf( String.valueOf( data.get( "type" ) ) );
         Long orderId = Long.valueOf( String.valueOf( data.get( "orderId" ) ) );
+//        Long userId = (Long) data.get( "userId" );
+        Long  userId = Long.valueOf( String.valueOf( data.get( "userId" ) ) );
+
+        if (userId==null||"null".equals( userId )) {
+            userId = (Long) session.getAttribute("userId");
+        }
+
+        String typeName=null;
 
 //        Long userId = (Long) session.getAttribute("userId");
         if(type==1){
@@ -342,8 +354,9 @@ public class AUploadController {
             String st = JSONObject.toJSONString( data );
             HeSuan heSuan= JSON.parseObject( st, HeSuan.class);
             heSuan.setArea( YNDhmNewDateString() );
-            System.out.println("  @#$11 String st: "+st);
-            System.out.println("  @#$11 String 实体: "+heSuan);
+            typeName="核酸点："+heSuan.getHesuanPosition();
+//            System.out.println("  @#$11 String st: "+st);
+//            System.out.println("  @#$11 String 实体: "+heSuan);
 //            后面去掉
             heSuan.setHesuanId( typeId );
             int i = heSuanService.updateOne(heSuan);
@@ -358,8 +371,9 @@ public class AUploadController {
             String st = JSONObject.toJSONString( data );
             YiMiao yiMiao= JSON.parseObject( st, YiMiao.class);
             yiMiao.setArea( YNDhmNewDateString() );
-            System.out.println("  @#$11 String st: "+st);
-            System.out.println("  @#$11 String 实体: "+yiMiao);
+            typeName="疫苗点："+yiMiao.getYimiaoPosition();
+//            System.out.println("  @#$11 String st: "+st);
+//            System.out.println("  @#$11 String 实体: "+yiMiao);
 
             yiMiao.setYimiaoId( typeId );
             int i = yiMiaoService.updateOne(yiMiao );
@@ -374,8 +388,9 @@ public class AUploadController {
             String st = JSONObject.toJSONString( data );
             GeLi geLi= JSON.parseObject( st, GeLi.class);
             geLi.setArea( YNDhmNewDateString() );
-            System.out.println("  @#$11 String st: "+st);
-            System.out.println("  @#$11 String 实体: "+geLi);
+            typeName="隔离点："+geLi.getGelidianPosition();
+//            System.out.println("  @#$11 String st: "+st);
+//            System.out.println("  @#$11 String 实体: "+geLi);
 
             geLi.setGeliId( typeId  );
 
@@ -390,8 +405,9 @@ public class AUploadController {
             JSONObject.DEFFAULT_DATE_FORMAT="yyyy-MM-dd HH:mm:ss";
             String guijis = JSONObject.toJSONString( data.get( "guiji" ) );
             ArrayList<GuiJi> listGuiJi= (ArrayList<GuiJi>)JSON.parseArray( guijis,GuiJi.class );
-            System.out.println("@#$44 listGuiJi: "+listGuiJi.toString());
-            System.out.println("@#$44 String guijis: "+guijis);
+            typeName="确诊患者轨迹信息";
+//            System.out.println("@#$44 listGuiJi: "+listGuiJi.toString());
+//            System.out.println("@#$44 String guijis: "+guijis);
 
 //            guiJi.setGuijiId( typeId );
 //
@@ -401,7 +417,6 @@ public class AUploadController {
 //            listGuiJi.add( guiJi );
 
 
-            Long userId = Long.valueOf( String.valueOf( data.get( "userId" ) ) );
 
             guiJiService.delectManyByOrderId( orderId );
             int i = guiJiService.insertListGuiJi( listGuiJi, orderId, userId, type );
@@ -410,9 +425,39 @@ public class AUploadController {
 
             if (i>=1) {
                 map.put( "msg", "修改成功，修改订单待审核  " );
-            }else { map.put("msg", "修改失败");}
+
+
+
+            }else {
+                map.put("msg", "修改失败");
+                return map;
+            }
 
         }
+
+//        List<Long> guanzhuUserId=null;
+        List<Comment> commentList=null;
+        List<Guanzhu> guanzhuList = guanzhuService.selectManyByStatusOrderId(  1, orderId );
+        for (Guanzhu guanzhu:guanzhuList){
+//            guanzhuUserId.add( guanzhu.getUserId() );
+            Comment comment = new Comment();
+            comment.setParentId( guanzhu.getUserId() );
+            comment.setParentRead( "0" );
+            comment.setLevel( (byte)0 );
+            comment.setContent( "你关注的疫情消息 "+typeName+" 已更新" );
+            comment.setOrderId( orderId );
+            comment.setCreateTime( new Date(  ) );
+            comment.setMessageType( (byte)0 );
+            comment.setSendId( userId );
+            comment.setCommentLouzhu( (byte)1 );
+            comment.setType( (byte) type.intValue() );
+
+            commentList.add( comment );
+        }
+
+        int ii=commentService.insertList(commentList);
+
+
 
         Order order = new Order();
         order.setOrderId( orderId );

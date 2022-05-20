@@ -18,9 +18,11 @@ public class QuartzUtils {
             // 构建定时任务信息
             JobDetail jobDetail = JobBuilder.newJob(jobClass).withIdentity(quartzBean.getJobName()).build();
             // 设置定时任务执行方式
+            System.out.println("@#$!!!time :"+quartzBean.getCronExpression());
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(quartzBean.getCronExpression());
             // 构建触发器trigger
             CronTrigger trigger = TriggerBuilder.newTrigger().withIdentity(quartzBean.getJobName()).withSchedule(scheduleBuilder).build();
+
             scheduler.scheduleJob(jobDetail, trigger);
         } catch (ClassNotFoundException e) {
             System.out.println("定时任务类路径出错：请输入类的绝对路径");
@@ -104,6 +106,7 @@ public class QuartzUtils {
      */
     public static void deleteScheduleJob(Scheduler scheduler, String jobName) {
         JobKey jobKey = JobKey.jobKey(jobName);
+
         try {
             scheduler.deleteJob(jobKey);
         } catch (SchedulerException e) {

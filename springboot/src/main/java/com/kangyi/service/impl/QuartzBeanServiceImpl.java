@@ -36,7 +36,7 @@ public class QuartzBeanServiceImpl implements QuartzBeanService {
             QuartzBeanExample quartzBeanExample = new QuartzBeanExample();
             QuartzBeanExample.Criteria criteria = quartzBeanExample.createCriteria();
             criteria.andIdEqualTo( quartzBean.getId() );
-            return quartzBeanMapper.updateByExample( quartzBean,quartzBeanExample );
+            return quartzBeanMapper.updateByExampleSelective( quartzBean,quartzBeanExample );
         }
 
     @Override
@@ -46,19 +46,29 @@ public class QuartzBeanServiceImpl implements QuartzBeanService {
         QuartzBeanExample oe = new QuartzBeanExample();
         QuartzBeanExample.Criteria criteria = oe.createCriteria();
 
-        if(status!=null){
+        if(status!=null&&status!=0){
             criteria.andStatusEqualTo( status );
+            System.out.println("111");
         }
-        if(jobName!=null&&jobName.trim().length()>0){
+        if(jobName!=null&&jobName.trim().length()>0&&!"null".equals( jobName )){
             criteria.andJobNameLike("%"+jobName+"%");
+            System.out.println(jobName+"123");
         }
+        System.out.println(status+jobName+pno);
         List<QuartzBean> quartzBeans = quartzBeanMapper.selectByExample( oe );
+//        System.out.println("@#$qua "+quartzBeans);
+
         Map<String, Object> map = new HashMap<>(3);
         map.put("quartzBeans", quartzBeans);
         map.put("pno", pno);
         map.put("psize", psize);
-        map.put("count", p.getTotal());
+        map.put("count",p.getTotal());
         return map;
 //        return null;
+    }
+
+    @Override
+    public int delectOne(int jobId) {
+        return quartzBeanMapper.deleteByPrimaryKey( jobId );
     }
 }

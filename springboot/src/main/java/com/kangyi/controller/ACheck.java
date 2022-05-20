@@ -2,6 +2,9 @@ package com.kangyi.controller;
 
 import com.kangyi.pojo.*;
 import com.kangyi.service.*;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping(path = "/check")
+@Api(value = "测试接口", tags = "审核管理相关的接口", description = "审核测试接口")
 @CrossOrigin(origins = {"http://localhost:8000"},allowCredentials = "true",allowedHeaders = {"X-Custom-Header"},
         maxAge = 3600L)
 //@CrossOrigin(origins = {"http://localhost:8000"},allowCredentials = "true",allowedHeaders = {"X-Custom-Header"},
@@ -42,6 +46,10 @@ public class ACheck {
     @GetMapping
     @PostMapping
     @RequestMapping(path = "/userlist")
+    //方法参数说明，name参数名；value参数说明，备注；dataType参数类型；required 是否必传；defaultValue 默认值
+//    @ApiImplicitParam(name = "user", value = "新增用户数据")
+    //说明是什么方法(可以理解为方法注释)
+    @ApiOperation(value = "查找全部用户1", notes = "查找全部用户")
 //    @ResponseBody
     public List<User> userlist(){
         return userService.selectAll();
@@ -70,15 +78,16 @@ public class ACheck {
         String btime= String.valueOf( map.get( "btime" ) );
         String etime= String.valueOf( map.get( "etime" ) );
         Integer type1=(Integer)map.get( "type" );
+//        Long id=(Long)map.get( "id" );
         Integer pno1=(Integer)map.get( "pno" );
         Integer psize1=(Integer)map.get( "psize" );
 //         System.out.println("@#$ :"+psize1);
 //         System.out.println("@#$2 :"+map.get( "psize" ));
         Long userId=null;
-//        if (map.get( "userId" )!=null){
-//            userId= Long.parseLong( map.get( "userId" ).toString() );
+        if (map.get( "id" )!=null){
+            userId= Long.parseLong( map.get( "id" ).toString() );
 //            System.out.println("$$  !! 普通userId: "+userId);
-//        }
+        }
 
         if (pno1 == null){
             pno1=1;
