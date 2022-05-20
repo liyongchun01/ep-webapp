@@ -22,7 +22,7 @@ export default ({ autoSize, style, blogInfo, userInfo, record, messageType, setI
             parentName: record?.parentName,
             commentLouzhu: blogInfo?.louzhu,
             typeName: record?.typeName,
-            orderId: blogInfo[callbackFieldsKeys[blogInfo.type]]?.orderId,
+            orderId: blogInfo[callbackFieldsKeys[blogInfo?.type]]?.orderId,
             type: blogInfo?.type,
         })
         form.setFieldsValue({ content: "" })

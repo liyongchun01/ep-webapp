@@ -118,7 +118,7 @@ export default () => {
     //             content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
     //             louzhu: 0,
     //             sendId: 1001,
-    //             commeId: 1010,
+    //             commentId: 1010,
     //             level: 1,
     //             guanzhu: 0
     //         },
@@ -127,7 +127,7 @@ export default () => {
     //             content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
     //             louzhu: 0,
     //             sendId: 1002,
-    //             commeId: 1020,
+    //             commentId: 1020,
     //             level: 0,
     //         },
     //         {
@@ -135,7 +135,7 @@ export default () => {
     //             content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
     //             louzhu: 1,
     //             sendId: 1003,
-    //             commeId: 1030,
+    //             commentId: 1030,
     //             level: 0,
     //         },
     //         {
@@ -143,7 +143,7 @@ export default () => {
     //             content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
     //             louzhu: 0,
     //             sendId: 1004,
-    //             commeId: 1040,
+    //             commentId: 1040,
     //             level: 0,
     //         },
     //     ]
@@ -172,37 +172,36 @@ export default () => {
     }
 
     // 删除评论方法
-    const deleteComment = async ({ commeId }) => {
+    const deleteComment = async ({ commentId }) => {
         await axios.get(`http://localhost:8083/boke/delectComment`, {
             params: {
-                commeId,
+                commentId,
                 userId: userId.id
             }
         })
         formRef.current?.reload()
     }
 
+
     // 关注方法
     const followBlog = async (val) => {
-        await axios.get(`http://localhost:8083/boke/guanzhu`, {
-            params: {
-                userId: userId.id,
-                orderId,
-                type,
-                typeId,
-                createTime,
-                typeName: blogInfo[callbackFieldsKeys[blogInfo.type]][callbackFieldsPositionKeys[blogInfo.type]],
-                guanzhu: val
-            }
+        await axios.post(`http://localhost:8083/boke/guanzhu`, {
+            userId: userId.id,
+            orderId,
+            type,
+            typeId,
+            createTime,
+            typeName: blogInfo[callbackFieldsKeys[blogInfo.type]][callbackFieldsPositionKeys[blogInfo.type]],
+            guanzhu: val
         })
         formRef.current?.reload()
     }
 
     // 置顶方法
-    const toppingComment = async ({ commeId, level }) => {
+    const toppingComment = async ({ commentId, level }) => {
         await axios.get(`http://localhost:8083/boke/upComment`, {
             params: {
-                commeId,
+                commentId,
                 level,
                 userId: userId.id
             }
@@ -212,23 +211,21 @@ export default () => {
 
     // 协同编辑
     const joinEdit = async (userRemark, jiaru) => {
-        await axios.get(`http://localhost:8083/boke/jiaru`, {
-            params: {
-                fromUserId: userId.id,
-                orderId,
-                type,
-                userRemark,
-                typeId,
-                createTime,
-                typeName: blogInfo[callbackFieldsKeys[blogInfo.type]][callbackFieldsPositionKeys[blogInfo.type]],
-                jiaru
-            }
+        await axios.post(`http://localhost:8083/boke/jiaru`, {
+            fromUserId: userId.id,
+            orderId,
+            type,
+            userRemark,
+            typeId,
+            createTime,
+            typeName: blogInfo[callbackFieldsKeys[blogInfo.type]][callbackFieldsPositionKeys[blogInfo.type]],
+            jiaru
         })
         formRef.current?.reload()
     }
 
     const childReplay = (record) => {
-        setInputId(record.commeId)
+        setInputId(record.commentId)
         setInputVisible(!inputVisible)
     }
 
@@ -252,7 +249,7 @@ export default () => {
     //         content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
     //         commentLouzhu: 0,
     //         sendId: 1001,
-    //         commeId: 1010,
+    //         commentId: 1010,
     //         level: 1,
     //         guanzhu: 0,
     //         userName: "awefe",
@@ -264,7 +261,7 @@ export default () => {
     //         content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
     //         commentLouzhu: 0,
     //         sendId: 1002,
-    //         commeId: 1020,
+    //         commentId: 1020,
     //         level: 0,
     //         userName: "awefe",
     //         typeName: "hesuan",
@@ -275,7 +272,7 @@ export default () => {
     //         content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
     //         commentLouzhu: 1,
     //         sendId: 1003,
-    //         commeId: 1030,
+    //         commentId: 1030,
     //         level: 0,
     //         userName: "awefe",
     //         typeName: "hesuan",
@@ -286,7 +283,7 @@ export default () => {
     //         content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
     //         commentLouzhu: 0,
     //         sendId: 1004,
-    //         commeId: 1040,
+    //         commentId: 1040,
     //         level: 0,
     //         userName: "awefe",
     //         typeName: "hesuan",
@@ -346,21 +343,23 @@ export default () => {
         actions: {
             render: (_, record) => [
                 <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" event={() => console.log("点赞")} />,
-                <IconText icon={MessageOutlined} text="2" key="list-vertical-message" event={() => setInputId(record.commeId)} />,
+                <IconText icon={MessageOutlined} text="2" key="list-vertical-message" event={() => setInputId(record.commentId)} />,
                 record?.level === 1 || blogInfo.louzhu === 1 && <VerticalAlignTopOutlined className={styles.iconStyle} onClick={() => toppingComment(record)} />,
                 record?.sendId === userId.id && <DeleteOutlined className={styles.ellipsisStyle} onClick={() => deleteComment(record)} />
             ],
         },
         content: {
             render: (_, record) => (
-                inputVisible && inputId === record.commeId
+                inputVisible && inputId === record.commentId
                 && <InputCard
                     autoSize={{ minRows: 3, maxRows: 5 }}
                     style={{ "background": "transparent" }}
                     record={record}
                     messageType={2}
+                    blogInfo={blogInfo}
                     setInputVisible={setInputVisible}
                     userInfo={userId}
+                    formRef={formRef}
                 />
             )
         }

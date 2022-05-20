@@ -70,11 +70,11 @@ export default ({ blogInfo, followBlog, joinEdit, formRef }) => {
                                     btnObj[blogInfo?.jiaru]
                                 }
                                 {
-                                    blogInfo?.guanzhu === 1
-                                        ? <Button onClick={() => followBlog(0)} type="primary" shape="round" icon={<PlusOutlined />} >
+                                    blogInfo?.guanzhu === 0
+                                        ? <Button onClick={() => followBlog(1)} type="primary" shape="round" icon={<PlusOutlined />} >
                                             关注
                                         </Button>
-                                        : <Popconfirm title="确定取消关注吗？" okText="确定" cancelText="取消" onConfirm={() => followBlog(1)}>
+                                        : <Popconfirm title="确定取消关注吗？" okText="确定" cancelText="取消" onConfirm={() => followBlog(0)}>
                                             <Button type="default" shape="round" style={{ "marginRight": "10px", "color": "rgba(0, 0, 0, 0.45)" }}  >
                                                 已关注
                                             </Button>
