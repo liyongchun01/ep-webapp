@@ -193,7 +193,7 @@ public class Amessage {
             i=commentService.updataOneById(commentId,comment);
 
         }
-//        int i=commentService.delectOne(commeId);
+//        int i=commentService.delectOne(commentId);
         if (i<=0){
             return "失败";
         }else {

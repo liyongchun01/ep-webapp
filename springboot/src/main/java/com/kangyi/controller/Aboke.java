@@ -198,15 +198,15 @@ public class Aboke {
     public String delectComment(
             @RequestBody  Map<String, Object> data
     ){
-        Long commeId = Long.valueOf( String.valueOf( data.get( "commeId" )));
+        Long commentId = Long.valueOf( String.valueOf( data.get( "commentId" )));
         Long userId = Long.valueOf( String.valueOf( data.get( "userId" )));
-        if (commeId==null||"null".equals( commeId )){
+        if (commentId==null||"null".equals( commentId )){
             return "删除失败";
         }
 
 
-//        Comment comment=commentService.selectOneById(commeId);
-        int i=commentService.delectOne(commeId);
+//        Comment comment=commentService.selectOneById(commentId);
+        int i=commentService.delectOne(commentId);
         if (i<=0){
             return "评论失败";
         }else {
@@ -221,19 +221,19 @@ public class Aboke {
     public String updataComment(
             @RequestBody  Map<String, Object> data
     ){
-        Long commeId = Long.valueOf( String.valueOf( data.get( "commeId" )));
+        Long commentId = Long.valueOf( String.valueOf( data.get( "commentId" )));
         Long userId = Long.valueOf( String.valueOf( data.get( "userId" )));
         Integer level = (Integer)data.get( "level" );
-        if (commeId==null||"null".equals( commeId )){
+        if (commentId==null||"null".equals( commentId )){
             return "失败";
         }
 
 
         Comment comment = new Comment();
         comment.setLevel( (byte)level.intValue() );
-        comment.setCommentId( commeId );
-        int i=commentService.updataOneById(commeId,comment);
-//        int i=commentService.delectOne(commeId);
+        comment.setCommentId( commentId );
+        int i=commentService.updataOneById(commentId,comment);
+//        int i=commentService.delectOne(commentId);
         if (i<=0){
             return "失败";
         }else {
@@ -275,6 +275,10 @@ public class Aboke {
     @ResponseBody
     public String guanzhuBoke(
             @RequestBody  Map<String, Object> data
+//            @ModelAttribute
+//            Guanzhu guanzhu
+
+
     ){
 //        String content=(String)data.get( "content" );
 //        Integer pno=(Integer)data.get( "parentId" );

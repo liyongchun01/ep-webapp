@@ -78,15 +78,15 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public int delectOne(Long commeId) {
+    public int delectOne(Long commentId) {
 
         CommentExample commentExample = new CommentExample();
         CommentExample.Criteria criteria = commentExample.createCriteria();
-        criteria.andCommentIdEqualTo( commeId );
+        criteria.andCommentIdEqualTo( commentId );
 //        commentMapper.
-        Comment comment = selectOneById( commeId );
+        Comment comment = selectOneById( commentId );
         int i = commentMapper.deleteByExample( commentExample );
-        String key="commentId:"+commeId;
+        String key="commentId:"+commentId;
         if (redisUtil.exists( key )){
             redisUtil.del( key );
         }
@@ -95,7 +95,7 @@ public class CommentServiceImpl implements CommentService {
 //            List<Comment> commentList = (List<Comment> )redisUtil.get( key );
 //            commentList.remove( comment );
 //            redisUtil.set( key,commentList );
-//            redisUtil.del( "commentId:"+commeId);
+//            redisUtil.del( "commentId:"+commentId);
 ////            System.out.println("list"+commentList);
 //
 //        }
@@ -106,9 +106,9 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment selectOneById(Long commeId) {
+    public Comment selectOneById(Long commentId) {
 
-        String key="commentId:"+commeId;
+        String key="commentId:"+commentId;
 
         if(redisUtil.exists( key )){
             Comment o = (Comment)redisUtil.get( key );
@@ -117,7 +117,7 @@ public class CommentServiceImpl implements CommentService {
 
             CommentExample commentExample = new CommentExample();
             CommentExample.Criteria criteria = commentExample.createCriteria();
-            criteria.andCommentIdEqualTo( commeId );
+            criteria.andCommentIdEqualTo( commentId );
             List<Comment> commentList = commentMapper.selectByExample( commentExample );
             Comment comment = commentList.get( 0 );
             redisUtil.set( key,comment,24*60*60 );
@@ -126,19 +126,19 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public int updataOneById(Long commeId, Comment comment) {
+    public int updataOneById(Long commentId, Comment comment) {
 
-        Comment comment1 = selectOneById( commeId );
+        Comment comment1 = selectOneById( commentId );
 //        comment.setLevel( (byte) level.intValue() );
 //        comment.setLevel( new Byte( String.valueOf( level ) ) );
 //        String Okey="commentOId:"+comment1.getOrderId();
-        String Idkey="commentId:"+commeId;
+        String Idkey="commentId:"+commentId;
         if (redisUtil.exists( Idkey )){
             redisUtil.del( Idkey );
         }
         CommentExample commentExample = new CommentExample();
         CommentExample.Criteria criteria = commentExample.createCriteria();
-        criteria.andCommentIdEqualTo( commeId );
+        criteria.andCommentIdEqualTo( commentId );
 
 
 //        if (redisUtil.exists( Okey )){

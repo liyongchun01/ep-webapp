@@ -12,11 +12,11 @@ public interface CommentService {
 
     int insertOne(Comment comment);
 
-    int delectOne(Long commeId);
+    int delectOne(Long commentId);
 
-    Comment selectOneById(Long commeId);
+    Comment selectOneById(Long commentId);
 
-    int updataOneById(Long commeId, Comment comment);
+    int updataOneById(Long commentId, Comment comment);
 
     List<Comment> getMessageByOrserIdList(List<Long> orderIdList, Integer parentRead, String sortField, String sortType, Integer type);
 

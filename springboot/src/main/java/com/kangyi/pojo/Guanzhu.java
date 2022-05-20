@@ -1,7 +1,9 @@
 package com.kangyi.pojo;
 
-import java.util.Date;
+import lombok.Data;
 
+import java.util.Date;
+@Data
 public class Guanzhu {
     private Long guanzhuId;
 
