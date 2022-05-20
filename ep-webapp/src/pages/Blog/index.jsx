@@ -16,8 +16,8 @@ export default () => {
     const timestamp = moment(new Date()).valueOf();
     const createTime = moment(timestamp).format('YYYY-MM-DD HH:mm:ss');
     const { orderId, type, typeId } = history.location.query
-    const [userId, setUserId] = useState(1001)
-    const [blogInfo, setBolgInfo] = useState()
+    const [userId, setUserId] = useState()
+    const [blogInfo, setBlogInfo] = useState()
     const [inputId, setInputId] = useState()
     const [inputVisible, setInputVisible] = useState(false)
     // const blogInfo = {
@@ -162,8 +162,8 @@ export default () => {
                 psize: params?.pageSize,
             }
         })
-        setUserId(uId.id)
-        setBolgInfo(list)
+        setUserId(uId)
+        setBlogInfo(list)
 
         return {
             data: list?.commentList,
@@ -176,7 +176,7 @@ export default () => {
         await axios.get(`http://localhost:8083/boke/delectComment`, {
             params: {
                 commeId,
-                userId
+                userId: userId.id
             }
         })
         formRef.current?.reload()
@@ -186,7 +186,7 @@ export default () => {
     const followBlog = async (val) => {
         await axios.get(`http://localhost:8083/boke/guanzhu`, {
             params: {
-                userId,
+                userId: userId.id,
                 orderId,
                 type,
                 typeId,
@@ -204,7 +204,7 @@ export default () => {
             params: {
                 commeId,
                 level,
-                userId
+                userId: userId.id
             }
         })
         formRef.current?.reload()
@@ -214,7 +214,7 @@ export default () => {
     const joinEdit = async (userRemark, jiaru) => {
         await axios.get(`http://localhost:8083/boke/jiaru`, {
             params: {
-                fromUserId: userId,
+                fromUserId: userId.id,
                 orderId,
                 type,
                 userRemark,
@@ -348,7 +348,7 @@ export default () => {
                 <IconText icon={LikeOutlined} text="156" key="list-vertical-like-o" event={() => console.log("点赞")} />,
                 <IconText icon={MessageOutlined} text="2" key="list-vertical-message" event={() => setInputId(record.commeId)} />,
                 record?.level === 1 || blogInfo.louzhu === 1 && <VerticalAlignTopOutlined className={styles.iconStyle} onClick={() => toppingComment(record)} />,
-                record?.sendId === userId && <DeleteOutlined className={styles.ellipsisStyle} onClick={() => deleteComment(record)} />
+                record?.sendId === userId.id && <DeleteOutlined className={styles.ellipsisStyle} onClick={() => deleteComment(record)} />
             ],
         },
         content: {
@@ -360,6 +360,7 @@ export default () => {
                     record={record}
                     messageType={2}
                     setInputVisible={setInputVisible}
+                    userInfo={userId}
                 />
             )
         }
@@ -388,7 +389,7 @@ export default () => {
                         <Divider>评论</Divider>
                     }
                 />
-                <InputCard autoSize={{ minRows: 5, maxRows: 5 }} style={{}} blogInfo={blogInfo} messageType={1} formRef={formRef} />
+                <InputCard autoSize={{ minRows: 5, maxRows: 5 }} userInfo={userId} style={{}} blogInfo={blogInfo} messageType={1} formRef={formRef} />
             </PageContainer>
         </>
     )

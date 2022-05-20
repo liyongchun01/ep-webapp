@@ -3,9 +3,10 @@ import { Card, Form, Input, Button } from 'antd'
 import styles from '../../styles.less'
 import axios from 'axios';
 import moment from 'moment';
+import { callbackFieldsKeys } from '@/configuration';
 
 const { TextArea } = Input;
-export default ({ autoSize, style, blogInfo, record, messageType, setInputVisible, formRef }) => {
+export default ({ autoSize, style, blogInfo, userId, record, messageType, setInputVisible, formRef }) => {
     const [form] = Form.useForm()
     const timestamp = moment(new Date()).valueOf();
     const createTime = moment(timestamp).format('YYYY-MM-DD HH:mm:ss');
@@ -17,12 +18,12 @@ export default ({ autoSize, style, blogInfo, record, messageType, setInputVisibl
             createTime,
             messageType,
             parentId: record?.parentId,
-            sendId: record?.sendId,
-            userName: record?.userName,
+            sendId: userId.id,
+            userName: userId?.username,
             parentName: record?.parentName,
-            commentLouzhu: record?.commentLouzhu,
+            commentLouzhu: blogInfo?.louzhu,
             typeName: record?.typeName,
-            orderId: blogInfo?.orderId,
+            orderId: blogInfo[callbackFieldsKeys[blogInfo.type]]?.orderId,
             type: blogInfo?.type,
         })
         form.setFieldsValue({ content: "" })

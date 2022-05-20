@@ -6,7 +6,10 @@ import styles from './styles.less'
 
 const { Panel } = Collapse;
 export default ({ blogInfo }) => {
-    const behaviourArr = Object.entries(blogInfo.qiekai)
+    let behaviourArr = {}
+    if (blogInfo.type == 4) {
+        behaviourArr = Object.entries(blogInfo?.qiekai)
+    }
 
     return (
         <ProDescriptions column={3} title="详情信息" style={{ "marginLeft": "5px" }} bordered className={styles.descriptionStyle}>

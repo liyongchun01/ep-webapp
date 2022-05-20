@@ -7,6 +7,7 @@ import { callbackFieldsId } from '@/configuration';
 
 export default ({ type }) => {
     const [isLoading, setIsloading] = useState(true)
+    const [linkParams, setLinkParams] = useState()
     const mapId = useRef() //  地图实例
 
     useEffect(() => {
@@ -24,6 +25,17 @@ export default ({ type }) => {
                 fn.call(this)
             }, delay)
         }
+    }
+
+    window.getBehaviorInfo = () => {
+        history.push({
+            pathname: '/blog',
+            query: {
+                type,
+                orderId: linkParams.orderId,
+                typeId: linkParams[callbackFieldsId[type]]
+            },
+        });
     }
 
     const mainMap = () => {
@@ -48,31 +60,19 @@ export default ({ type }) => {
 
                 const infoWindowList = Array(10)
 
-                window.getBehaviorInfo = (params) => {
-                    params = JSON.parse(params)
-                    history.push({
-                        pathname: '/blog',
-                        query: {
-                            type: params.type,
-                            orderId: params.orderId,
-                            typeId: params[callbackFieldsId[type]]
-                        },
-                    });
-                }
-
                 const infoContent = (item) => {
                     const info = {
                         1: {
-                            content: `  核酸检测信息 <br/> <h3>${item.hesuanPosition}</h3> ${item.hesuanName} <br/> 工作时间：${item.starttime} - ${item.endtime} <br /> 最新时间: ${item.area} 人数: ${item.renshu} <br/> <a onClick=getBehaviorInfo(\`${JSON.stringify(item)}\`)>博客</a>`,
+                            content: `  核酸检测信息 <br/> <h3>${item.hesuanPosition}</h3> ${item.hesuanName} <br/> 工作时间：${item.starttime} - ${item.endtime} <br /> 最新时间: ${item.area} 人数: ${item.renshu} <br/> <a onClick=getBehaviorInfo()>博客</a>`,
                         },
                         2: {
-                            content: `  疫苗接种信息 <br/> <h3>${item.yimiaoPosition}</h3> ${item.yimaioName} <br/>工作时间：${item.starttime} - ${item.endtime}  <br/>所属机构：${item.orgType} <br/> 第${item.batch}批次 <br /> 最新时间: ${item.area} 人数: ${item.renshu} <br/> <a onClick=getBehaviorInfo(\`${JSON.stringify(item)}\`)>博客</a>`,
+                            content: `  疫苗接种信息 <br/> <h3>${item.yimiaoPosition}</h3> ${item.yimaioName} <br/>工作时间：${item.starttime} - ${item.endtime}  <br/>所属机构：${item.orgType} <br/> 第${item.batch}批次 <br /> 最新时间: ${item.area} 人数: ${item.renshu} <br/> <a onClick=getBehaviorInfo()>博客</a>`,
                         },
                         3: {
-                            content: ` 隔离地点信息 <br/>  <h3>${item.gelidianPosition}</h3> ${item.gelidianName} <br/>所属机构：${item.geliOrg} <br /> 最新时间: ${item.area} 隔离人数: ${item.grlirenshu} <br /> 联系电话${item.contact} <br/> <a onClick=getBehaviorInfo(\`${JSON.stringify(item)}\`)>博客</a>`,
+                            content: ` 隔离地点信息 <br/>  <h3>${item.gelidianPosition}</h3> ${item.gelidianName} <br/>所属机构：${item.geliOrg} <br /> 最新时间: ${item.area} 隔离人数: ${item.grlirenshu} <br /> 联系电话${item.contact} <br/> <a onClick=getBehaviorInfo()>博客</a>`,
                         },
                         4: {
-                            content: ` 排查确诊者轨迹信息 <br/> <h3>${item.guijiPosition}</h3>  时间：${item.starttime} - ${item.endtime} <br/> <a onClick=getBehaviorInfo(\`${JSON.stringify(item)}\`)>博客</a>`,
+                            content: ` 排查确诊者轨迹信息 <br/> <h3>${item.guijiPosition}</h3>  时间：${item.starttime} - ${item.endtime} <br/> <a onClick=getBehaviorInfo()>博客</a>`,
                         }
                     }
                     return info
@@ -124,6 +124,7 @@ export default ({ type }) => {
                                 formatId = formatId.split("-")[0]
                             }
                             if (+formatId === index) {
+                                setLinkParams(item)
                                 infoWindowList[Number(formatId)]?.setContent(
                                     infoContent(item)[type].content
                                 )
