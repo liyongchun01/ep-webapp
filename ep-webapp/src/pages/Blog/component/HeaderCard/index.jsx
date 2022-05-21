@@ -1,7 +1,6 @@
 import React, { useState } from "react"
 import { EditOutlined, PlusOutlined } from "@ant-design/icons"
-import { Button, Card, Modal, Form, Input, Popconfirm, Popover, Tag, Empty } from "antd"
-import moment from 'moment';
+import { Button, Card, Modal, Form, Input, Popconfirm, Popover, Empty } from "antd"
 import DescriptionsCard from "../DescriptionsCard";
 import { callbackFieldsKeys, serviceTypeObject, callbackFieldsNameKeys } from "@/configuration";
 
@@ -10,10 +9,6 @@ export default ({ blogInfo, followBlog, joinEdit, formRef }) => {
     const [modalVisible, setModalVisible] = useState(false)
     const [jiaruStatus, setJiaruStatus] = useState(null)
     const [form] = Form.useForm()
-    let createTime = ""
-    if (blogInfo) {
-        createTime = blogInfo[callbackFieldsKeys[blogInfo?.type]]?.uploadTime
-    }
 
     const btnObj = {
         0:
@@ -88,17 +83,6 @@ export default ({ blogInfo, followBlog, joinEdit, formRef }) => {
                             </>
                         }
                     >
-                        <Card type="inner" style={{ "marginBottom": 16 }}>
-                            <Meta
-                                title={
-                                    <>
-                                        {blogInfo?.parentName}
-                                        <span style={{ "fontSize": "13px", "color": "rgba(0, 0, 0, 0.45)" }}> <span>{moment(createTime, "YYYY-MM-DD HH:mm").fromNow()}</span></span>
-                                    </>
-                                }
-                                description="This is the description"
-                            />
-                        </Card>
                         <Meta
                             description={
                                 <>
