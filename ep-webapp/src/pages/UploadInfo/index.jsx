@@ -10,6 +10,7 @@ import axios from 'axios';
 import { tagObject, serviceTypeObject } from '@/configuration'
 import moment from 'moment';
 const { RangePicker } = DatePicker
+import { history } from 'umi';
 
 export default () => {
     const [userId, setUserId] = useState()
@@ -108,6 +109,18 @@ export default () => {
         clearFilters()
     };
 
+    // 跳转博客方法
+    const toBlog = (record) => {
+        history.push({
+            pathname: '/blog',
+            query: {
+                type: record.type,
+                orderId: record.orderId,
+                typeId: record.typeId
+            },
+        });
+    }
+
     const columns = [
         {
             title: '类型',
@@ -115,7 +128,7 @@ export default () => {
             key: 'type',
             render: (_, record) => (
                 <>
-                    {serviceTypeObject[record?.type]}
+                    <Button type='link' onClick={() => toBlog(record)}>{serviceTypeObject[record?.type]}</Button>
                 </>
             ),
             filters: [

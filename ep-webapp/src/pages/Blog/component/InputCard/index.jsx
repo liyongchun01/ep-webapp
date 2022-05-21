@@ -16,14 +16,15 @@ export default ({ autoSize, style, blogInfo, userInfo, record, messageType, setI
             content,
             createTime,
             messageType,
-            parentId: record?.parentId,
+            parentId: record?.sendId,
             sendId: userInfo.id,
             userName: userInfo?.nickname,
-            parentName: record?.parentName,
+            parentName: record?.userName,
             commentLouzhu: blogInfo?.louzhu,
             typeName: record?.typeName,
             orderId: blogInfo[callbackFieldsKeys[blogInfo?.type]]?.orderId,
             type: blogInfo?.type,
+            userRemark: record?.userRemark
         })
         form.setFieldsValue({ content: "" })
         formRef.current?.reload()

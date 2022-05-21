@@ -7,6 +7,7 @@ import DetailDrawer from '@/components/DetailDrawer';
 import axios from 'axios';
 import moment from 'moment';
 import { tagObject, serviceTypeObject } from '../../configuration.js'
+import { history } from 'umi';
 
 const { RangePicker } = DatePicker
 
@@ -111,10 +112,6 @@ export default () => {
         clearFilters()
     };
 
-    const onOk = () => {
-        form.submit()
-    }
-
     const onFinish = async ({ reason }) => {
         setModalVisible(false)
         await axios.get(`http://localhost:8083/check/no`, {
@@ -145,6 +142,18 @@ export default () => {
         formRef.current?.reload()
     }
 
+    // 跳转博客方法
+    const toBlog = (record) => {
+        history.push({
+            pathname: '/blog',
+            query: {
+                type: record.type,
+                orderId: record.orderId,
+                typeId: record.typeId
+            },
+        });
+    }
+
     const columns = [
         {
             title: '用户类型',
@@ -161,7 +170,7 @@ export default () => {
             search: false,
             render: (_, record) => (
                 <>
-                    {serviceTypeObject[record?.type]}
+                    <Button type='link' onClick={() => toBlog(record)}>{serviceTypeObject[record?.type]}</Button>
                 </>
             ),
             filters: [
@@ -242,7 +251,7 @@ export default () => {
                 width={700}
                 destroyOnClose
                 title="驳回"
-                onOk={onOk}
+                onOk={() => form.submit()}
                 onCancel={() => setModalVisible(false)}
             >
                 <Form

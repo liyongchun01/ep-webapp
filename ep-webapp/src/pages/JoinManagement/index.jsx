@@ -4,10 +4,9 @@ import { PageContainer } from '@ant-design/pro-layout';
 import ProTable from '@ant-design/pro-table';
 import DetailDrawer from '@/components/DetailDrawer';
 import axios from 'axios';
+import { history } from 'umi';
 import { tagObject, serviceTypeObject } from '../../configuration.js'
-/**
- * 未完成 5/19 12:22
- */
+
 export default () => {
     const [userId, setUserId] = useState()
     const [detailVisible, setDetailVisible] = useState(false)
@@ -24,7 +23,40 @@ export default () => {
 
     const dataSource = [
         {
-
+            orderId: 1001,
+            userId: 1231,
+            typeId: 12,
+            type: 1,
+            status: 1,
+            insertTime: "2022-1-12 12:21",
+            handelRemark: "123"
+        },
+        {
+            orderId: 1001,
+            userId: 1231,
+            typeId: 12,
+            type: 1,
+            status: 2,
+            insertTime: "2022-1-12 12:21",
+            handelRemark: "123"
+        },
+        {
+            orderId: 1001,
+            userId: 1231,
+            typeId: 12,
+            type: 1,
+            status: 3,
+            insertTime: "2022-1-12 12:21",
+            handelRemark: "123"
+        },
+        {
+            orderId: 1001,
+            userId: 1231,
+            typeId: 12,
+            type: 1,
+            status: 2,
+            insertTime: "2022-1-12 12:21",
+            handelRemark: "123"
         }
     ]
 
@@ -43,7 +75,7 @@ export default () => {
         setUserId(uId)
 
         return {
-            data: list?.order,
+            data: list?.jiaru,
             total: list?.count
         }
     }
@@ -72,14 +104,14 @@ export default () => {
         form.submit()
     }
 
-    const onFinish = async ({ reason }) => {
+    const onFinish = async ({ adminRemark }) => {
         setModalVisible(false)
-        await axios.get(`http://localhost:8083/check/no`, {
+        await axios.get(`http://localhost:8083/message/jiaruNo`, {
             params: {
                 type: rejectFields.type,
                 typeId: rejectFields.typeId,
                 orderId: rejectFields.orderId,
-                handelRemark: reason
+                handelRemark: adminRemark
             }
         })
         formRef.current?.reload()
@@ -92,17 +124,49 @@ export default () => {
 
     // 通过方法
     const confirmData = async ({ type, typeId, orderId }) => {
-        await axios.get(`http://localhost:8083/check/ok`, {
+        await axios.get(`http://localhost:8083/message/jiaruOk`, {
             params: {
-                type,
-                typeId,
-                orderId
+                jiaruId: orderId,
+                userId: userId.id,
             }
         })
         formRef.current?.reload()
     }
 
+    // 跳转博客方法
+    const toBlog = (record) => {
+        history.push({
+            pathname: '/blog',
+            query: {
+                type: record.type,
+                orderId: record.orderId,
+                typeId: record.typeId
+            },
+        });
+    }
+
     const columns = [
+        {
+            title: '来源',
+            dataIndex: "actType",
+            hideInTable: true,
+            valueType: 'select',
+            request: async () => [
+                {
+                    label: '全部',
+                    value: 0
+                },
+                {
+                    label: '加入',
+                    value: 1
+                },
+                {
+                    label: '关注',
+                    value: 2
+                }
+            ],
+            initialValue: 0,
+        },
         {
             title: '类型',
             dataIndex: 'actType',
@@ -110,7 +174,7 @@ export default () => {
             search: false,
             render: (_, record) => (
                 <>
-                    {serviceTypeObject[record?.type]}
+                    <Button type='link' onClick={() => toBlog(record)}>{serviceTypeObject[record?.type]}</Button>
                 </>
             ),
             filters: [
@@ -127,7 +191,6 @@ export default () => {
             title: '上传时间',
             dataIndex: 'insertTime',
             search: false,
-            sorter: true,
             key: 'insertTime',
         },
         {
@@ -166,7 +229,7 @@ export default () => {
                         </Button>
                     </Popconfirm>
                     <Button type="link" onClick={() => setModal(record)}>
-                        驳回
+                        拒绝
                     </Button>
                     <Button type="link" onClick={() => detailClick(record)}>
                         详情
@@ -183,6 +246,8 @@ export default () => {
                     columns={columns}
                     actionRef={formRef}
                     request={fetchList}
+                    dataSource={dataSource}
+                // search={false}
                 />
             </PageContainer>
             <Modal
@@ -198,8 +263,8 @@ export default () => {
                     onFinish={onFinish}
                     preserve={false}
                 >
-                    <Form.Item label="驳回原因" name="reason" rules={[{ required: true }]}>
-                        <Input placeholder="请输入驳回原因" />
+                    <Form.Item label="拒绝原因" name="adminRemark" rules={[{ required: true }]}>
+                        <Input placeholder="请输入拒绝原因" />
                     </Form.Item>
                 </Form>
             </Modal>
