@@ -51,63 +51,88 @@ public class Amessage {
     @PostMapping
     @RequestMapping("/list")
     @ResponseBody
-    public Map<String, Object> getBokeList(
-            @RequestBody  Map<String, Object> data
+    public Map<String, Object> getMessageList(
+//            @RequestBody  Map<String, Object> data,
+            @RequestParam(value = "pno",defaultValue = "1") Integer pno,
+            @RequestParam(value = "psize",defaultValue = "10") Integer psize,
+            @RequestParam(value = "type",defaultValue = "0") Integer type,
+            @RequestParam(value = "parentRead",defaultValue = "") Integer parentRead,
+            @RequestParam(value = "messageType",defaultValue = "2") Integer messageType,
+            @RequestParam(value = "shenQingType",defaultValue = "2") Integer shenQingType,
+            @RequestParam(value = "userId",defaultValue = "") Long userId,
+            @RequestParam(value = "sortField",defaultValue = "insertTime") String sortField,
+            @RequestParam(value = "sortType",defaultValue = "desc") String sortType
     ){
 //        Map<String, Object> map = new HashMap<>(3);
-        Integer type=(Integer)data.get( "type" );
-        Integer pno=(Integer)data.get( "pno" );
-        Integer psize=(Integer)data.get( "psize" );
-        Integer parentRead=(Integer)data.get( "parentRead" );
-        Integer messageType=(Integer)data.get( "messageType" );
-        Long userId= Long.valueOf( String.valueOf( data.get("userId" )));
-        if (pno == null){
-            pno=1;
-        }
-        if (psize==null){
-            psize=10;
-        }
-        if (type==null){
-            type=0;
-        }
-        String sortField="insertTime";
-        String sortType="desc";
+//        Integer type=(Integer)data.get( "type" );
+//        Integer pno=(Integer)data.get( "pno" );
+//        Integer psize=(Integer)data.get( "psize" );
+//        Integer parentRead=(Integer)data.get( "parentRead" );
+//        Integer messageType=(Integer)data.get( "messageType" );
+//        Long userId= Long.valueOf( String.valueOf( data.get("userId" )));
+//        if (pno == null){
+//            pno=1;
+//        }
+//        if (psize==null){
+//            psize=10;
+//        }
+//        if (type==null){
+//            type=0;
+//        }
+//        String sortField="insertTime";
+//        String sortType="desc";
+        Map<String, Object> map = new HashMap<String, Object>();
+        if (messageType==3) {
+            //申请消息3
+            if (shenQingType==2) {
+                List<Jiaru> fromJiaruList = jiaruService.selectManyByStatusUserId( -1, userId, parentRead, sortField, sortType, type );
+                map.put( "fromJiaruList" ,fromJiaruList);
+                Page<Jiaru> p = PageHelper.startPage( pno, psize );
+                map.put( "count",p.getTotal() );
 
-        Page<Object> p = PageHelper.startPage( pno, psize );
-        //申请消息3
-        List<Jiaru> fromJiaruList = jiaruService.selectManyByStatusUserId( -1, userId,parentRead,sortField,sortType,type );
-        List<Jiaru> toJiaruList = jiaruService.selectManyByStatusToUserId( -1, userId ,parentRead,sortField,sortType ,type);
 
-        //评论文章1
+            }else {
+                List<Jiaru> toJiaruList = jiaruService.selectManyByStatusToUserId( -1, userId, parentRead, sortField, sortType, type );
+                map.put( "toJiaruList", toJiaruList );
+                Page<Jiaru> p = PageHelper.startPage( pno, psize );
+                map.put( "count",p.getTotal() );
+            }
+        }else if (messageType==1) {
+            //评论文章1
 //        commentService.
-        List<Jiaru> okJJiaruList = jiaruService.selectManyByStatusUserId( 2, userId, -1 ,sortField,sortType,type );
-        List<Long> orderIdList=null;
-        for (Jiaru jiaru:okJJiaruList){
-            orderIdList.add( jiaru.getOrderId() );
+            List<Jiaru> okJJiaruList = jiaruService.selectManyByStatusUserId( 2, userId, -1, sortField, sortType, type );
+            List<Long> orderIdList = null;
+            for (Jiaru jiaru : okJJiaruList) {
+                orderIdList.add( jiaru.getOrderId() );
+            }
+            List<Comment> pingLunCommentList = commentService.getMessageByOrserIdList( orderIdList, parentRead, sortField, sortType, type );
+            map.put( "pingLunCommentList" ,pingLunCommentList);
+            Page<Comment> p = PageHelper.startPage( pno, psize );
+            map.put( "count",p.getTotal() );
+
+        }else if (messageType==2) {
+            //2回复评论
+            List<Comment> huifuCommentList = commentService.getMessageByParetId( userId, parentRead, sortField, sortType, type, messageType );
+            map.put( "huifuCommentList" ,huifuCommentList);
+            Page<Comment> p = PageHelper.startPage( pno, psize );
+            map.put( "count",p.getTotal() );
+
         }
-        List<Comment> pingLunCommentList=commentService.getMessageByOrserIdList(orderIdList,parentRead,sortField,sortType,type );
-
-        //2回复评论
-        List<Comment> huifuCommentList=commentService.getMessageByParetId(userId,parentRead,sortField,sortType ,type);
-
 
 
 //        gLstForPage = orderService.getListForPageByIdList( type, btime, etime, pno, psize, gOrderList, sortField, sortType, "guanzhu" );
 //        jListForPage = orderService.getListForPageByIdList( type, btime, etime, pno, psize, jOrderList, sortField, sortType, "jiaru" );
 
 
-        Map<String, Object> map = new HashMap<String, Object>();
 
-        map.put( "fromJiaruList" ,fromJiaruList);
-        map.put( "toJiaruList" ,toJiaruList);
-        map.put( "pingLunCommentList" ,pingLunCommentList);
-        map.put( "huifuCommentList" ,huifuCommentList);
+
+
         map.put( "pno",pno );
         map.put( "psize",psize );
-        map.put( "count",p.getTotal() );
         map.put( "type",type );
         map.put( "parentRead",parentRead );
         map.put( "messageType",messageType );
+        map.put( "shenQingType",shenQingType );
 
         return map;
 

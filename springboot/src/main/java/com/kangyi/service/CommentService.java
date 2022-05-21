@@ -20,7 +20,7 @@ public interface CommentService {
 
     List<Comment> getMessageByOrserIdList(List<Long> orderIdList, Integer parentRead, String sortField, String sortType, Integer type);
 
-    List<Comment> getMessageByParetId(Long parentId, Integer parentRead, String sortField, String sortType, Integer type);
+    List<Comment> getMessageByParetId(Long parentId, Integer parentRead, String sortField, String sortType, Integer type, Integer messageType);
 
     int insertList(List<Comment> commentList);
 }

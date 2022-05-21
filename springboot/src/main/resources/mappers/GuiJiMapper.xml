@@ -147,6 +147,11 @@
 
 
   <insert id="insert" parameterType="com.kangyi.pojo.GuiJi">
+
+    <selectKey resultType="java.lang.Long" order="AFTER" keyProperty="guijiId">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+
      insert ignore into t_guiji (guiji_id, area, starttime,
       endtime, enddate, jindu, 
       weidu, guiji_position, user_id, 

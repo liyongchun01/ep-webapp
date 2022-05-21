@@ -38,7 +38,8 @@ public class CommentServiceImpl implements CommentService {
 
             criteria.andOrderIdEqualTo( orderId );
             criteria.andMessageTypeNotEqualTo( (byte) 0 );
-            oe.setOrderByClause( ChangeChar.camelToUnderline( "createTime", 2 ) + " " + "desc , level asc " );
+            oe.setOrderByClause("level desc,"+ChangeChar.camelToUnderline( "createTime", 2 ) + " " + "desc" );
+//            oe.setOrderByClause( ChangeChar.camelToUnderline( "createTime", 2 ) + " " + "desc,level desc" );
 //            oe.setOrderByClause( ChangeChar.camelToUnderline( "createTime", 2 ) + " " + "desc","level asc " );
              commentList = commentMapper.selectByExample( oe );
 //             redisUtil.set( key,commentList,24*60*60 );
@@ -176,9 +177,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public List<Comment> getMessageByParetId(Long parentId, Integer parentRead, String sortField, String sortType, Integer type) {
+    public List<Comment> getMessageByParetId(Long parentId, Integer parentRead, String sortField, String sortType, Integer type, Integer messageType) {
         CommentExample commentExample = new CommentExample();
         CommentExample.Criteria criteria = commentExample.createCriteria();
+
+        if (messageType!=null&&messageType>=0){
+            criteria.andMessageTypeEqualTo( (byte) messageType.intValue() );
+        }
 
         if (parentId!=null&&parentId>0){
             criteria.andParentIdEqualTo( parentId );

@@ -73,7 +73,7 @@ export default () => {
         await axios.get(`http://localhost:8083/boke/upComment`, {
             params: {
                 commentId,
-                level,
+                level: level === 1 ? 0 : 1,
                 userId: userId.id
             }
         })
@@ -110,7 +110,7 @@ export default () => {
                     {record?.commentLouzhu === 1 && <Tag color="blue" style={{ 'marginLeft': 10 }}>楼主</Tag>}
                     {record?.messageType === 2 &&
                         <>
-                            <span style={{ "fontSize": "12px", "color": "rgba(0, 0, 0, 0.45)", "marginLeft": "5px" }}>回复</span> <span style={{ "color": "#1890FF" }}>{`@${record?.parentId} `} </span>:
+                            <span style={{ "fontSize": "12px", "color": "rgba(0, 0, 0, 0.45)", "marginLeft": "5px" }}>回复</span> <span style={{ "color": "#1890FF" }}>{`@${record?.parentName} `} </span>:
                         </>
                     }
                     {record?.level === 1 && <Tag color="red" style={{ 'marginLeft': 10 }}>置顶</Tag>}
@@ -127,8 +127,8 @@ export default () => {
                         <div>{record.createTime}</div>
                         <div>
                             <MessageOutlined className={styles.commentStyle} onClick={() => deleteHandle(record)} />
-                            {record?.level === 1 || blogInfo.louzhu === 1 && <VerticalAlignTopOutlined className={styles.iconStyle} onClick={() => toppingComment(record)} />}
-                            {record?.sendId === userId && <DeleteOutlined className={styles.ellipsisStyle} onClick={() => deleteComment(record)} />}
+                            {blogInfo?.louzhu === 1 && <VerticalAlignTopOutlined className={styles.iconStyle} onClick={() => toppingComment(record)} />}
+                            {record?.sendId === userId.id && <DeleteOutlined className={styles.ellipsisStyle} onClick={() => deleteComment(record)} />}
                         </div>
                     </div>
 

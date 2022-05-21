@@ -7,7 +7,7 @@ import styles from './styles.less'
 const { Panel } = Collapse;
 export default ({ blogInfo }) => {
     let behaviourArr = {}
-    if (blogInfo.type == 4) {
+    if (blogInfo.hasOwnProperty("qiekai")) {
         behaviourArr = Object.entries(blogInfo?.qiekai)
     }
 
@@ -84,7 +84,7 @@ export default ({ blogInfo }) => {
                 </>
             }
             {
-                +blogInfo?.type === 4 &&
+                blogInfo.hasOwnProperty("qiekai") &&
                 <>
                     <ProDescriptions.Item label="轨迹信息" span={3}>
                         <Collapse defaultActiveKey={['1']} ghost>

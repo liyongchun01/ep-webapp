@@ -10,6 +10,7 @@ export default ({ autoSize, style, blogInfo, userInfo, record, messageType, setI
     const [form] = Form.useForm()
     const timestamp = moment(new Date()).valueOf();
     const createTime = moment(timestamp).format('YYYY-MM-DD HH:mm:ss');
+    console.log(record)
     const onFinish = async ({ content }) => {
         messageType === 2 && setInputVisible(false)
         await axios.post(`http://localhost:8083/boke/addComment`, {

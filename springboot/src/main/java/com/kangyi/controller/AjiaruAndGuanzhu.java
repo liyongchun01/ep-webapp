@@ -47,37 +47,51 @@ public class AjiaruAndGuanzhu {
     @RequestMapping("/list")
     @ResponseBody
     public Map<String, Object> getBokeList(
-            @RequestBody Map<String, Object> data
+//            @RequestBody  Map<String, Object> data,
+              @RequestParam(value = "pno",defaultValue = "1") Integer pno,
+             @RequestParam(value = "psize",defaultValue = "10") Integer psize,
+             @RequestParam(value = "type",defaultValue = "0") Integer type,
+             @RequestParam(value = "messageType",defaultValue = "") Integer messageType,
+//             @RequestParam(value = "orderId",defaultValue = "") Long orderId,
+             @RequestParam(value = "etime",defaultValue = "null") String etime,
+            @RequestParam(value = "btime",defaultValue = "null") String btime,
+             @RequestParam(value = "userId",defaultValue = "") Long userId,
+               @RequestParam(value = "sortField",defaultValue = "insertTime") String sortField,
+            @RequestParam(value = "sortType",defaultValue = "desc") String sortType
            ) {
 //        Map<String, Object> map = new HashMap<>(3);
-        Integer type = (Integer) data.get( "type" );
-        Integer pno = (Integer) data.get( "pno" );
-        Integer psize = (Integer) data.get( "psize" );
-        Integer actType = (Integer) data.get( "actType" );
-        Long userId = Long.valueOf( String.valueOf( data.get("userId")) );
-        String btime = String.valueOf( data.get( "btime" ) );
-        String etime = String.valueOf( data.get( "etime" ) );
+//        Integer type = (Integer) data.get( "type" );
+//        Integer pno = (Integer) data.get( "pno" );
+//        Integer psize = (Integer) data.get( "psize" );
+//        Integer messageType = (Integer) data.get( "messageType" );
+//        Long userId = Long.valueOf( String.valueOf( data.get("userId")) );
+//        String btime = String.valueOf( data.get( "btime" ) );
+//        String etime = String.valueOf( data.get( "etime" ) );
+//
+//        if (pno == null) {
+//            pno = 1;
+//        }
+//        if (psize == null) {
+//            psize = 10;
+//        }
+//        if (type == null) {
+//            type = 0;
+//        }
+//        String sortField = "insertTime";
+//        String sortType = "desc";
+//        String.valueOf( data.get( "sortType" ) )
+//        String.valueOf( data.get( "sortField" ) )
 
-        if (pno == null) {
-            pno = 1;
-        }
-        if (psize == null) {
-            psize = 10;
-        }
-        if (type == null) {
-            type = 0;
-        }
-        String sortField = "insertTime";
-        String sortType = "desc";
-        if ("ascend".equals( String.valueOf( data.get( "sortType" ) ) )) {
+
+        if ("ascend".equals( sortType )) {
             sortType = "asc";
-        } else if ("descend".equals( String.valueOf( data.get( "sortType" ) ) )) {
+        } else if ("descend".equals( sortType)) {
             sortType = "desc";
         }
 
-        if (data.get( "sortField" ) != null) {
-            sortField = String.valueOf( data.get( "sortField" ) );
-        }
+//        if (data.get( "sortField" ) != null) {
+//            sortField =  String.valueOf( data.get( "sortField" ) );
+//        }
 
         List<Jiaru> jiaruList = jiaruService.selectManyByStatusUserId( 2, userId, -1, sortField, sortType, type );
         List<Guanzhu> guanzhuList = guanzhuService.selectManyByStatusUserId( 1, userId );
@@ -101,12 +115,12 @@ public class AjiaruAndGuanzhu {
         gLstForPage = orderService.getListForPageByIdList( type, btime, etime, pno, psize, gOrderList, sortField, sortType, "guanzhu" );
 //        jListForPage = orderService.getListForPageByIdList( type, btime, etime, pno, psize, jOrderList, sortField, sortType, "jiaru" );
 
-        if (actType == 1) {
+        if (messageType == 1) {
             //jiaru
 
             return jListForPage;
 
-        } else if (actType == 2) {
+        } else if (messageType == 2) {
             //guanzhu
             return gLstForPage;
 
