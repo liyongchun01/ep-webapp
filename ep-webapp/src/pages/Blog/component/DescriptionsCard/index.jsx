@@ -83,7 +83,7 @@ export default ({ blogInfo }) => {
                 </>
             }
             {
-                blogInfo?.guiji.hasOwnProperty("qiekai") &&
+                blogInfo?.type === 4 &&
                 <>
                     <ProDescriptions.Item span={3} label="场所名称" >
                         {blogInfo[callbackFieldsKeys[blogInfo.type]].guijiPosition}
