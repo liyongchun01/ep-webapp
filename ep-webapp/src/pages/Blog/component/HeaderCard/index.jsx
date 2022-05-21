@@ -10,6 +10,11 @@ export default ({ blogInfo, followBlog, joinEdit, formRef }) => {
     const [modalVisible, setModalVisible] = useState(false)
     const [jiaruStatus, setJiaruStatus] = useState(null)
     const [form] = Form.useForm()
+    let createTime = ""
+    if (blogInfo) {
+        createTime = blogInfo[callbackFieldsKeys[blogInfo?.type]]?.uploadTime
+    }
+
     const btnObj = {
         0:
             <Popover content="通过加入申请后, 你也将成为楼主" >
@@ -70,11 +75,11 @@ export default ({ blogInfo, followBlog, joinEdit, formRef }) => {
                                     btnObj[blogInfo?.jiaru]
                                 }
                                 {
-                                    blogInfo?.guanzhu === 1
-                                        ? <Button onClick={() => followBlog(0)} type="primary" shape="round" icon={<PlusOutlined />} >
+                                    blogInfo?.guanzhu === 0
+                                        ? <Button onClick={() => followBlog(1)} type="primary" shape="round" icon={<PlusOutlined />} >
                                             关注
                                         </Button>
-                                        : <Popconfirm title="确定取消关注吗？" okText="确定" cancelText="取消" onConfirm={() => followBlog(1)}>
+                                        : <Popconfirm title="确定取消关注吗？" okText="确定" cancelText="取消" onConfirm={() => followBlog(0)}>
                                             <Button type="default" shape="round" style={{ "marginRight": "10px", "color": "rgba(0, 0, 0, 0.45)" }}  >
                                                 已关注
                                             </Button>
@@ -88,11 +93,10 @@ export default ({ blogInfo, followBlog, joinEdit, formRef }) => {
                                 title={
                                     <>
                                         {blogInfo?.parentName}
-                                        <span style={{ "fontSize": "13px", "color": "rgba(0, 0, 0, 0.45)" }}> <span>{moment("2022-05-17 15:30", "YYYY-MM-DD HH:mm").fromNow()}</span></span>
+                                        <span style={{ "fontSize": "13px", "color": "rgba(0, 0, 0, 0.45)" }}> <span>{moment(createTime, "YYYY-MM-DD HH:mm").fromNow()}</span></span>
                                     </>
                                 }
                                 description="This is the description"
-                                icon={<Tag color="#108ee9">#108ee9</Tag>}
                             />
                         </Card>
                         <Meta

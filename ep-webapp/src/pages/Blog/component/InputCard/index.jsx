@@ -18,12 +18,12 @@ export default ({ autoSize, style, blogInfo, userId, record, messageType, setInp
             createTime,
             messageType,
             parentId: record?.parentId,
-            sendId: userId.id,
+            sendId: userId?.id,
             userName: userId?.username,
             parentName: record?.parentName,
             commentLouzhu: blogInfo?.louzhu,
             typeName: record?.typeName,
-            orderId: blogInfo[callbackFieldsKeys[blogInfo.type]]?.orderId,
+            orderId: blogInfo[callbackFieldsKeys[blogInfo?.type]]?.orderId,
             type: blogInfo?.type,
         })
         form.setFieldsValue({ content: "" })
