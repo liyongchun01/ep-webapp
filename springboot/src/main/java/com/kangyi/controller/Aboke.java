@@ -53,10 +53,10 @@ public class Aboke {
 //            @RequestBody  Map<String, Object> data,
             @RequestParam(value = "pno",defaultValue = "1") Integer pno,
             @RequestParam(value = "psize",defaultValue = "10") Integer psize,
-            @RequestParam(value = "type",defaultValue = "10") Integer type,
-            @RequestParam(value = "typeId",defaultValue = "10") Long typeId,
-            @RequestParam(value = "orderId",defaultValue = "10") Long orderId,
-            @RequestParam(value = "userId",defaultValue = "10") Long userId
+            @RequestParam(value = "type",defaultValue = "0") Integer type,
+            @RequestParam(value = "typeId",defaultValue = "") Long typeId,
+            @RequestParam(value = "orderId",defaultValue = "") Long orderId,
+            @RequestParam(value = "userId",defaultValue = "") Long userId
 
     ){
 //        Map<String, Object> map = new HashMap<>(3);
@@ -69,12 +69,12 @@ public class Aboke {
 //        Long orderId= Long.valueOf( String.valueOf( data.get("orderId" )));
 //        Long typeId= (Long) data.get( "typeId" );
 //        Long userId= Long.valueOf( String.valueOf( data.get("userId" )));
-        if (pno == null){
-            pno=1;
-        }
-        if (psize==null){
-            psize=10;
-        }
+//        if (pno == null){
+//            pno=1;
+//        }
+//        if (psize==null){
+//            psize=10;
+//        }
         if (type==null){
             type=0;
         }
@@ -196,10 +196,12 @@ public class Aboke {
     @RequestMapping("/delectComment")
     @ResponseBody
     public String delectComment(
-            @RequestBody  Map<String, Object> data
+//            @RequestBody  Map<String, Object> data
+            @RequestParam(value = "commentId",defaultValue = "10") Long commentId,
+            @RequestParam(value = "userId",defaultValue = "10") Long userId
     ){
-        Long commentId = Long.valueOf( String.valueOf( data.get( "commentId" )));
-        Long userId = Long.valueOf( String.valueOf( data.get( "userId" )));
+//        Long commentId = Long.valueOf( String.valueOf( data.get( "commentId" )));
+//        Long userId = Long.valueOf( String.valueOf( data.get( "userId" )));
         if (commentId==null||"null".equals( commentId )){
             return "删除失败";
         }
@@ -208,9 +210,9 @@ public class Aboke {
 //        Comment comment=commentService.selectOneById(commentId);
         int i=commentService.delectOne(commentId);
         if (i<=0){
-            return "评论失败";
+            return "删除失败";
         }else {
-            return "评论成功";
+            return "删除成功";
         }
     }
 
@@ -219,11 +221,14 @@ public class Aboke {
     @RequestMapping("/upComment")
     @ResponseBody
     public String updataComment(
-            @RequestBody  Map<String, Object> data
+//            @RequestBody  Map<String, Object> data
+            @RequestParam(value = "commentId",defaultValue = "") Long commentId,
+            @RequestParam(value = "level",defaultValue = "0") Integer level,
+            @RequestParam(value = "userId",defaultValue = "") Long userId
     ){
-        Long commentId = Long.valueOf( String.valueOf( data.get( "commentId" )));
-        Long userId = Long.valueOf( String.valueOf( data.get( "userId" )));
-        Integer level = (Integer)data.get( "level" );
+//        Long commentId = Long.valueOf( String.valueOf( data.get( "commentId" )));
+//        Long userId = Long.valueOf( String.valueOf( data.get( "userId" )));
+//        Integer level = (Integer)data.get( "level" );
         if (commentId==null||"null".equals( commentId )){
             return "失败";
         }
