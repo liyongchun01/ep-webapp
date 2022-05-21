@@ -97,7 +97,9 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.kangyi.pojo.Order">
-    insert into t_order (order_id, user_id, type_id, 
+--   replace
+
+     insert ignore into t_order (order_id, user_id, type_id,
       handle_user_id, status, insert_time, 
       update_time, user_remark, handel_remark, 
       handle_time, type)
@@ -114,7 +116,7 @@
       SELECT LAST_INSERT_ID()
     </selectKey>
 
-    replace into t_order (order_id, user_id, type_id,
+    insert ignore into t_order (order_id, user_id, type_id,
       handle_user_id, status, insert_time,
       update_time, user_remark, handel_remark,
       handle_time, type)

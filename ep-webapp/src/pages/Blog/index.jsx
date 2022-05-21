@@ -20,134 +20,134 @@ export default () => {
     // const [blogInfo, setBlogInfo] = useState()
     const [inputId, setInputId] = useState()
     const [inputVisible, setInputVisible] = useState(false)
-    const blogInfo = {
-        louzhu: 1,
-        guanzhu: 0,
-        jiaru: 0, //0未加入。1待通过，2已加入
-        type: 1,
-        orderId: 10011,
-        parentName: '语雀的天空',
-        hesuan: {
-            hesuanPosition: "黑龙江省哈尔滨市南岗区学府路246号",
-            hesuanName: "哈尔滨市医大二院",
-            startdate: "2022-5-10",
-            starttime: "12:00",
-            enddate: "2022-5-21",
-            endtime: "13:00",
-            renshu: 154,
-            processTime: "2022-5-10 12:10",
-            uploadTime: "2022-5-12 12:30"
-        },
-        yimiao: {
-            yimiaoPosition: "黑龙江省哈尔滨市南岗区学府路246号",
-            yimaioName: "哈尔滨市医大二院",
-            orgType: "医院",
-            batch: 3,
-            renshu: 126,
-            startdate: "2022-5-10",
-            starttime: "12:00",
-            enddate: "2022-5-21",
-            endtime: "13:00",
-            processTime: "2022-5-10 12:10",
-            uploadTime: "2022-5-12 12:30"
-        },
-        gelidian: {
-            gelidianPosition: "黑龙江省哈尔滨市南岗区学府路246号",
-            gelidianName: "哈尔滨市医大二院",
-            geliOrg: "医院",
-            contact: "13019771851",
-            grlirenshu: 190,
-            enddate: "2022-5-12 12:30",
-            processTime: "2022-5-10 12:10",
-            uploadTime: "2022-5-12 12:30"
-        },
-        guiji: [
-            {
-                starttime: "2022-5-10 12:10",
-                endtime: "2022-6-10 13:00",
-                guijiPosition: "百盛"
-            },
-            {
-                starttime: "2022-5-10 12:10",
-                endtime: "2022-6-10 13:00",
-                guijiPosition: "百盛"
-            },
-            {
-                starttime: "2022-5-10 12:10",
-                endtime: "2022-6-10 13:00",
-                guijiPosition: "百盛"
-            },
-            {
-                starttime: "2022-5-10 12:10",
-                endtime: "2022-6-10 13:00",
-                guijiPosition: "百盛"
-            },
-        ],
-        qiekai: {
-            "广顺路德禧假日酒店": "4月6日",
-            "人民路127号鲜丰水果店": "4月6日",
-            "海宁市妇幼保健院住院部": "4月6日",
-            "工人路夜市": "4月6日",
-            "海宁99商业广场": "4月6日",
-            "洛南路6号方圆木门楼梯店": "4月6日",
-            "硖川路海宁农商银行（城北支行）": "4月6日",
-            "海宁宾馆": "4月6日",
-            "爱尚水果（人民路112号）": "4月6日",
-            "爱琴海购物公园": "4月6日",
-            "爱琴海广场永辉超市": "4月6日",
-            "阿亮水果生鲜超市（西南河后街西南河小区）": "4月6日",
-            "斜桥镇综合服务点": "4月6日",
-            "西山社区": "4月6日",
-            "米米农家菜": "4月6日",
-            "可爱可亲母婴生活馆": "4月6日",
-            "西山路便民交易市场": "4月6日",
-            "塘南东路60号奥普": "4月6日",
-            "海昌街道办事处": "4月6日",
-            "窗之都（海宁旗舰店）": "4月6日",
-            "海宁市中医院": "4月6日",
-            "海宁市中心菜市场": "4月6日",
-            "芙蓉里6幢": "4月6日",
-            "狮岭幼儿园": "4月6日",
-            "人民路112号": "4月6日",
-            "东勒线东郊水果特卖场": "4月6日",
-            "硖石街道社区卫生服务中心": "4月6日"
-        },
-        commentList: [
-            {
-                parentName: '语雀的天空',
-                content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
-                louzhu: 0,
-                sendId: 1001,
-                commentId: 1010,
-                level: 1,
-                guanzhu: 0
-            },
-            {
-                parentName: 'Ant Design',
-                content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
-                louzhu: 0,
-                sendId: 1002,
-                commentId: 1020,
-                level: 0,
-            },
-            {
-                parentName: '蚂蚁金服体验科技',
-                content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
-                louzhu: 1,
-                sendId: 1003,
-                commentId: 1030,
-                level: 0,
-            },
-            {
-                parentName: 'TechUI',
-                content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
-                louzhu: 0,
-                sendId: 1004,
-                commentId: 1040,
-                level: 0,
-            },
-        ]
-    }
+    // const blogInfo = {
+    //     louzhu: 1,
+    //     guanzhu: 0,
+    //     jiaru: 0, //0未加入。1待通过，2已加入
+    //     type: 1,
+    //     orderId: 10011,
+    //     parentName: '语雀的天空',
+    //     hesuan: {
+    //         hesuanPosition: "黑龙江省哈尔滨市南岗区学府路246号",
+    //         hesuanName: "哈尔滨市医大二院",
+    //         startdate: "2022-5-10",
+    //         starttime: "12:00",
+    //         enddate: "2022-5-21",
+    //         endtime: "13:00",
+    //         renshu: 154,
+    //         processTime: "2022-5-10 12:10",
+    //         uploadTime: "2022-5-12 12:30"
+    //     },
+    //     yimiao: {
+    //         yimiaoPosition: "黑龙江省哈尔滨市南岗区学府路246号",
+    //         yimaioName: "哈尔滨市医大二院",
+    //         orgType: "医院",
+    //         batch: 3,
+    //         renshu: 126,
+    //         startdate: "2022-5-10",
+    //         starttime: "12:00",
+    //         enddate: "2022-5-21",
+    //         endtime: "13:00",
+    //         processTime: "2022-5-10 12:10",
+    //         uploadTime: "2022-5-12 12:30"
+    //     },
+    //     gelidian: {
+    //         gelidianPosition: "黑龙江省哈尔滨市南岗区学府路246号",
+    //         gelidianName: "哈尔滨市医大二院",
+    //         geliOrg: "医院",
+    //         contact: "13019771851",
+    //         grlirenshu: 190,
+    //         enddate: "2022-5-12 12:30",
+    //         processTime: "2022-5-10 12:10",
+    //         uploadTime: "2022-5-12 12:30"
+    //     },
+    //     guiji: [
+    //         {
+    //             starttime: "2022-5-10 12:10",
+    //             endtime: "2022-6-10 13:00",
+    //             guijiPosition: "百盛"
+    //         },
+    //         {
+    //             starttime: "2022-5-10 12:10",
+    //             endtime: "2022-6-10 13:00",
+    //             guijiPosition: "百盛"
+    //         },
+    //         {
+    //             starttime: "2022-5-10 12:10",
+    //             endtime: "2022-6-10 13:00",
+    //             guijiPosition: "百盛"
+    //         },
+    //         {
+    //             starttime: "2022-5-10 12:10",
+    //             endtime: "2022-6-10 13:00",
+    //             guijiPosition: "百盛"
+    //         },
+    //     ],
+    //     qiekai: {
+    //         "广顺路德禧假日酒店": "4月6日",
+    //         "人民路127号鲜丰水果店": "4月6日",
+    //         "海宁市妇幼保健院住院部": "4月6日",
+    //         "工人路夜市": "4月6日",
+    //         "海宁99商业广场": "4月6日",
+    //         "洛南路6号方圆木门楼梯店": "4月6日",
+    //         "硖川路海宁农商银行（城北支行）": "4月6日",
+    //         "海宁宾馆": "4月6日",
+    //         "爱尚水果（人民路112号）": "4月6日",
+    //         "爱琴海购物公园": "4月6日",
+    //         "爱琴海广场永辉超市": "4月6日",
+    //         "阿亮水果生鲜超市（西南河后街西南河小区）": "4月6日",
+    //         "斜桥镇综合服务点": "4月6日",
+    //         "西山社区": "4月6日",
+    //         "米米农家菜": "4月6日",
+    //         "可爱可亲母婴生活馆": "4月6日",
+    //         "西山路便民交易市场": "4月6日",
+    //         "塘南东路60号奥普": "4月6日",
+    //         "海昌街道办事处": "4月6日",
+    //         "窗之都（海宁旗舰店）": "4月6日",
+    //         "海宁市中医院": "4月6日",
+    //         "海宁市中心菜市场": "4月6日",
+    //         "芙蓉里6幢": "4月6日",
+    //         "狮岭幼儿园": "4月6日",
+    //         "人民路112号": "4月6日",
+    //         "东勒线东郊水果特卖场": "4月6日",
+    //         "硖石街道社区卫生服务中心": "4月6日"
+    //     },
+    //     commentList: [
+    //         {
+    //             parentName: '语雀的天空',
+    //             content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
+    //             louzhu: 0,
+    //             sendId: 1001,
+    //             commentId: 1010,
+    //             level: 1,
+    //             guanzhu: 0
+    //         },
+    //         {
+    //             parentName: 'Ant Design',
+    //             content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
+    //             louzhu: 0,
+    //             sendId: 1002,
+    //             commentId: 1020,
+    //             level: 0,
+    //         },
+    //         {
+    //             parentName: '蚂蚁金服体验科技',
+    //             content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
+    //             louzhu: 1,
+    //             sendId: 1003,
+    //             commentId: 1030,
+    //             level: 0,
+    //         },
+    //         {
+    //             parentName: 'TechUI',
+    //             content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
+    //             louzhu: 0,
+    //             sendId: 1004,
+    //             commentId: 1040,
+    //             level: 0,
+    //         },
+    //     ]
+    // }
 
     // 获取评论列表信息
     const getBlogData = async (params) => {
@@ -181,6 +181,7 @@ export default () => {
         })
         formRef.current?.reload()
     }
+
 
     // 关注方法
     const followBlog = async (val) => {
@@ -236,55 +237,53 @@ export default () => {
         </span>
     );
 
-    const dataSource = [
-        {
-            parentName: '语雀的天空',
-            parentId: 1101,
-            content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
-            commentLouzhu: 0,
-            sendId: 1001,
-            commentId: 1010,
-            level: 1,
-            guanzhu: 0,
-            userName: "awefe",
-            typeName: "hesuan",
-            messageType: 2
-        },
-        {
-            parentName: 'Ant Design',
-            parentId: 1102,
-            content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
-            commentLouzhu: 0,
-            sendId: 1002,
-            commentId: 1020,
-            level: 0,
-            userName: "awefe",
-            typeName: "hesuan",
-        },
-        {
-            parentName: '蚂蚁金服体验科技',
-            parentId: 1103,
-            content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
-            commentLouzhu: 1,
-            sendId: 1003,
-            commentId: 1030,
-            level: 0,
-            userName: "awefe",
-            typeName: "hesuan",
-        },
-        {
-            parentName: 'TechUI',
-            parentId: 1104,
-            content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
-            commentLouzhu: 0,
-            sendId: 1004,
-            commentId: 1040,
-            level: 0,
-            userName: "awefe",
-            typeName: "hesuan",
-        },
-    ];
-
+    // const dataSource = [
+    //     {
+    //         parentName: '语雀的天空',
+    //         parentId: 1101,
+    //         content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
+    //         commentLouzhu: 0,
+    //         sendId: 1001,
+    //         commentId: 1010,
+    //         level: 1,
+    //         guanzhu: 0,
+    //         userName: "awefe",
+    //         typeName: "hesuan",
+    //     },
+    //     {
+    //         parentName: 'Ant Design',
+    //         parentId: 1102,
+    //         content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
+    //         commentLouzhu: 0,
+    //         sendId: 1002,
+    //         commentId: 1020,
+    //         level: 0,
+    //         userName: "awefe",
+    //         typeName: "hesuan",
+    //     },
+    //     {
+    //         parentName: '蚂蚁金服体验科技',
+    //         parentId: 1103,
+    //         content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
+    //         commentLouzhu: 1,
+    //         sendId: 1003,
+    //         commentId: 1030,
+    //         level: 0,
+    //         userName: "awefe",
+    //         typeName: "hesuan",
+    //     },
+    //     {
+    //         parentName: 'TechUI',
+    //         parentId: 1104,
+    //         content: '段落示意: 蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态, 提供跨越设计与开发的体验解决方案。蚂蚁金服设计平台design.alipay.com, 用最小的工作量, 无缝接入蚂蚁金服生态提供跨越设计与开发的体验解决方案。',
+    //         commentLouzhu: 0,
+    //         sendId: 1004,
+    //         commentId: 1040,
+    //         level: 0,
+    //         userName: "awefe",
+    //         typeName: "hesuan",
+    //     },
+    // ];
     const metas = {
         title: {
             dataIndex: 'parentName',
@@ -343,7 +342,7 @@ export default () => {
                     itemLayout="vertical"
                     rowKey="id"
                     request={getBlogData}
-                    dataSource={dataSource}
+                    // dataSource={dataSource}
                     metas={metas}
                     split={true}
                     pagination={{

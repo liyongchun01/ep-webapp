@@ -17,6 +17,10 @@
                         connectionURL="jdbc:mysql://localhost:3306/kanyi"
                         userId="ljh"
                         password="990326">
+            <!--设置可以获取tables remarks信息-->
+            <property name="useInformationSchema" value="true"/>
+            <!--设置可以获取remarks信息-->
+            <property name="remarks" value="true"/>
         </jdbcConnection>
 
         <javaTypeResolver >
@@ -60,8 +64,10 @@
                 <!--<table tableName="t_log" domainObjectName="Log" ></table>-->
                 <!--<table tableName="t_hesuan" domainObjectName="HeSuan" ></table>-->
                 <!--<table tableName="t_quartz_bean" domainObjectName="QuartzBean" ></table>-->
-                <!--<table tableName="t_order" domainObjectName="Order" ></table>-->
-                <table tableName="t_order123" domainObjectName="Order123" ></table>
+                <table tableName="t_comment" domainObjectName="Comment" ></table>
+                <!--<table tableName="t_order_user_guanzhu" domainObjectName="Guanzhu" ></table>-->
+                <!--<table tableName="t_order_user_jiaru" domainObjectName="Jiaru" ></table>-->
+                <!--<table tableName="t_order123" domainObjectName="Order123" ></table>-->
                 <!--<table tableName="t_" domainObjectName="GeLi" ></table>-->
     </context>
 </generatorConfiguration>

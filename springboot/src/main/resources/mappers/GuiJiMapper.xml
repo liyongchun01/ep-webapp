@@ -127,7 +127,9 @@
 
 
   <insert id="insertList" parameterType="java.util.List">
-    replace into t_guiji (guiji_id, area, starttime,
+    /*insert ignore
+    replace*/
+    insert ignore into t_guiji (guiji_id, area, starttime,
     endtime, enddate, weidu,
     jindu, guiji_position, user_id,
     order_id)
@@ -145,7 +147,7 @@
 
 
   <insert id="insert" parameterType="com.kangyi.pojo.GuiJi">
-    replace into t_guiji (guiji_id, area, starttime,
+     insert ignore into t_guiji (guiji_id, area, starttime,
       endtime, enddate, jindu, 
       weidu, guiji_position, user_id, 
       order_id)
@@ -314,6 +316,50 @@
     </set>
     where guiji_id = #{guijiId,jdbcType=BIGINT}
   </update>
+
+  <update id="updateListByPrimaryKeySelective" parameterType="java.util.List">
+    <foreach collection="list" item="i" index="index" separator=";">
+      update t_guiji
+      <set>
+        <if test="i.area != null">
+          area = #{i.area,jdbcType=VARCHAR},
+        </if>
+        <if test="i.starttime != null">
+          starttime = #{i.starttime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="i.endtime != null">
+          endtime = #{i.endtime,jdbcType=TIMESTAMP},
+        </if>
+        <if test="i.enddate != null">
+          enddate = #{i.enddate,jdbcType=TIMESTAMP},
+        </if>
+        <if test="i.jindu != null">
+          jindu = #{i.jindu,jdbcType=DECIMAL},
+        </if>
+        <if test="i.weidu != null">
+          weidu = #{i.weidu,jdbcType=DECIMAL},
+        </if>
+        <if test="i.guijiPosition != null">
+          guiji_position = #{i.guijiPosition,jdbcType=VARCHAR},
+        </if>
+        <if test="i.userId != null">
+          user_id = #{i.userId,jdbcType=BIGINT},
+        </if>
+        <if test="i.orderId != null">
+          order_id = #{i.orderId,jdbcType=BIGINT},
+        </if>
+      </set>
+      where guiji_id = #{i.guijiId,jdbcType=BIGINT}
+    </foreach>
+  </update>
+
+  <!--<foreach collection="list" item="i" index="index" separator="," >-->
+    <!--(#{i.guijiId,jdbcType=BIGINT}, #{i.area,jdbcType=VARCHAR}, #{i.starttime,jdbcType=TIMESTAMP},-->
+    <!--#{i.endtime,jdbcType=TIMESTAMP}, #{i.enddate,jdbcType=TIMESTAMP}, #{i.weidu,jdbcType=DECIMAL},-->
+    <!--#{i.jindu,jdbcType=DECIMAL}, #{i.guijiPosition,jdbcType=VARCHAR}, #{i.userId,jdbcType=BIGINT},-->
+    <!--#{i.orderId,jdbcType=BIGINT})-->
+  <!--</foreach>-->
+
   <update id="updateByPrimaryKey" parameterType="com.kangyi.pojo.GuiJi">
     update t_guiji
     set area = #{area,jdbcType=VARCHAR},

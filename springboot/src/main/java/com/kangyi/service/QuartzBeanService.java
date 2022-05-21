@@ -13,4 +13,6 @@ public interface QuartzBeanService {
     public int updateOne(QuartzBean quartzBean);
 
     Map<String, Object> getListForPage(Integer status, String jobName, Integer pno1, Integer psize1);
+
+    int delectOne(int jobId);
 }
