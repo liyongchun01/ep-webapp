@@ -25,6 +25,7 @@ export default ({ autoSize, style, blogInfo, userInfo, record, messageType, setI
             typeName: record?.typeName,
             orderId: blogInfo[callbackFieldsKeys[blogInfo?.type]]?.orderId,
             type: blogInfo?.type,
+            userRemark: record?.userRemark
         })
         form.setFieldsValue({ content: "" })
         formRef.current?.reload()

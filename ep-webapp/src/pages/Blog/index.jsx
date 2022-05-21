@@ -127,7 +127,7 @@ export default () => {
                         <div>{record.createTime}</div>
                         <div>
                             <MessageOutlined className={styles.commentStyle} onClick={() => deleteHandle(record)} />
-                            {blogInfo?.louzhu === 1 && <VerticalAlignTopOutlined className={styles.iconStyle} onClick={() => toppingComment(record)} />}
+                            {blogInfo.louzhu === 1 && <VerticalAlignTopOutlined className={styles.iconStyle} onClick={() => toppingComment(record)} />}
                             {record?.sendId === userId.id && <DeleteOutlined className={styles.ellipsisStyle} onClick={() => deleteComment(record)} />}
                         </div>
                     </div>

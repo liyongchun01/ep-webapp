@@ -125,10 +125,6 @@ export const callbackFieldsNameKeys = {
 
 export const messageTab = [
   {
-    tab: '全部',
-    key: '-1',
-  },
-  {
     tab: '评论',
     key: '1',
   },
@@ -143,6 +139,14 @@ export const messageTab = [
   {
     tab: '系统',
     key: '0',
+  },
+  {
+    tab: '已关注',
+    key: '4',
+  },
+  {
+    tab: '已加入',
+    key: '5',
   },
 ];
 

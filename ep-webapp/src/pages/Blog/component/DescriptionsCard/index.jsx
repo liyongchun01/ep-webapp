@@ -7,8 +7,8 @@ import styles from './styles.less'
 const { Panel } = Collapse;
 export default ({ blogInfo }) => {
     let behaviourArr = {}
-    if (blogInfo.hasOwnProperty("qiekai")) {
-        behaviourArr = Object.entries(blogInfo?.qiekai)
+    if (blogInfo?.guiji.hasOwnProperty("qiekai")) {
+        behaviourArr = Object.entries(blogInfo?.guiji.qiekai)
     }
 
     return (
@@ -77,27 +77,22 @@ export default ({ blogInfo }) => {
                     <ProDescriptions.Item span={2} label="隔离人数" >
                         {blogInfo[callbackFieldsKeys[blogInfo.type]].grlirenshu}
                     </ProDescriptions.Item>
-
                     <ProDescriptions.Item label="结束时间" >
                         {`${blogInfo[callbackFieldsKeys[blogInfo.type]].enddate}`}
                     </ProDescriptions.Item>
                 </>
             }
             {
-                blogInfo.hasOwnProperty("qiekai") &&
+                blogInfo?.type === 4 &&
                 <>
-                    <ProDescriptions.Item label="轨迹信息" span={3}>
-                        <Collapse defaultActiveKey={['1']} ghost>
-                            <Panel header="详情" key="1">
-                                <Timeline mode="alternate">
-                                    {
-                                        blogInfo[callbackFieldsKeys[blogInfo.type]]?.map(item => (
-                                            <Timeline.Item>{`${item.starttime} ${item.endtime} ${item.guijiPosition}`}</Timeline.Item>
-                                        ))
-                                    }
-                                </Timeline>
-                            </Panel>
-                        </Collapse>
+                    <ProDescriptions.Item span={3} label="场所名称" >
+                        {blogInfo[callbackFieldsKeys[blogInfo.type]].guijiPosition}
+                    </ProDescriptions.Item>
+                    <ProDescriptions.Item span={1} label="时间段" >
+                        {`${blogInfo[callbackFieldsKeys[blogInfo.type]].starttime} - ${blogInfo[callbackFieldsKeys[blogInfo.type]].endtime}`}
+                    </ProDescriptions.Item>
+                    <ProDescriptions.Item span={2} label="结束时间" >
+                        {`${blogInfo[callbackFieldsKeys[blogInfo.type]].enddate}`}
                     </ProDescriptions.Item>
                     <ProDescriptions.Item label="行为信息" span={3}>
                         <Collapse defaultActiveKey={['1']} ghost>
@@ -111,7 +106,6 @@ export default ({ blogInfo }) => {
                                 </Timeline>
                             </Panel>
                         </Collapse>
-
                     </ProDescriptions.Item>
                 </>
             }
