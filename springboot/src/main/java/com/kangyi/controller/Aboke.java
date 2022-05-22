@@ -98,6 +98,9 @@ public class Aboke {
 
 
         Order order = orderService.selectOneById( orderId );
+        if (order==null){
+            System.out.println("orderId错误，没有此order");
+        }
 
         if (order.getUserId()!=3l){
             if (order.getUserId()== userId||jiaruStatus==2){

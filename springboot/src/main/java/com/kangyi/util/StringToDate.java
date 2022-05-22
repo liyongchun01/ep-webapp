@@ -103,7 +103,7 @@ public class StringToDate {
 //        String a="6月3日";
         String a="3月20日-24日";
         String b="11月23日";
-        String c="6月23日";
+        String c="5月1日";
         String e="12月3日";
         System.out.println(YRDateString(a,"00:00")+"  "+YRDateString(b,"23:00")+"  "+YRDateString(c,"00:56")+"  "+YRDateString(e,"00:00")+"  ");
 

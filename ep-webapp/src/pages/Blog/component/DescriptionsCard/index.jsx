@@ -7,8 +7,10 @@ import styles from './styles.less'
 const { Panel } = Collapse;
 export default ({ blogInfo }) => {
     let behaviourArr = {}
-    if (blogInfo?.guiji.hasOwnProperty("qiekai")) {
-        behaviourArr = Object.entries(blogInfo?.guiji.qiekai)
+    if (blogInfo.type == 4) {
+        if (blogInfo?.guiji.hasOwnProperty("qiekai")) {
+            behaviourArr = Object.entries(JSON.parse(blogInfo?.guiji.qiekai))
+        }
     }
 
     return (

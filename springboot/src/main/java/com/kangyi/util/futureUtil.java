@@ -120,7 +120,7 @@ public class futureUtil {
         return guiJiList;
     }
 
-    public static List<GuiJi> addGuijiListOnThrea(JSONArray r,String time,ArrayList<Long> orderIdList) throws InterruptedException {
+    public static List<GuiJi> addGuijiListOnThrea(JSONArray r,ArrayList<String> timeList,ArrayList<Long> orderIdList) throws InterruptedException {
         //组合线程请求参数
         JSONArray result = r;
         if(r.size()==0){
@@ -139,11 +139,11 @@ public class futureUtil {
 
 
         for (int i=0;i<result.size();i++){
-            JSONObject singleobje=result.getJSONObject(i);
+//            JSONObject singleobje=result.getJSONObject(i);
             //每10个减a级
             if(i%10==0){ j=j-a; }
             if(j<1){ j=10; }
-                ThreadAddOneGuiji one = new ThreadAddOneGuiji( singleobje, time, j, orderIdList.get( i ) );
+                ThreadAddOneGuiji one = new ThreadAddOneGuiji( result.getJSONObject(i), timeList.get( i ), j, orderIdList.get( i ) );
                 list.add(one);
         }
 
@@ -160,6 +160,9 @@ public class futureUtil {
                 //业务逻辑
 //                GuiJi guiji = getGuijiJingWeiDu( json, time );
                 GuiJi guiji = future.get();
+                if (guiji==null||"null".equals( guiji )){
+                    continue;
+                }
                 if(guiji.getJindu()!=null&&!("null".equals(String.valueOf( guiji.getJindu() )))) {
 //                    guiji.setUserId( PACHONG_ADMINID );
 //                    guiji.setArea( YNDhmNewDateString() );

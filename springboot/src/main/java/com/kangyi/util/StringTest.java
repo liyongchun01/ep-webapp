@@ -1,6 +1,8 @@
 package com.kangyi.util;
 
 import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -177,6 +179,21 @@ public class StringTest {
         }
         return city;
     }
+
+    public static boolean isJsonObject(String content) {
+        // 此处应该注意，不要使用StringUtils.isEmpty(),因为当content为"  "空格字符串时，JSONObject.parseObject可以解析成功，
+        // 实际上，这是没有什么意义的。所以content应该是非空白字符串且不为空，判断是否是JSON数组也是相同的情况。
+        if(StringUtils.isBlank(content))
+            return false;
+        try {
+            JSONObject jsonStr = JSONObject.parseObject(content);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+
 
     public static void main(String[] args) throws Exception{
 //        String str = "【3月24日】3月23日上午10时左右从辽宁省朝阳市凌源市装蔬菜（黄瓜），3月23日中午12时左右出发，前往目的地石家庄市，3月23日中途接到凌源市电话通知，核酸检测结果异常，要求就近停靠，3月23日晚22时38分驶入京港澳高速定州服务区，停靠在大型车辆停车区内，期间未下车，3月24日凌晨1时28分采集咽拭子，早7时32分实验室报告结果为阳性，现已转运至保定市定点救治医院，诊断为新冠确诊病例";

@@ -33,4 +33,6 @@ public interface GuiJiMapper {
     int insertList(List<GuiJi> listGuiji);
 
     int updateListByPrimaryKeySelective(List<GuiJi> listGuiji);
+
+    int genxinList(List<GuiJi> guiJiList);
 }

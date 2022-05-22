@@ -3,6 +3,7 @@ package com.kangyi.util;
 //import com.kangyi.mapper.GuiJi123Mapper;
 import com.kangyi.mapper.GuiJiMapper;
 import com.kangyi.pojo.GuiJi;
+import com.kangyi.pojo.Order;
 import com.kangyi.service.OrderService;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -137,7 +138,9 @@ public class GetListGuiji {
             net.sf.json.JSONArray  list = json_data.getJSONArray( "list" );
             JSONArray jsonArray = new JSONArray();
             ArrayList<Long> orderIdList = new ArrayList<Long>();
-            String time=null;
+            Map<String, String> newMap = new HashMap<>();
+            ArrayList<String> timeList=new ArrayList<String>(  );
+//            String time=null;
             /*
              * 一个城市一个list，每个list可能有多条desc
              *
@@ -148,6 +151,10 @@ public class GetListGuiji {
                 String desc =  list.getJSONObject( i ).get( "desc" ).toString();
                 String ydata = list.getString( i );
                 orderId = orderService.insertOrder( PACHONG_ADMINID, 4, 2, ydata);
+                Order order = orderService.selectOneById( orderId );
+                if (order==null||"null".equals( order )||orderId==0l){
+                    continue;
+                }
 
 //                String prov =  list.getJSONObject( i ).get( "prov" ).toString();
                 String city = ifCity(list.getJSONObject( i ).get( "city" ).toString());
@@ -158,6 +165,7 @@ public class GetListGuiji {
 
                     }
                     Map<String, String> descMap = StringTest.StringChange( desc );
+
 //               System.out.println("@#$5  "+descMap);
                     Set<String> strings = descMap.keySet();
 //               Set<String> urls = new HashSet<> ();
@@ -170,9 +178,10 @@ public class GetListGuiji {
 //
                     for (String a:strings) {
 
+
                         num++;
                         jingweiurl = getUrl(num );
-                        time = descMap.get( a );
+                        timeList.add( descMap.get( a ) );
                         String url = jingweiurl  + city + a;
                         JSONObject jsonUrl = new JSONObject();
                         jsonUrl.put( "requestUrl", url );
@@ -185,7 +194,8 @@ public class GetListGuiji {
                     e.printStackTrace();
                 }
             }
-            List<GuiJi> guiJiList1 = addGuijiListOnThrea( jsonArray, time, orderIdList );
+
+            List<GuiJi> guiJiList1 = addGuijiListOnThrea( jsonArray ,timeList,orderIdList );
             if (guiJiList1==null){
                 System.out.println(num+"个  "+s);
                 throw new Exception( "解析失败" );
@@ -194,6 +204,10 @@ public class GetListGuiji {
 //          System.out.println("@#$jsonArray "+jsonArray.size());
         }else {
             throw new Exception("查不到轨迹!");
+        }
+        if (guiJiList==null||guiJiList.size()<=0){
+            System.out.println("无轨迹数据加入");
+            return null;
         }
         int i1 = guiJiMapper.insertList( guiJiList );
         System.out.println(i1+"个轨迹加入数据库完毕");

@@ -206,6 +206,9 @@ public class OrderServiceImpl implements OrderService {
             OrderExample.Criteria criteria = orderExample.createCriteria();
             criteria.andOrderIdEqualTo( orderId );
             List<Order> orders = orderMapper.selectByExample( orderExample );
+            if (orders==null||orders.size()<=0){
+                return null;
+            }
             order1 = orders.get( 0 );
             redisUtil.set( key, JSON.toJSONString( order1 ),24*60*60 );
 //            System.out.println("@#$key,no");

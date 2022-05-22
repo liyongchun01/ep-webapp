@@ -64,6 +64,7 @@ public class ThreadAddOneGuiji implements Callable<GuiJi> {
                 if ("0".equals( jsonObject.getString( "status" ) )) {
 //                JSONObject res = JSONObject.fromObject( htmlJson );
                     guiji = getGuijiJingWeiDu( jsonObject, time );
+
                     if (guiji.getJindu() != null) {
                         guiji.setUserId( PACHONG_ADMINID );
                         guiji.setOrderId( orderId );

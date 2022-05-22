@@ -12,12 +12,10 @@ import com.kangyi.service.CommentService;
 import com.kangyi.service.OrderService;
 import com.kangyi.service.QuartzBeanService;
 import com.kangyi.service.impl.GuiJiServiceImpl;
-import com.kangyi.util.GetListGuiji;
-import com.kangyi.util.HttpURLConnectionUtil;
-import com.kangyi.util.PageResult;
-import com.kangyi.util.StringTest;
+import com.kangyi.util.*;
 import com.kangyi.util.jsoup.JsoupUtil;
 import com.kangyi.util.jsoup.ResultGenerator;
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -27,13 +25,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.kangyi.constant.Constant.PACHONG_ADMINID;
+import static com.kangyi.util.ManyUrlKeyUtil.getUrl;
+import static com.kangyi.util.StringTest.ifCity;
+import static com.kangyi.util.StringTest.isJsonObject;
+import static com.kangyi.util.StringToDate.YMDmsToDate;
 import static com.kangyi.util.StringToDate.dateAddTian;
+import static com.kangyi.util.futureUtil.addGuijiListOnThrea;
 //import static com.kangyi.util.GetListGuiji.addListGuiji;
 
 @SpringBootTest
@@ -42,6 +42,7 @@ Kangyi01ApplicationTests {
 
     @Autowired
     GetListGuiji getListGuiji;
+
     @Autowired
     OrderService orderService;
 
@@ -65,6 +66,7 @@ Kangyi01ApplicationTests {
 
     @Autowired
     CommentService commentService;
+
 
 //
 //    @Test
@@ -268,9 +270,6 @@ Kangyi01ApplicationTests {
 //        int i = guiJiMapper.updateListByPrimaryKeySelective( guiJiList2 );
 
         System.out.println(i+"  j"+j);
-
-
-
     }
 
     @Test
@@ -280,6 +279,108 @@ Kangyi01ApplicationTests {
         int i=commentService.insertOne(comment);
         System.out.println(i);
     }
+
+    @Test
+    public void  testdeleteGuijiAndOrder() {
+        GuiJiExample guiJiExample = new GuiJiExample();
+        GuiJiExample.Criteria criteria = guiJiExample.createCriteria();
+        criteria.andGuijiIdBetween( 1591l,95270l );
+        criteria.andUserIdEqualTo( 3l );
+        int i = guiJiMapper.deleteByExample( guiJiExample );
+        System.out.println(i);
+
+
+    }
+
+    @Test
+    public void  testUpdateOneGuijiAndOrder() {
+
+        OrderExample orderExample = new OrderExample();
+        OrderExample.Criteria criteria1 = orderExample.createCriteria();
+        criteria1.andUserIdEqualTo( 3l );
+//        criteria1.andOrderIdEqualTo( 10043l );
+        criteria1.andInsertTimeBetween(YMDmsToDate("2022-05-09 18:56:26"),YMDmsToDate("2022-05-21 20:49" ));
+        List<Order> orderList = orderMapper.selectByExample( orderExample );
+
+//        net.sf.json.JSONArray  list = json_data.getJSONArray( "list" );
+
+        int num = 0;
+        for (Order order : orderList) {
+            JSONArray jsonArray = new JSONArray();
+            ArrayList<Long> orderIdList = new ArrayList<Long>();
+            ArrayList<String> timeList = new ArrayList<String>();
+            List<GuiJi> guiJiList = new ArrayList<>();
+            String handelRemark = order.getHandelRemark();
+            if (handelRemark==null||"null".equals( handelRemark )){
+//                System.out.println("h 空");
+                continue;
+            }
+//            System.out.println("    h "+handelRemark);
+
+            if (!isJsonObject(handelRemark)){
+                continue;
+            }
+            JSONObject jsonObject = JSONObject.fromObject( handelRemark );
+//            System.out.println("   json  "+jsonObject);
+            String  desc = jsonObject.getString( "desc" );
+            if (desc==null||"null".equals( desc )){
+//                System.out.println("   json  "+jsonObject);
+//                System.out.println("dect  空");
+                continue;
+            }
+//            String desc =data.getString("desc") ;
+
+            Long orderId = order.getOrderId();
+
+//                String prov =  list.getJSONObject( i ).get( "prov" ).toString();
+            String city = ifCity( jsonObject.get( "city" ).toString() );
+            try {
+                if (!desc.contains( "【" )) {
+                    System.out.println( "少了中括号!  " + desc );
+//                    System.out.println( list+"少了中括号!" );
+                }
+                Map<String, String> descMap = StringTest.StringChange( desc );
+
+                Set<String> strings = descMap.keySet();
+                for (String a : strings) {
+                    num++;
+                    String jingweiurl = getUrl( num );
+                    timeList.add( descMap.get( a ) );
+                    String url = jingweiurl + city + a;
+                    JSONObject jsonUrl = new JSONObject();
+                    jsonUrl.put( "requestUrl", url );
+                    jsonArray.add( jsonUrl );
+                    orderIdList.add( orderId );
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+//            List<GuiJi> guiJiList1 = null;
+            try {
+                guiJiList = futureUtil.addGuijiListOnThrea( jsonArray, timeList, orderIdList );
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if (guiJiList == null||guiJiList.size()<=0||"null".equals( guiJiList )) {
+                System.out.println( "解析失败" );
+                System.out.println( num + "个  " + desc );
+                continue;
+            }
+//            guiJiList.addAll( guiJiList );
+//            int i1 = guiJiMapper.insertList( guiJiList );
+
+            int i1 = guiJiMapper.genxinList( guiJiList );
+            System.out.println( "orderId "+order.getOrderId()+"   共"+i1 + "个轨迹更新数据库完毕" );
+            System.out.println(" guijiList  "+guiJiList);
+        }
+    }
+
+
+
+
 
 
 }
