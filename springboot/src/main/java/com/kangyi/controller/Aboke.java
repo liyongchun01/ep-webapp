@@ -50,7 +50,7 @@ public class Aboke {
     @RequestMapping("/list")
 //    @ResponseBody
     public Map<String, Object> getBokeList(
-//            @RequestBody  Map<String, Object> data,
+//             Map<String, Object> data
             @RequestParam(value = "pno",defaultValue = "1") Integer pno,
             @RequestParam(value = "psize",defaultValue = "10") Integer psize,
             @RequestParam(value = "type",defaultValue = "0") Integer type,
@@ -61,13 +61,12 @@ public class Aboke {
     ){
 //        Map<String, Object> map = new HashMap<>(3);
 //        System.out.println("!@#bokelist data :"+data);
-
+//
 //        Integer type=(Integer)data.get( "type" );
 //        Integer pno=(Integer)data.get( "pno" );
 //        Integer psize=(Integer)data.get( "psize" );
 //        Long typeId = Long.valueOf( String.valueOf( data.get( "typeId" ) ) );
 //        Long orderId= Long.valueOf( String.valueOf( data.get("orderId" )));
-//        Long typeId= (Long) data.get( "typeId" );
 //        Long userId= Long.valueOf( String.valueOf( data.get("userId" )));
 //        if (pno == null){
 //            pno=1;
@@ -75,9 +74,9 @@ public class Aboke {
 //        if (psize==null){
 //            psize=10;
 //        }
-        if (type==null){
-            type=0;
-        }
+//        if (type==null){
+//            type=0;
+//        }
 
         Map<String,Object> map=commentService.getPageByOrderId(orderId,pno,psize);
 
@@ -179,10 +178,11 @@ public class Aboke {
         JSONObject.DEFFAULT_DATE_FORMAT="yyyy-MM-dd HH:mm:ss";
         String commentSt = JSONObject.toJSONString( data );
         Comment comment= JSON.parseObject( commentSt, Comment.class);
-        System.out.println("@#$addcomment "+comment);
+//        System.out.println("@#$addcomment "+comment);
         if (comment==null||"null".equals( comment )){
             return "评论失败 comment空";
         }
+        comment.setLevel( (byte) 0 );
         int i=commentService.insertOne(comment);
         if (i<=0){
             return "评论失败 sql失败";
@@ -230,7 +230,7 @@ public class Aboke {
 //        Long userId = Long.valueOf( String.valueOf( data.get( "userId" )));
 //        Integer level = (Integer)data.get( "level" );
         if (commentId==null||"null".equals( commentId )){
-            return "失败";
+            return "失败,commentId空";
         }
 
 
@@ -240,7 +240,7 @@ public class Aboke {
         int i=commentService.updataOneById(commentId,comment);
 //        int i=commentService.delectOne(commentId);
         if (i<=0){
-            return "失败";
+            return "失败,sql";
         }else {
             return "成功";
         }

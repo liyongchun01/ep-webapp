@@ -47,11 +47,12 @@ public class GuiJiServiceImpl implements GuiJiService {
             Date enddate =cal.getTime();
             guiJi.setEnddate( enddate );
             guiJi.setArea( YNDhmNewDateString() );
-//            i+=guiJiMapper.insert( guiJi );
-            System.out.println(guiJi);
+            i+=guiJiMapper.insert( guiJi );
+//            Long guijiId = guiJi.getGuijiId();
+//            System.out.println(guiJi);
 //            listGuiJi.add( guiJi );
         }
-         i = guiJiMapper.insertList( listGuiJi );
+//         i = guiJiMapper.insertList( listGuiJi );
 
 
         return i;

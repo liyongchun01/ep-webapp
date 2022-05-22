@@ -346,15 +346,17 @@ public class AUploadController {
         }
 
         String typeName=null;
+        Long typeId =null;
 
 //        Long userId = (Long) session.getAttribute("userId");
         if(type==1){
-            Long typeId = Long.valueOf( String.valueOf( data.get( "typeId" ) ) );
+           typeId = Long.valueOf( String.valueOf( data.get( "typeId" ) ) );
             JSONObject.DEFFAULT_DATE_FORMAT="yyyy-MM-dd HH:mm:ss";
             String st = JSONObject.toJSONString( data );
             HeSuan heSuan= JSON.parseObject( st, HeSuan.class);
             heSuan.setArea( YNDhmNewDateString() );
             typeName="核酸点："+heSuan.getHesuanPosition();
+//            typeId="核酸点："+heSuan.getHesuanPosition();
 //            System.out.println("  @#$11 String st: "+st);
 //            System.out.println("  @#$11 String 实体: "+heSuan);
 //            后面去掉
@@ -366,7 +368,7 @@ public class AUploadController {
 
         }else if (type==2){
 
-            Long typeId = Long.valueOf( String.valueOf( data.get( "typeId" ) ) );
+            typeId = Long.valueOf( String.valueOf( data.get( "typeId" ) ) );
             JSONObject.DEFFAULT_DATE_FORMAT="yyyy-MM-dd HH:mm:ss";
             String st = JSONObject.toJSONString( data );
             YiMiao yiMiao= JSON.parseObject( st, YiMiao.class);
@@ -383,7 +385,7 @@ public class AUploadController {
 
 
         }else if (type==3){
-            Long typeId = Long.valueOf( String.valueOf( data.get( "typeId" ) ) );
+             typeId = Long.valueOf( String.valueOf( data.get( "typeId" ) ) );
             JSONObject.DEFFAULT_DATE_FORMAT="yyyy-MM-dd HH:mm:ss";
             String st = JSONObject.toJSONString( data );
             GeLi geLi= JSON.parseObject( st, GeLi.class);
@@ -420,6 +422,8 @@ public class AUploadController {
 
             guiJiService.delectManyByOrderId( orderId );
             int i = guiJiService.insertListGuiJi( listGuiJi, orderId, userId, type );
+//            System.out.println("@#$updata guiji "+listGuiJi.get( 0 ).getGuijiId(  ));
+            typeId =  listGuiJi.get( 0 ).getGuijiId(  );
 
 //            int i = guiJiService.updateManyByOrderId( orderId, listGuiJi );
 
@@ -451,6 +455,7 @@ public class AUploadController {
             comment.setSendId( userId );
             comment.setCommentLouzhu( (byte)1 );
             comment.setType( (byte) type.intValue() );
+            comment.setUserRemark( String.valueOf( typeId ) );
 
             commentList.add( comment );
         }
