@@ -8,7 +8,7 @@ const { Panel } = Collapse;
 export default ({ blogInfo }) => {
     let behaviourArr = {}
     if (blogInfo.type == 4) {
-        if (blogInfo?.guiji.hasOwnProperty("qiekai")) {
+        if (blogInfo?.guiji?.hasOwnProperty("qiekai")) {
             behaviourArr = Object.entries(JSON.parse(blogInfo?.guiji.qiekai))
         }
     }

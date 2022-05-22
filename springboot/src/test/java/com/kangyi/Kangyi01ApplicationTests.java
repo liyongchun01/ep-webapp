@@ -378,6 +378,13 @@ Kangyi01ApplicationTests {
         }
     }
 
+    @Test
+    public void test1(){
+
+        Comment comment = commentService.selectOneById( 46l );
+        System.out.println(comment.getTypeName());
+    }
+
 
 
 

@@ -120,7 +120,6 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public long insertOrder(Long userId, int type,int status,String ydata) {
-
 //        System.out.println("@#$!!!");
         Order order = new Order();
         order.setHandelRemark( ydata );
@@ -138,7 +137,6 @@ public class OrderServiceImpl implements OrderService {
         orderMapper.insertAndGetId( order );
         Long orderId = order.getOrderId();
 //        System.out.println("@#$orderId "+orderId);
-
         return orderId;
     }
 

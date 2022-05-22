@@ -133,7 +133,11 @@ public class GetListGuiji {
         System.out.println(page+"页 调用m.sm.cn/api耗时 : " + (System.currentTimeMillis() - startTime1) );
         JSONObject json_s = JSONObject.fromObject(s);
         JSONObject json_data  = json_s.getJSONObject( "data" );
-        if (!"null".equals( json_data.toString() )&&json_data!=null){
+        if ("null".equals( json_data.toString() )||json_data==null){
+            System.out.println("查不到轨迹!");
+            return null;
+                }
+
 //        JSONObject json_data = JSONObject.fromObject(data);
             net.sf.json.JSONArray  list = json_data.getJSONArray( "list" );
             JSONArray jsonArray = new JSONArray();
@@ -151,8 +155,10 @@ public class GetListGuiji {
                 String desc =  list.getJSONObject( i ).get( "desc" ).toString();
                 String ydata = list.getString( i );
                 orderId = orderService.insertOrder( PACHONG_ADMINID, 4, 2, ydata);
+//                System.out.println("orderId   "+orderId);
                 Order order = orderService.selectOneById( orderId );
                 if (order==null||"null".equals( order )||orderId==0l){
+//                    System.out.println("order没有");
                     continue;
                 }
 
@@ -195,18 +201,11 @@ public class GetListGuiji {
                 }
             }
 
-            List<GuiJi> guiJiList1 = addGuijiListOnThrea( jsonArray ,timeList,orderIdList );
-            if (guiJiList1==null){
-                System.out.println(num+"个  "+s);
-                throw new Exception( "解析失败" );
-            }
-            guiJiList.addAll( guiJiList1 );
-//          System.out.println("@#$jsonArray "+jsonArray.size());
-        }else {
-            throw new Exception("查不到轨迹!");
-        }
+             guiJiList = addGuijiListOnThrea( jsonArray ,timeList,orderIdList );
+
+
         if (guiJiList==null||guiJiList.size()<=0){
-            System.out.println("无轨迹数据加入");
+            System.out.println(num+"个,解析失败 无轨迹数据加入"+s);
             return null;
         }
         int i1 = guiJiMapper.insertList( guiJiList );

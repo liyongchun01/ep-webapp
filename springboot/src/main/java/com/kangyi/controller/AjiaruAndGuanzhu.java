@@ -56,7 +56,7 @@ public class AjiaruAndGuanzhu {
              @RequestParam(value = "etime",defaultValue = "null") String etime,
             @RequestParam(value = "btime",defaultValue = "null") String btime,
              @RequestParam(value = "userId",defaultValue = "") Long userId,
-               @RequestParam(value = "sortField",defaultValue = "insertTime") String sortField,
+               @RequestParam(value = "sortField",defaultValue = "createTime") String sortField,
             @RequestParam(value = "sortType",defaultValue = "desc") String sortType
            ) {
 //        Map<String, Object> map = new HashMap<>(3);

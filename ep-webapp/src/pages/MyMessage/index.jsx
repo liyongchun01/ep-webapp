@@ -21,7 +21,7 @@ import DetailDrawer from '@/components/DetailDrawer';
 export default () => {
     const formRef = useRef()
     const [key, setKey] = useState("1")
-    const [userId, setuserId] = useState({ id: 1001, nickname: "1zsvd" })
+    const [userId, setuserId] = useState()
     const [guanzhuFields, setGuanzhuFields] = useState()
     const [followOrJoin, setFollowOrJoin] = useState(1)
     const [detailVisible, setDetailVisible] = useState(false)
@@ -33,7 +33,6 @@ export default () => {
     const getMessageList = async (params) => {
         const { data: uId } = await axios.get(`/api/login/getuser`)
         setuserId(uId)
-        setFollowOrJoin(params?.shenQingType)
         if (key == 4 || key == 5) {
             const { data: joinOrFollow } = await axios.get(`http://localhost:8083/jiaruAndGuanzhu/list`, {
                 params: {
@@ -62,9 +61,10 @@ export default () => {
                     shenQingType: key === "3" ? (params?.hasOwnProperty("shenQingType") ? params?.shenQingType : 1) : null
                 }
             })
+            setFollowOrJoin(params?.hasOwnProperty("shenQingType") ? params?.shenQingType : 1)
 
             return {
-                data: list[listObj[key]],
+                data: key === "3" ? list[listObj[key][params?.hasOwnProperty("shenQingType") ? params?.shenQingType : 1]] : list[listObj[key]],
                 total: list?.count
             }
         }
@@ -102,10 +102,6 @@ export default () => {
             }
             return complexBtn[followOrJoin]
         }
-
-    }
-
-    const detailClick = (record) => {
 
     }
 
@@ -152,7 +148,7 @@ export default () => {
             params: {
                 messageType: key,
                 commentId: record.commentId,
-                jiaruId: record.jiaruId,
+                jiaruId: key == 3 ? record.jiaruId : record.commentId,
                 userId: userId.id
             }
         })
@@ -229,7 +225,7 @@ export default () => {
             render: (_, record) => (
                 <>
                     <div onClick={() => toBlog(record)}>
-                        <span style={{ "fontSize": "16px", "fontWeight": "600" }}>{record.name}</span>
+                        <span style={{ "fontSize": "16px", "fontWeight": "600" }}>{record.userName}</span>
                         <span> 于{serviceTypeObject[record.type]}: 「{record.typeName}」回复了你: </span>
                         <span style={{ "color": "rgba(0, 0, 0, 0.45)", "fontSize": "12px", "marginLeft": "10px" }}>{readObj[record.parentRead]}</span>
                     </div>
@@ -281,11 +277,11 @@ export default () => {
             request: async () => [
                 {
                     label: '我发出的',
-                    value: 1
+                    value: 2
                 },
                 {
                     label: '别人发出的',
-                    value: 2
+                    value: 1
                 }
             ],
         },

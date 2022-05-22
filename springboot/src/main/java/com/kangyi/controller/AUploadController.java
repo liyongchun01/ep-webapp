@@ -251,10 +251,15 @@ public class AUploadController {
 
     ){
 
-
-        Order order=orderService.selectOneById(orderId);
-
         Map<String, Object> map = new HashMap<>(3);
+        Order order=orderService.selectOneById(orderId);
+        if (order==null){
+            System.out.println("没有此orderId");
+            map.put("msg", "查看失败");
+            return map;
+        }
+
+
 
 
         if(type==1){

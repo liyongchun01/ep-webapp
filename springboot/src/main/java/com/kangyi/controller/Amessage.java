@@ -60,7 +60,7 @@ public class Amessage {
             @RequestParam(value = "messageType",defaultValue = "2") Integer messageType,
             @RequestParam(value = "shenQingType",defaultValue = "2") Integer shenQingType,
             @RequestParam(value = "userId",defaultValue = "") Long userId,
-            @RequestParam(value = "sortField",defaultValue = "insertTime") String sortField,
+            @RequestParam(value = "sortField",defaultValue = "createTime") String sortField,
             @RequestParam(value = "sortType",defaultValue = "desc") String sortType
     ){
 //        Map<String, Object> map = new HashMap<>(3);
@@ -106,6 +106,9 @@ public class Amessage {
                 orderIdList.add( jiaru.getOrderId() );
             }
             List<Comment> pingLunCommentList = commentService.getMessageByOrserIdList( orderIdList, parentRead, sortField, sortType, type );
+            System.out.println("typeName"+pingLunCommentList.get( 0 ).getTypeName());
+            System.out.println(pingLunCommentList.get( 0 ));
+
             map.put( "pingLunCommentList" ,pingLunCommentList);
             Page<Comment> p = PageHelper.startPage( pno, psize );
             map.put( "count",p.getTotal() );
@@ -113,6 +116,9 @@ public class Amessage {
         }else if (messageType==2) {
             //2回复评论
             List<Comment> huifuCommentList = commentService.getMessageByParetId( userId, parentRead, sortField, sortType, type, messageType );
+            System.out.println("typeName"+huifuCommentList.get( 0 ).getTypeName());
+            System.out.println(huifuCommentList.get( 0 ));
+
             map.put( "huifuCommentList" ,huifuCommentList);
             Page<Comment> p = PageHelper.startPage( pno, psize );
             map.put( "count",p.getTotal() );
