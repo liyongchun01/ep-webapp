@@ -96,19 +96,22 @@ export default ({ blogInfo }) => {
                     <ProDescriptions.Item span={2} label="结束时间" >
                         {`${blogInfo[callbackFieldsKeys[blogInfo.type]].enddate}`}
                     </ProDescriptions.Item>
-                    <ProDescriptions.Item label="行为信息" span={3}>
-                        <Collapse defaultActiveKey={['1']} ghost>
-                            <Panel header="详情" key="2">
-                                <Timeline mode="alternate">
-                                    {
-                                        behaviourArr.map(item => (
-                                            <Timeline.Item>{`${item[1]} ${item[0]}`}</Timeline.Item>
-                                        ))
-                                    }
-                                </Timeline>
-                            </Panel>
-                        </Collapse>
-                    </ProDescriptions.Item>
+                    {
+                        blogInfo?.guiji.hasOwnProperty("qiekai") &&
+                        <ProDescriptions.Item label="行为信息" span={3}>
+                            <Collapse defaultActiveKey={['1']} ghost>
+                                <Panel header="详情" key="2">
+                                    <Timeline mode="alternate">
+                                        {
+                                            behaviourArr.map(item => (
+                                                <Timeline.Item>{`${item[1]} ${item[0]}`}</Timeline.Item>
+                                            ))
+                                        }
+                                    </Timeline>
+                                </Panel>
+                            </Collapse>
+                        </ProDescriptions.Item>
+                    }
                 </>
             }
             {

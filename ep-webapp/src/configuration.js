@@ -151,14 +151,25 @@ export const messageTab = [
 ];
 
 export const messageTabObj = {
-  0: '系统',
-  '-1': '全部',
-  1: '评论',
-  2: '回复',
-  3: '申请',
-};
+    "0": "系统",
+    "-1": "全部",
+    "1": "评论",
+    "2": "回复",
+    "3": "申请",
+    "4": "已关注",
+    "5": "已加入"
+}
 
 export const readObj = {
-  0: '未读',
-  1: '已读',
-};
+    0: "未读",
+    1: "已读"
+}
+
+export const listObj = {
+    "1": "pingLunCommentList",
+    "2": "huiFuCommentList",
+    "0": "xiTongCommentList",
+    "3": "shenQingType",
+    "4": "guanzhu",
+    "5": "jiaru"
+}

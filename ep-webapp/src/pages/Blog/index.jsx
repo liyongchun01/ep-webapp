@@ -16,9 +16,9 @@ export default () => {
     const timestamp = moment(new Date()).valueOf();
     const createTime = moment(timestamp).format('YYYY-MM-DD HH:mm:ss');
     const { orderId, type, typeId } = history.location.query
-    const [userId, setUserId] = useState(1001)
+    const [userId, setUserId] = useState({})
     const [blogInfo, setBlogInfo] = useState()
-    const [inputId, setInputId] = useState()
+    const [inputId, setInputId] = useState(null)
     const [inputVisible, setInputVisible] = useState(false)
 
     // 获取评论列表信息
