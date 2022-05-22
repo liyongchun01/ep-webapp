@@ -18,59 +18,6 @@ import { history } from 'umi';
 import moment from 'moment';
 import SubmitModal from './component/SubmitModal';
 import DetailDrawer from '@/components/DetailDrawer';
-const dataSource = [
-    {
-        name: '语雀的天空',
-        content: '说的好',
-        type: 1,
-        parentRead: 0,
-        typeName: "黑龙江工程学院",
-        messageType: 0,
-        jiaruId: 1,
-        orderId: 1001,
-        userRemark: 1001,
-        status: 1,
-        handelRemark: "asdasdasd",
-        insertTime: "2022-12-02 12:12",
-        sendId: 123123,
-        userName: "hhshf",
-        louzhu: 0,
-        jiaruId: 123123
-    },
-    {
-        name: 'Ant Design',
-        content: '啥时候结束啊',
-        type: 2,
-        parentRead: 1,
-        typeName: "黑龙江工程学院",
-        messageType: 1,
-        status: 2,
-        handelRemark: "asdasdasd",
-        insertTime: "2022-12-02 12:12",
-    },
-    {
-        name: '蚂蚁金服体验科技',
-        content: '人多吗现在',
-        type: 3,
-        parentRead: 0,
-        typeName: "黑龙江工程学院",
-        messageType: 2,
-        status: 1,
-        handelRemark: "asdasdasd",
-        insertTime: "2022-12-02 12:12",
-    },
-    {
-        name: 'TechUI',
-        content: '下雨了！',
-        type: 4,
-        parentRead: 1,
-        typeName: "黑龙江工程学院",
-        messageType: 1,
-        status: 2,
-        handelRemark: "asdasdasd",
-        insertTime: "2022-12-02 12:12",
-    },
-];
 
 export default () => {
     const formRef = useRef()
@@ -385,7 +332,6 @@ export default () => {
                     pagination={{
                         pageSize: 5,
                     }}
-                    dataSource={dataSource}
                     rowKey="name"
                     headerTitle={messageTabObj[key]}
                     request={getMessageList}
