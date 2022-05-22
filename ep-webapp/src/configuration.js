@@ -152,7 +152,6 @@ export const messageTab = [
 
 export const messageTabObj = {
   0: '系统',
-  '-1': '全部',
   1: '评论',
   2: '回复',
   3: '申请',
@@ -173,3 +172,12 @@ export const listObj = {
   4: 'guanzhu',
   5: 'jiaru',
 };
+
+export const commentCallback = {
+  0: "",
+  1: "回复了我",
+  2: "评论了我",
+  3: "请求加入",
+  4: "",
+  5: ""
+}

@@ -9,7 +9,8 @@ import {
     readObj,
     callbackFieldsKeys,
     callbackFieldsPositionKeys,
-    listObj
+    listObj,
+    commentCallback
 } from '@/configuration';
 import axios from 'axios';
 import styles from './styles.less';
@@ -17,6 +18,59 @@ import { history } from 'umi';
 import moment from 'moment';
 import SubmitModal from './component/SubmitModal';
 import DetailDrawer from '@/components/DetailDrawer';
+const dataSource = [
+    {
+        name: '语雀的天空',
+        content: '说的好',
+        type: 1,
+        parentRead: 0,
+        typeName: "黑龙江工程学院",
+        messageType: 0,
+        jiaruId: 1,
+        orderId: 1001,
+        userRemark: 1001,
+        status: 1,
+        handelRemark: "asdasdasd",
+        insertTime: "2022-12-02 12:12",
+        sendId: 123123,
+        userName: "hhshf",
+        louzhu: 0,
+        jiaruId: 123123
+    },
+    {
+        name: 'Ant Design',
+        content: '啥时候结束啊',
+        type: 2,
+        parentRead: 1,
+        typeName: "黑龙江工程学院",
+        messageType: 1,
+        status: 2,
+        handelRemark: "asdasdasd",
+        insertTime: "2022-12-02 12:12",
+    },
+    {
+        name: '蚂蚁金服体验科技',
+        content: '人多吗现在',
+        type: 3,
+        parentRead: 0,
+        typeName: "黑龙江工程学院",
+        messageType: 2,
+        status: 1,
+        handelRemark: "asdasdasd",
+        insertTime: "2022-12-02 12:12",
+    },
+    {
+        name: 'TechUI',
+        content: '下雨了！',
+        type: 4,
+        parentRead: 1,
+        typeName: "黑龙江工程学院",
+        messageType: 1,
+        status: 2,
+        handelRemark: "asdasdasd",
+        insertTime: "2022-12-02 12:12",
+    },
+];
 
 export default () => {
     const formRef = useRef()
@@ -58,13 +112,13 @@ export default () => {
                     type: params?.type,
                     parentRead: params?.parentRead,
                     messageType: key,
-                    shenQingType: key === "3" ? (params?.hasOwnProperty("shenQingType") ? params?.shenQingType : 1) : null
+                    shenQingType: key == "3" ? (params?.hasOwnProperty("shenQingType") ? params?.shenQingType : 1) : null
                 }
             })
             setFollowOrJoin(params?.hasOwnProperty("shenQingType") ? params?.shenQingType : 1)
 
             return {
-                data: key === "3" ? list[listObj[key][params?.hasOwnProperty("shenQingType") ? params?.shenQingType : 1]] : list[listObj[key]],
+                data: key == "3" ? list[listObj[key][params?.hasOwnProperty("shenQingType") ? params?.shenQingType : 1]] : list[listObj[key]],
                 total: list?.count
             }
         }
@@ -121,11 +175,11 @@ export default () => {
                 orderId: orderId
             }
         })
-        if (type === 1) {
+        if (type == 1) {
             setRecordList(data.heSuan)
-        } else if (type === 2) {
+        } else if (type == 2) {
             setRecordList(data.yiMiao)
-        } else if (type === 3) {
+        } else if (type == 3) {
             setRecordList(data.geli)
         } else {
             setRecordList(data)
@@ -226,7 +280,7 @@ export default () => {
                 <>
                     <div onClick={() => toBlog(record)}>
                         <span style={{ "fontSize": "16px", "fontWeight": "600" }}>{record.userName}</span>
-                        <span> 于{serviceTypeObject[record.type]}: 「{record.typeName}」回复了你: </span>
+                        <span> 于{serviceTypeObject[record.type]}: 「{record.typeName}」{commentCallback[key]} </span>
                         <span style={{ "color": "rgba(0, 0, 0, 0.45)", "fontSize": "12px", "marginLeft": "10px" }}>{readObj[record.parentRead]}</span>
                     </div>
                 </>
@@ -273,7 +327,7 @@ export default () => {
             dataIndex: 'shenQingType',
             title: '来源',
             initialValue: 1,
-            hideInSearch: key !== "3",
+            hideInSearch: key != "3",
             request: async () => [
                 {
                     label: '我发出的',
@@ -331,6 +385,7 @@ export default () => {
                     pagination={{
                         pageSize: 5,
                     }}
+                    dataSource={dataSource}
                     rowKey="name"
                     headerTitle={messageTabObj[key]}
                     request={getMessageList}
