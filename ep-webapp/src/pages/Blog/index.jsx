@@ -84,6 +84,7 @@ export default () => {
     const joinEdit = async (userRemark, jiaru) => {
         await axios.post(`http://localhost:8083/boke/jiaru`, {
             fromUserId: userId.id,
+            toUserId: blogInfo[callbackFieldsKeys[blogInfo.type]]?.userId,
             orderId,
             type,
             userRemark,

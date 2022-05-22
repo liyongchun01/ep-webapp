@@ -79,14 +79,14 @@ export default () => {
         if (key != "3") {
             const normalObj = {
                 "0": <>
-                    <Button type='link' onClick={() => handleRead(record)}>已读</Button>
+                    {record.parentRead === 1 && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
                 </>,
                 "1": <>
-                    <Button type='link' onClick={() => handleRead(record)}>已读</Button>
+                    {record.parentRead === 1 && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
                     <SubmitModal options="reply" userId={userId} record={record} createTime={createTime} />
                 </>,
                 "2": <>
-                    <Button type='link' onClick={() => handleRead(record)}>已读</Button>
+                    {record.parentRead === 1 && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
                     <SubmitModal options="reply" userId={userId} record={record} createTime={createTime} />
                 </>
             }
@@ -97,7 +97,7 @@ export default () => {
                     <Button type='link' style={{ "color": "red" }} onClick={() => removeFollow(record)}>移除</Button>
                 </>,
                 2: <>
-                    <Button type='link' onClick={() => handleRead(record)}>已读</Button>
+                    {record.parentRead === 1 && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
                     <SubmitModal options="refuse" userId={userId} record={record} createTime={createTime} />
                 </>
             }
@@ -192,7 +192,12 @@ export default () => {
         },
         description: {
             dataIndex: 'handelRemark',
-            search: false
+            search: false,
+            render: (_, record) => (
+                <>
+                    {record.type === 4 ? JSON.parse(record.handelRemark).desc : record.handelRemark}
+                </>
+            )
         },
         subTitle: {
             dataIndex: 'insertTime',
