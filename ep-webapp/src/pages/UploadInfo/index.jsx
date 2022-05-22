@@ -9,9 +9,9 @@ import DetailDrawer from '@/components/DetailDrawer';
 import axios from 'axios';
 import { tagObject, serviceTypeObject } from '@/configuration'
 import moment from 'moment';
-const { RangePicker } = DatePicker
 import { history } from 'umi';
 
+const { RangePicker } = DatePicker
 export default () => {
     const [userId, setUserId] = useState()
     const [detailVisible, setDetailVisible] = useState(false)

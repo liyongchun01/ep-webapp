@@ -30,12 +30,12 @@ export default [
     path: '/message',
     component: './MyMessage',
   },
-  {
-    name: '申请管理',
-    icon: 'AuditOutlined',
-    path: '/join-management',
-    component: './JoinManagement',
-  },
+  // {
+  //   name: '申请管理',
+  //   icon: 'AuditOutlined',
+  //   path: '/join-management',
+  //   component: './JoinManagement',
+  // },
   {
     name: '疫情地图',
     icon: 'FundOutlined',

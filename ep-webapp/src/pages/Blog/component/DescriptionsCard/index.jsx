@@ -7,8 +7,10 @@ import styles from './styles.less'
 const { Panel } = Collapse;
 export default ({ blogInfo }) => {
     let behaviourArr = {}
-    if (blogInfo?.guiji.hasOwnProperty("qiekai")) {
-        behaviourArr = Object.entries(blogInfo?.guiji.qiekai)
+    if (blogInfo.type == 4) {
+        if (blogInfo?.guiji.hasOwnProperty("qiekai")) {
+            behaviourArr = Object.entries(JSON.parse(blogInfo?.guiji.qiekai))
+        }
     }
 
     return (
@@ -83,7 +85,7 @@ export default ({ blogInfo }) => {
                 </>
             }
             {
-                blogInfo?.guiji.hasOwnProperty("qiekai") &&
+                blogInfo?.type === 4 &&
                 <>
                     <ProDescriptions.Item span={3} label="场所名称" >
                         {blogInfo[callbackFieldsKeys[blogInfo.type]].guijiPosition}
@@ -94,19 +96,22 @@ export default ({ blogInfo }) => {
                     <ProDescriptions.Item span={2} label="结束时间" >
                         {`${blogInfo[callbackFieldsKeys[blogInfo.type]].enddate}`}
                     </ProDescriptions.Item>
-                    <ProDescriptions.Item label="行为信息" span={3}>
-                        <Collapse defaultActiveKey={['1']} ghost>
-                            <Panel header="详情" key="2">
-                                <Timeline mode="alternate">
-                                    {
-                                        behaviourArr.map(item => (
-                                            <Timeline.Item>{`${item[1]} ${item[0]}`}</Timeline.Item>
-                                        ))
-                                    }
-                                </Timeline>
-                            </Panel>
-                        </Collapse>
-                    </ProDescriptions.Item>
+                    {
+                        blogInfo?.guiji.hasOwnProperty("qiekai") &&
+                        <ProDescriptions.Item label="行为信息" span={3}>
+                            <Collapse defaultActiveKey={['1']} ghost>
+                                <Panel header="详情" key="2">
+                                    <Timeline mode="alternate">
+                                        {
+                                            behaviourArr.map(item => (
+                                                <Timeline.Item>{`${item[1]} ${item[0]}`}</Timeline.Item>
+                                            ))
+                                        }
+                                    </Timeline>
+                                </Panel>
+                            </Collapse>
+                        </ProDescriptions.Item>
+                    }
                 </>
             }
             {
