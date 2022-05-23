@@ -197,7 +197,7 @@ public class Aboke {
         JSONObject.DEFFAULT_DATE_FORMAT="yyyy-MM-dd HH:mm:ss";
         String commentSt = JSONObject.toJSONString( data );
         Comment comment= JSON.parseObject( commentSt, Comment.class);
-//        System.out.println("@#$addcomment "+comment);
+        System.out.println("@#$addcomment "+comment);
         if (comment==null||"null".equals( comment )){
             return "评论失败 comment空";
         }
