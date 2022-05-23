@@ -85,18 +85,18 @@ export default () => {
                 </>,
                 "1": <>
                     {record.parentRead === "0" && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
-                    <SubmitModal options="reply" userId={userId} record={record} createTime={createTime} />
+                    <SubmitModal options="reply" formRef={formRef} userId={userId} record={record} createTime={createTime} />
                 </>,
                 "2": <>
                     {record.parentRead === "0" && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
-                    <SubmitModal options="reply" userId={userId} record={record} createTime={createTime} />
+                    <SubmitModal options="reply" formRef={formRef} userId={userId} record={record} createTime={createTime} />
                 </>
             }
             return normalObj[key]
         } else {
             const complexBtn = {
                 1: <>
-                    <SubmitModal options="refuse" userId={userId} record={record} createTime={createTime} />
+                    <SubmitModal options="refuse" formRef={formRef} userId={userId} record={record} createTime={createTime} />
                     <Button type='link' onClick={() => handleAccess(record)}>通过</Button>
                 </>,
                 2: <>
@@ -239,7 +239,7 @@ export default () => {
                         }</span>
                         <span> 于{serviceTypeObject[record.type]}: 「{record.typeName}」{commentCallback[key]} </span>
                         {
-                            key == 3 && followOrJoin == 2
+                            key == 3
                                 ? <Tag style={{ "marginLeft": "10px" }} color={joinStatus[record.jiaru].color}>{joinStatus[record.jiaru].label}</Tag>
                                 : <span style={{ "color": "rgba(0, 0, 0, 0.45)", "fontSize": "12px", "marginLeft": "10px" }}>{readObj[record.parentRead]}</span>
                         }
