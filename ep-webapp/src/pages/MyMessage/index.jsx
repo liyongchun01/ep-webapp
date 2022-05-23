@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Button } from 'antd';
+import { Button, Tag } from 'antd';
 import ProList from '@ant-design/pro-list';
 import { PageContainer } from '@ant-design/pro-layout';
 import {
@@ -11,7 +11,8 @@ import {
     callbackFieldsPositionKeys,
     listObj,
     commentCallback,
-    getTypeId
+    getTypeId,
+    joinStatus
 } from '@/configuration';
 import axios from 'axios';
 import styles from './styles.less';
@@ -23,7 +24,7 @@ import DetailDrawer from '@/components/DetailDrawer';
 export default () => {
     const formRef = useRef()
     const [key, setKey] = useState("1")
-    const [userId, setuserId] = useState()
+    const [userId, setuserId] = useState({})
     const [guanzhuFields, setGuanzhuFields] = useState()
     const [followOrJoin, setFollowOrJoin] = useState(1)
     const [detailVisible, setDetailVisible] = useState(false)
@@ -95,11 +96,11 @@ export default () => {
         } else {
             const complexBtn = {
                 1: <>
-                    <Button type='link' style={{ "color": "red" }} onClick={() => removeFollow(record)}>移除</Button>
+                    <SubmitModal options="refuse" userId={userId} record={record} createTime={createTime} />
+                    <Button type='link' onClick={() => handleAccess(record)}>通过</Button>
                 </>,
                 2: <>
-                    {record.parentRead === "0" && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
-                    <SubmitModal options="refuse" userId={userId} record={record} createTime={createTime} />
+
                 </>
             }
             return complexBtn[followOrJoin]
@@ -142,6 +143,7 @@ export default () => {
                 userId: userId.id
             }
         })
+        formRef.current?.reload()
     }
 
     // 已读方法
@@ -232,9 +234,15 @@ export default () => {
             render: (_, record) => (
                 <>
                     <div onClick={() => toBlog(record)}>
-                        <span style={{ "fontSize": "16px", "fontWeight": "600" }}>{record.userName}</span>
+                        <span style={{ "fontSize": "16px", "fontWeight": "600" }}>{
+                            key == 3 ? record?.remark : record?.userName
+                        }</span>
                         <span> 于{serviceTypeObject[record.type]}: 「{record.typeName}」{commentCallback[key]} </span>
-                        <span style={{ "color": "rgba(0, 0, 0, 0.45)", "fontSize": "12px", "marginLeft": "10px" }}>{readObj[record.parentRead]}</span>
+                        {
+                            key == 3 && followOrJoin == 2
+                                ? <Tag style={{ "marginLeft": "10px" }} color={joinStatus[record.jiaru].color}>{joinStatus[record.jiaru].label}</Tag>
+                                : <span style={{ "color": "rgba(0, 0, 0, 0.45)", "fontSize": "12px", "marginLeft": "10px" }}>{readObj[record.parentRead]}</span>
+                        }
                     </div>
                 </>
             )
@@ -274,7 +282,16 @@ export default () => {
         },
         description: {
             dataIndex: 'content',
-            search: false
+            search: false,
+            render: (_, record) => (
+                <>
+                    {
+                        key == 3
+                            ? (record?.jiaru == 0 ? record?.adminRemark : record?.userRemark)
+                            : record?.content
+                    }
+                </>
+            )
         },
         type: {
             dataIndex: 'shenQingType',

@@ -190,3 +190,18 @@ export const getTypeId = {
   4: 'typeId',
   5: 'typeId',
 };
+
+export const joinStatus = {
+  0: {
+    color: 'red',
+    label: '已拒绝',
+  },
+  1: {
+    color: 'blue',
+    label: '待通过',
+  },
+  2: {
+    color: 'green',
+    label: '已通过',
+  },
+}

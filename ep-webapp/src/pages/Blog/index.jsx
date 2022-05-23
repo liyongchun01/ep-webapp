@@ -91,7 +91,8 @@ export default () => {
             typeId,
             createTime,
             typeName: blogInfo[callbackFieldsKeys[blogInfo.type]][callbackFieldsPositionKeys[blogInfo.type]],
-            jiaru
+            jiaru,
+            remark: userId.username
         })
         formRef.current?.reload()
     }
