@@ -25,7 +25,6 @@ export default () => {
     const formRef = useRef()
     const [key, setKey] = useState("1")
     const [userId, setuserId] = useState({})
-    const [guanzhuFields, setGuanzhuFields] = useState()
     const [followOrJoin, setFollowOrJoin] = useState(1)
     const [detailVisible, setDetailVisible] = useState(false)
     const [recordList, setRecordList] = useState({})
@@ -46,7 +45,6 @@ export default () => {
                     messageType: key == 4 ? 1 : 2
                 }
             })
-            setGuanzhuFields(joinOrFollow[listObj[key]])
 
             return {
                 data: joinOrFollow[listObj[key]],
@@ -191,6 +189,7 @@ export default () => {
             render: (_, record) => (
                 <>
                     <Button style={{ "paddingLeft": 0 }} type='link' onClick={() => toBlog(record)}>{serviceTypeObject[record?.type]}</Button>
+                    <span>「{record.typeName}」</span>
                 </>
             ),
         },
@@ -199,7 +198,7 @@ export default () => {
             search: false,
             render: (_, record) => (
                 <>
-                    {record?.type === 4 ? (record?.handelRemark ? JSON.parse(record?.handelRemark).desc : record.handelRemark) : record.handelRemark}
+                    {/* {record?.type === 4 ? (record?.handelRemark ? JSON.parse(record?.handelRemark).desc : record.handelRemark) : record.handelRemark} */}
                 </>
             )
         },
