@@ -3,8 +3,8 @@ const Settings = {
   // 拂晓蓝
   primaryColor: '#1890ff',
   layout: 'side',
-  // siderWidth: 0, //是否隐藏导航
-  // collapsed: false,
+  siderWidth: 0, //是否隐藏导航
+  collapsed: false,
   contentWidth: 'Fluid',
   fixedHeader: false,
   fixSiderbar: true,
