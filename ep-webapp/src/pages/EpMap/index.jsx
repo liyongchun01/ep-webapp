@@ -83,7 +83,7 @@ export default () => {
                     form={form}
                     onFinish={onFinish}
                 >
-                    <Form.Item label="天数" name="tian">
+                    <Form.Item label="最近几天" name="tian">
                         <Input allowClear />
                     </Form.Item>
                     <Form.Item label="时间范围" style={{ "margin": "0 10px" }} name="timeRange">
