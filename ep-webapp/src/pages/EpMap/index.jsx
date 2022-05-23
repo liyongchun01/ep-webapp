@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Alert, Button, Skeleton } from 'antd';
+import { Card, Alert, Button, Skeleton, DatePicker, Form, Input } from 'antd';
 import MainMap from '@/components/MainMap';
 import { tabList } from '@/configuration';
 import { TextLoop } from 'react-text-loop-next';
 import axios from 'axios';
 import styles from './styles.less'
+import moment from 'moment';
 
+const { RangePicker } = DatePicker;
 export default () => {
+    const [form] = Form.useForm()
     const [key, setKey] = useState(1)
     const [newList, setNewList] = useState([])
+    const [filterFields, setFilterFields] = useState({ tian: 14 })
 
     const getNewsList = async () => {
         const { data: newone } = await axios.get("http://api.tianapi.com/ncov/index", {
@@ -53,14 +57,57 @@ export default () => {
         }
     }
 
+    const onFinish = (val) => {
+        console.log(val)
+        if (val.timeRange) {
+            const getAllFields = {
+                tian: val.tian,
+                btime: moment(val?.timeRange[0]).format('YYYY-MM-DD hh:mm'),
+                etime: moment(val?.timeRange[1]).format('YYYY-MM-DD hh:mm')
+            }
+            setFilterFields(getAllFields)
+        } else {
+            const getPartOfFields = {
+                tian: val.tian,
+            }
+            setFilterFields(getPartOfFields)
+        }
+
+    }
+
+    const filterBar = () => {
+        return (
+            <>
+                <Form
+                    className={styles.formStyle}
+                    form={form}
+                    onFinish={onFinish}
+                >
+                    <Form.Item label="天数" name="tian">
+                        <Input allowClear />
+                    </Form.Item>
+                    <Form.Item label="时间范围" style={{ "margin": "0 10px" }} name="timeRange">
+                        <RangePicker showTime format="YYYY-MM-DD HH:mm" />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                            查询
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </>
+        )
+    }
+
     return (
         <PageContainer
             tabList={tabList}
             onTabChange={(key) => setKey(key)}
             content={newsAlert()}
+            tabBarExtraContent={filterBar()}
         >
             <Card>
-                <MainMap type={+key} key={key} />
+                <MainMap filterFields={filterFields} type={+key} key={key} />
             </Card>
         </PageContainer>
     );

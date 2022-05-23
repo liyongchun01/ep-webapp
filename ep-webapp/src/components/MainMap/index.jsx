@@ -5,14 +5,13 @@ import axios from 'axios'
 import { Spin } from 'antd'
 import { callbackFieldsId } from '@/configuration';
 
-export default ({ type }) => {
+export default ({ type, filterFields }) => {
     const [isLoading, setIsloading] = useState(true)
     const [linkParams, setLinkParams] = useState()
     const mapId = useRef() //  地图实例
-
     useEffect(() => {
         mainMap()
-    }, [type])
+    }, [type, filterFields])
 
     // 防抖函数
     const debounce = (fn, delay) => {
@@ -96,7 +95,10 @@ export default ({ type }) => {
                             dbJingDu,
                             xnWeiDu,
                             xnJingDu,
-                            type
+                            type,
+                            tian: filterFields?.tian,
+                            btime: filterFields?.btime,
+                            etime: filterFields?.etime
                         }
                     })
                     setIsloading(false)
