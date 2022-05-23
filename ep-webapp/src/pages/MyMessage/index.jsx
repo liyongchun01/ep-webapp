@@ -9,7 +9,8 @@ import {
     readObj,
     callbackFieldsKeys,
     callbackFieldsPositionKeys,
-    listObj
+    listObj,
+    commentCallback
 } from '@/configuration';
 import axios from 'axios';
 import styles from './styles.less';
@@ -58,13 +59,13 @@ export default () => {
                     type: params?.type,
                     parentRead: params?.parentRead,
                     messageType: key,
-                    shenQingType: key === "3" ? (params?.hasOwnProperty("shenQingType") ? params?.shenQingType : 1) : null
+                    shenQingType: key == "3" ? (params?.hasOwnProperty("shenQingType") ? params?.shenQingType : 1) : null
                 }
             })
             setFollowOrJoin(params?.hasOwnProperty("shenQingType") ? params?.shenQingType : 1)
 
             return {
-                data: key === "3" ? list[listObj[key][params?.hasOwnProperty("shenQingType") ? params?.shenQingType : 1]] : list[listObj[key]],
+                data: key == "3" ? list[listObj[key][params?.hasOwnProperty("shenQingType") ? params?.shenQingType : 1]] : list[listObj[key]],
                 total: list?.count
             }
         }
@@ -78,14 +79,14 @@ export default () => {
         if (key != "3") {
             const normalObj = {
                 "0": <>
-                    <Button type='link' onClick={() => handleRead(record)}>已读</Button>
+                    {record.parentRead === 1 && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
                 </>,
                 "1": <>
-                    <Button type='link' onClick={() => handleRead(record)}>已读</Button>
+                    {record.parentRead === 1 && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
                     <SubmitModal options="reply" userId={userId} record={record} createTime={createTime} />
                 </>,
                 "2": <>
-                    <Button type='link' onClick={() => handleRead(record)}>已读</Button>
+                    {record.parentRead === 1 && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
                     <SubmitModal options="reply" userId={userId} record={record} createTime={createTime} />
                 </>
             }
@@ -96,7 +97,7 @@ export default () => {
                     <Button type='link' style={{ "color": "red" }} onClick={() => removeFollow(record)}>移除</Button>
                 </>,
                 2: <>
-                    <Button type='link' onClick={() => handleRead(record)}>已读</Button>
+                    {record.parentRead === 1 && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
                     <SubmitModal options="refuse" userId={userId} record={record} createTime={createTime} />
                 </>
             }
@@ -121,11 +122,11 @@ export default () => {
                 orderId: orderId
             }
         })
-        if (type === 1) {
+        if (type == 1) {
             setRecordList(data.heSuan)
-        } else if (type === 2) {
+        } else if (type == 2) {
             setRecordList(data.yiMiao)
-        } else if (type === 3) {
+        } else if (type == 3) {
             setRecordList(data.geli)
         } else {
             setRecordList(data)
@@ -191,7 +192,12 @@ export default () => {
         },
         description: {
             dataIndex: 'handelRemark',
-            search: false
+            search: false,
+            render: (_, record) => (
+                <>
+                    {record.type === 4 ? JSON.parse(record.handelRemark).desc : record.handelRemark}
+                </>
+            )
         },
         subTitle: {
             dataIndex: 'insertTime',
@@ -226,7 +232,7 @@ export default () => {
                 <>
                     <div onClick={() => toBlog(record)}>
                         <span style={{ "fontSize": "16px", "fontWeight": "600" }}>{record.userName}</span>
-                        <span> 于{serviceTypeObject[record.type]}: 「{record.typeName}」回复了你: </span>
+                        <span> 于{serviceTypeObject[record.type]}: 「{record.typeName}」{commentCallback[key]} </span>
                         <span style={{ "color": "rgba(0, 0, 0, 0.45)", "fontSize": "12px", "marginLeft": "10px" }}>{readObj[record.parentRead]}</span>
                     </div>
                 </>
@@ -273,7 +279,7 @@ export default () => {
             dataIndex: 'shenQingType',
             title: '来源',
             initialValue: 1,
-            hideInSearch: key !== "3",
+            hideInSearch: key != "3",
             request: async () => [
                 {
                     label: '我发出的',
