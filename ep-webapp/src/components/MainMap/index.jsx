@@ -95,7 +95,8 @@ export default ({ type }) => {
                             dbWeiDu,
                             dbJingDu,
                             xnWeiDu,
-                            xnJingDu
+                            xnJingDu,
+                            type
                         }
                     })
                     setIsloading(false)
