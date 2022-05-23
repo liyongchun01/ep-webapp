@@ -88,21 +88,21 @@ public class GuanzhuServiceImpl implements GuanzhuService {
 
     @Override
     public List<Guanzhu> selectManyByStatusOrderId(int guanzhuStatus, Long orderId) {
-        String key="guanzhuStatus:"+guanzhuStatus+"guanzhuOId"+orderId;
-        if (redisUtil.exists( key )){
-            List<Guanzhu> o =(List<Guanzhu>) redisUtil.get( key );
-            redisUtil.expire( key,24*60*60 );
-            return o;
-        }else {
+//        String key="guanzhuStatus:"+guanzhuStatus+"guanzhuOId"+orderId;
+//        if (redisUtil.exists( key )){
+//            List<Guanzhu> o =(List<Guanzhu>) redisUtil.get( key );
+//            redisUtil.expire( key,24*60*60 );
+//            return o;
+//        }else {
             GuanzhuExample oe = new GuanzhuExample();
             GuanzhuExample.Criteria criteria = oe.createCriteria();
             criteria.andGuanzhuEqualTo( (byte)guanzhuStatus );
             criteria.andOrderIdEqualTo( orderId );
             List<Guanzhu> list = guanzhuMapper.selectByExample( oe );
-            redisUtil.set( key,list,24*60*60 );
+//            redisUtil.set( key,list,24*60*60 );
 
             return list;
-        }
+//        }
     }
 }
 

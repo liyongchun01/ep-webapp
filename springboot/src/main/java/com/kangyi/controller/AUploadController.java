@@ -445,7 +445,7 @@ public class AUploadController {
         }
 
 //        List<Long> guanzhuUserId=null;
-        List<Comment> commentList=null;
+        List<Comment> commentList=new ArrayList<>(  );
         List<Guanzhu> guanzhuList = guanzhuService.selectManyByStatusOrderId(  1, orderId );
         for (Guanzhu guanzhu:guanzhuList){
 //            guanzhuUserId.add( guanzhu.getUserId() );
@@ -461,8 +461,9 @@ public class AUploadController {
             comment.setCommentLouzhu( (byte)1 );
             comment.setType( (byte) type.intValue() );
             comment.setUserRemark( String.valueOf( typeId ) );
-
             commentList.add( comment );
+            comment.setTypeName( typeName );
+//            comment.setUserRemark( typeId );
         }
 
         int ii=commentService.insertList(commentList);
