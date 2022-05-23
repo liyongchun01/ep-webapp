@@ -108,7 +108,8 @@ export default () => {
             title: '用户名',
             render: (_, record) => (
                 <>
-                    {record?.userName}
+                    <span style={{ "color": "#1890FF" }}>{record?.userName}</span>
+                    {record?.messageType !== 2 && <span>:</span>}
                     {record?.commentLouzhu === 1 && <Tag color="blue" style={{ 'marginLeft': 10 }}>楼主</Tag>}
                     {record?.messageType === 2 &&
                         <>
@@ -120,7 +121,12 @@ export default () => {
             )
         },
         subTitle: {
-            dataIndex: 'content'
+            dataIndex: 'content',
+            render: (_, record) => (
+                <>
+                    <span style={{ "color": "#333" }}>{record.content}</span>
+                </>
+            )
         },
         actions: {
             render: (_, record) => (

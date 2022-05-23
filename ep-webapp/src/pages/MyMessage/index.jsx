@@ -239,7 +239,7 @@ export default () => {
                         <span> 于{serviceTypeObject[record.type]}: 「{record.typeName}」{commentCallback[key]} </span>
                         {
                             key == 3
-                                ? <Tag style={{ "marginLeft": "10px" }} color={joinStatus[record.jiaru].color}>{joinStatus[record.jiaru].label}</Tag>
+                                ? <Tag style={{ "marginLeft": "10px" }} color={joinStatus[record?.jiaru]?.color}>{joinStatus[record?.jiaru]?.label}</Tag>
                                 : <span style={{ "color": "rgba(0, 0, 0, 0.45)", "fontSize": "12px", "marginLeft": "10px" }}>{readObj[record.parentRead]}</span>
                         }
                     </div>
