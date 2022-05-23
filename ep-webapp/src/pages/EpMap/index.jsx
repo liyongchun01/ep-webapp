@@ -13,7 +13,7 @@ export default () => {
     const [form] = Form.useForm()
     const [key, setKey] = useState(1)
     const [newList, setNewList] = useState([])
-    const [filterFields, setFilterFields] = useState({ tian: 14 })
+    const [filterFields, setFilterFields] = useState({ tian: 30 })
 
     const getNewsList = async () => {
         const { data: newone } = await axios.get("http://api.tianapi.com/ncov/index", {
@@ -83,7 +83,7 @@ export default () => {
                     form={form}
                     onFinish={onFinish}
                 >
-                    <Form.Item label="天数" name="tian">
+                    <Form.Item label="最近几天" name="tian">
                         <Input allowClear />
                     </Form.Item>
                     <Form.Item label="时间范围" style={{ "margin": "0 10px" }} name="timeRange">

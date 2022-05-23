@@ -11,8 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import static com.kangyi.util.StringToDate.YMDmsToDate;
-import static com.kangyi.util.StringToDate.dateAddTian;
+import static com.kangyi.util.StringToDate.*;
 
 @Service
 public class GeLiServiceImpl implements GeLiService {
@@ -53,7 +52,7 @@ public class GeLiServiceImpl implements GeLiService {
         criteria.andJinduBetween( smalJingDu,bigJingDu );
         criteria.andWeiduBetween( smallWeiDu,bigWeiDu );
         if (etime!=null&&!"null".equals( etime )&&etime.trim().length()>0){
-            criteria.andEnddateBetween( YMDmsToDate(btime),YMDmsToDate(etime) );
+            criteria.andEnddateBetween( YMDmToDate(btime),YMDmToDate(etime) );
         }else {
             criteria.andEnddateGreaterThanOrEqualTo( dateAddTian(new Date(  ),1));
         }

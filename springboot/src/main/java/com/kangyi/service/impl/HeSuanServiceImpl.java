@@ -13,8 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static com.kangyi.util.StringToDate.YMDmsToDate;
-import static com.kangyi.util.StringToDate.dateAddTian;
+import static com.kangyi.util.StringToDate.*;
 
 
 @Service
@@ -62,7 +61,8 @@ public class HeSuanServiceImpl implements HeSuanService {
 
         if (etime!=null&&!"null".equals( etime )&&etime.trim().length()>0){
             System.out.println("etime  "+etime);
-            criteria.andEnddateBetween( YMDmsToDate(btime),YMDmsToDate(etime) );
+            criteria.andEnddateLessThanOrEqualTo( YMDmToDate(etime) );
+            criteria.andStartdateGreaterThanOrEqualTo( YMDmToDate(btime) );
         }else {
             criteria.andEnddateGreaterThan( dateAddTian(new Date(  ),1));
 

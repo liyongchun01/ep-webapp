@@ -127,8 +127,8 @@ public class GuiJiServiceImpl implements GuiJiService {
         criteria.andWeiduBetween( smallWeiDu,bigWeiDu );
 
         if (etime!=null&&!"null".equals( etime )&&etime.trim().length()>0){
-            criteria.andEndtimeLessThan( YMDmsToDate(etime) );
-            criteria.andStarttimeGreaterThanOrEqualTo( YMDmsToDate(btime) );
+            criteria.andEndtimeLessThan( YMDmToDate(etime) );
+            criteria.andStarttimeGreaterThanOrEqualTo( YMDmToDate(btime) );
         }
 
         if (tian!=null&&tian>=0){

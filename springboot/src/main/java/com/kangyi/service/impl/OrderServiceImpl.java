@@ -305,7 +305,7 @@ public class OrderServiceImpl implements OrderService {
         map.put(gOrj, orders);
         map.put("pno", pno);
         map.put("psize", psize);
-        map.put(gOrj+"Count", p.getTotal());
+        map.put("count", p.getTotal());
         return map;
 
     }

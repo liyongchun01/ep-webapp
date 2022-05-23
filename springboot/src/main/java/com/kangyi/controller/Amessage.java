@@ -87,17 +87,18 @@ public class Amessage {
             //申请消息3
             if (shenQingType==2) {
                 //我发出的申请
+                Page<Jiaru> p = PageHelper.startPage( pno, psize );
+
                 List<Jiaru> fromJiaruList = jiaruService.selectManyByStatusUserId( -1, userId, parentRead, sortField, sortType, type );
                 map.put( "fromJiaruList" ,fromJiaruList);
-                Page<Jiaru> p = PageHelper.startPage( pno, psize );
                 map.put( "count",p.getTotal() );
 
 
             }else {
                 //别人发出的申请，我来审核
+                Page<Jiaru> p = PageHelper.startPage( pno, psize );
                 List<Jiaru> toJiaruList = jiaruService.selectManyByStatusToUserId( -1, userId, parentRead, sortField, sortType, type );
                 map.put( "toJiaruList", toJiaruList );
-                Page<Jiaru> p = PageHelper.startPage( pno, psize );
                 map.put( "count",p.getTotal() );
             }
         }else if (messageType==1) {
@@ -119,32 +120,36 @@ public class Amessage {
                 }
             }
 
+            Page<Comment> p = PageHelper.startPage( pno, psize );
+
             //评论
             List<Comment> pingLunCommentList = commentService.getMessageByOrserIdList( orderIdList, parentRead, sortField, sortType, type );
 //            System.out.println("typeName"+pingLunCommentList.get( 0 ).getTypeName());
 //            System.out.println(pingLunCommentList.get( 0 ));
-
-            map.put( "pingLunCommentList" ,pingLunCommentList);
-            Page<Comment> p = PageHelper.startPage( pno, psize );
             map.put( "count",p.getTotal() );
+            map.put( "pingLunCommentList" ,pingLunCommentList);
 
         }else if (messageType==2) {
             //2回复评论
+            Page<Comment> p = PageHelper.startPage( pno, psize );
+
             List<Comment> huifuCommentList = commentService.getMessageByParetId( userId, parentRead, sortField, sortType, type, messageType );
 //            System.out.println("typeName"+huifuCommentList.get( 0 ).getTypeName());
 //            System.out.println(huifuCommentList.get( 0 ));
-            map.put( "huifuCommentList" ,huifuCommentList);
-            Page<Comment> p = PageHelper.startPage( pno, psize );
             map.put( "count",p.getTotal() );
+            map.put( "huifuCommentList" ,huifuCommentList);
+
 
         }else if (messageType==0) {
             //0系统
+            Page<Comment> p = PageHelper.startPage( pno, psize );
+
             List<Comment> xiTongCommentList = commentService.getMessageByParetId( userId, parentRead, sortField, sortType, type, messageType );
 //            System.out.println("typeName"+huifuCommentList.get( 0 ).getTypeName());
 //            System.out.println(huifuCommentList.get( 0 ));
-            map.put( "xiTongCommentList" ,xiTongCommentList);
-            Page<Comment> p = PageHelper.startPage( pno, psize );
             map.put( "count",p.getTotal() );
+            map.put( "xiTongCommentList" ,xiTongCommentList);
+
 
         }
 

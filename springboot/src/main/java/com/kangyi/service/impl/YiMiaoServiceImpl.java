@@ -11,8 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import static com.kangyi.util.StringToDate.YMDmsToDate;
-import static com.kangyi.util.StringToDate.dateAddTian;
+import static com.kangyi.util.StringToDate.*;
 
 @Service
 public class YiMiaoServiceImpl implements YiMiaoService {
@@ -48,7 +47,8 @@ public class YiMiaoServiceImpl implements YiMiaoService {
         YiMiaoExample yiMiaoExample = new YiMiaoExample();
         YiMiaoExample.Criteria criteria = yiMiaoExample.createCriteria();
         if (etime!=null&&!"null".equals( etime )&&etime.trim().length()>0){
-            criteria.andEnddateBetween( YMDmsToDate(btime),YMDmsToDate(etime) );
+            criteria.andEnddateLessThanOrEqualTo( YMDmToDate(etime) );
+            criteria.andStartdateGreaterThanOrEqualTo( YMDmToDate(btime) );
         }else {
             criteria.andEnddateGreaterThanOrEqualTo( dateAddTian(new Date(  ),1) );
         }
