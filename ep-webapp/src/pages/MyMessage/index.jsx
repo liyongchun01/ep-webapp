@@ -172,14 +172,14 @@ export default () => {
     }
 
     // 取消关注
-    const removeFollow = async ({ orderId, type, typeId }) => {
+    const removeFollow = async ({ orderId, type, typeId, typeName }) => {
         await axios.post(`http://localhost:8083/boke/guanzhu`, {
             userId: userId?.id,
             orderId,
             type,
             typeId,
             createTime,
-            typeName: guanzhuFields[callbackFieldsKeys[guanzhuFields?.type]][callbackFieldsPositionKeys[guanzhuFields?.type]],
+            typeName,
             guanzhu: 0
         })
         formRef.current?.reload()

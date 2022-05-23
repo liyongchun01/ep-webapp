@@ -161,7 +161,7 @@ export default () => {
                     title: ""
                 }}
             >
-                <HeaderCard blogInfo={blogInfo} followBlog={followBlog} joinEdit={joinEdit} formRef={formRef} />
+                <HeaderCard userInfo={userId} blogInfo={blogInfo} followBlog={followBlog} joinEdit={joinEdit} formRef={formRef} />
                 <ProList
                     actionRef={formRef}
                     className={styles.headerDivider}

@@ -1,22 +1,22 @@
 import React, { useState } from "react"
 import { EditOutlined, PlusOutlined } from "@ant-design/icons"
-import { Button, Card, Modal, Form, Input, Popconfirm, Popover, Empty } from "antd"
+import { Button, Card, Modal, Form, Input, Popconfirm, Empty, Tooltip } from "antd"
 import DescriptionsCard from "../DescriptionsCard";
 import { callbackFieldsKeys, serviceTypeObject, callbackFieldsNameKeys } from "@/configuration";
 
 const { Meta } = Card;
-export default ({ blogInfo, followBlog, joinEdit, formRef }) => {
+export default ({ userInfo, blogInfo, followBlog, joinEdit, formRef }) => {
     const [modalVisible, setModalVisible] = useState(false)
     const [jiaruStatus, setJiaruStatus] = useState(null)
     const [form] = Form.useForm()
 
     const btnObj = {
         0:
-            <Popover content="通过加入申请后, 你也将成为楼主" >
-                <Button onClick={() => joinEditHandle(1)} type="primary" shape="round" icon={<EditOutlined />} style={{ "marginRight": "10px" }} >
+            <Tooltip title={userInfo.id == 0 ? "请登录" : "通过加入申请后, 你也将成为楼主"} >
+                <Button disabled={userInfo.id == 0} onClick={() => joinEditHandle(1)} type="primary" shape="round" icon={<EditOutlined />} style={{ "marginRight": "10px" }} >
                     加入
                 </Button>
-            </Popover>,
+            </Tooltip>,
         1:
             <Button onClick={() => joinEditHandle(0)} type="default" shape="round" disabled style={{ "marginRight": "10px" }}>
                 待通过
@@ -71,10 +71,14 @@ export default ({ blogInfo, followBlog, joinEdit, formRef }) => {
                                 }
                                 {
                                     blogInfo?.guanzhu === 0
-                                        ? <Button onClick={() => followBlog(1)} type="primary" shape="round" icon={<PlusOutlined />} >
-                                            关注
-                                        </Button>
-                                        : <Popconfirm title="确定取消关注吗？" okText="确定" cancelText="取消" onConfirm={() => followBlog(0)}>
+                                        ?
+                                        <Tooltip title="请登录" trigger={userInfo.id == 0 ? "hover" : ""} >
+                                            <Button disabled={userInfo.id == 0} onClick={() => followBlog(1)} type="primary" shape="round" icon={<PlusOutlined />} >
+                                                关注
+                                            </Button>
+                                        </Tooltip>
+                                        :
+                                        <Popconfirm title="确定取消关注吗？" okText="确定" cancelText="取消" onConfirm={() => followBlog(0)}>
                                             <Button type="default" shape="round" style={{ "marginRight": "10px", "color": "rgba(0, 0, 0, 0.45)" }}  >
                                                 已关注
                                             </Button>
