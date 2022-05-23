@@ -4,7 +4,7 @@ import { Button } from 'antd';
 import { ProFormText } from '@ant-design/pro-form';
 import axios from 'axios';
 
-export default ({ options, record, userId, createTime }) => {
+export default ({ options, record, userId, createTime, formRef }) => {
     const onFinish = async (val) => {
         if (options === "refuse") {
             await axios.get(`http://localhost:8083/message/jiaruNo`, {
@@ -30,6 +30,7 @@ export default ({ options, record, userId, createTime }) => {
             })
         }
 
+        formRef.current?.reload()
         return true
     }
 
