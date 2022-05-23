@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static com.kangyi.util.StringToDate.YMDmsToDate;
 import static com.kangyi.util.StringToDate.dateAddTian;
 
 
@@ -53,14 +54,21 @@ public class HeSuanServiceImpl implements HeSuanService {
     }
 
     @Override
-    public List<HeSuan> selectManyByJingWeiDu(BigDecimal bigWeiDu, BigDecimal smallWeiDu, BigDecimal bigJingDu, BigDecimal smalJingDu) {
+    public List<HeSuan> selectManyByJingWeiDu(BigDecimal bigWeiDu, BigDecimal smallWeiDu, BigDecimal bigJingDu, BigDecimal smalJingDu, String etime, String btime) {
 
         List<HeSuan> heSuanList = new ArrayList<HeSuan>();
         HeSuanExample heSuanExample = new HeSuanExample();
         HeSuanExample.Criteria criteria = heSuanExample.createCriteria();
+
+        if (etime!=null&&!"null".equals( etime )&&etime.trim().length()>0){
+            System.out.println("etime  "+etime);
+            criteria.andEnddateBetween( YMDmsToDate(btime),YMDmsToDate(etime) );
+        }else {
+            criteria.andEnddateGreaterThan( dateAddTian(new Date(  ),1));
+
+        }
         criteria.andJinduBetween( smalJingDu,bigJingDu );
         criteria.andWeiduBetween( smallWeiDu,bigWeiDu );
-        criteria.andEnddateGreaterThan( dateAddTian(new Date(  ),1));
         heSuanList=heSuanMapper.selectByOrderStatusAndExample( heSuanExample );
 //        System.out.println(smallWeiDu+" :1@#$hesuan: "+bigWeiDu+"   "+smalJingDu+"  JingDu  "+bigJingDu+"  实体"+heSuanList);
         return heSuanList;

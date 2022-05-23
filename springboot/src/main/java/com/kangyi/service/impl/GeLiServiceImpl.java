@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import static com.kangyi.util.StringToDate.YMDmsToDate;
 import static com.kangyi.util.StringToDate.dateAddTian;
 
 @Service
@@ -46,12 +47,16 @@ public class GeLiServiceImpl implements GeLiService {
     }
 
     @Override
-    public List<GeLi> selectManyByJingWeiDu(BigDecimal bigWeiDu, BigDecimal smallWeiDu, BigDecimal bigJingDu, BigDecimal smalJingDu) {
+    public List<GeLi> selectManyByJingWeiDu(BigDecimal bigWeiDu, BigDecimal smallWeiDu, BigDecimal bigJingDu, BigDecimal smalJingDu, String etime, String btime) {
         GeLiExample geLiExample = new GeLiExample();
         GeLiExample.Criteria criteria = geLiExample.createCriteria();
         criteria.andJinduBetween( smalJingDu,bigJingDu );
         criteria.andWeiduBetween( smallWeiDu,bigWeiDu );
-        criteria.andEnddateGreaterThanOrEqualTo( dateAddTian(new Date(  ),1) );
+        if (etime!=null&&!"null".equals( etime )&&etime.trim().length()>0){
+            criteria.andEnddateBetween( YMDmsToDate(btime),YMDmsToDate(etime) );
+        }else {
+            criteria.andEnddateGreaterThanOrEqualTo( dateAddTian(new Date(  ),1));
+        }
 
         System.out.println("@#$ "+bigJingDu+" mj "+smalJingDu+" bw "+bigWeiDu+" mw "+smallWeiDu);
         List<GeLi> geLiList = geLiMapper.selectByOrderStatusAndExample( geLiExample );

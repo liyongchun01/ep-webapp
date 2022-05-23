@@ -1,11 +1,9 @@
 package com.kangyi.service.impl;
 
 import com.kangyi.mapper.GuiJiMapper;
-import com.kangyi.pojo.GeLi;
 import com.kangyi.pojo.GuiJi;
 import com.kangyi.pojo.GuiJiExample;
 import com.kangyi.redisRepository.GuijiRepository;
-import com.kangyi.service.GeLiService;
 import com.kangyi.service.GuiJiService;
 import com.kangyi.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +12,8 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static com.kangyi.util.StringToDate.YNDhmNewDateString;
-import static com.kangyi.util.StringToDate.dateAddTian;
+import static com.kangyi.util.StringToDate.*;
+import static com.kangyi.util.StringToDate.YMDmsToDate;
 
 @Service
 public class GuiJiServiceImpl implements GuiJiService {
@@ -122,12 +120,25 @@ public class GuiJiServiceImpl implements GuiJiService {
     }
 
     @Override
-    public List<GuiJi> selectManyByJingWeiDu(BigDecimal bigWeiDu, BigDecimal smallWeiDu, BigDecimal bigJingDu, BigDecimal smalJingDu) {
+    public List<GuiJi> selectManyByJingWeiDu(BigDecimal bigWeiDu, BigDecimal smallWeiDu, BigDecimal bigJingDu, BigDecimal smalJingDu, String etime, String btime, Integer tian) {
         GuiJiExample guiJiExample = new GuiJiExample();
         GuiJiExample.Criteria criteria = guiJiExample.createCriteria();
         criteria.andJinduBetween( smalJingDu,bigJingDu );
         criteria.andWeiduBetween( smallWeiDu,bigWeiDu );
-        criteria.andEnddateGreaterThanOrEqualTo( dateAddTian(new Date(  ),1) );
+
+        if (etime!=null&&!"null".equals( etime )&&etime.trim().length()>0){
+            criteria.andEndtimeLessThan( YMDmsToDate(etime) );
+            criteria.andStarttimeGreaterThanOrEqualTo( YMDmsToDate(btime) );
+        }
+
+        if (tian!=null&&tian>=0){
+            criteria.andStarttimeGreaterThanOrEqualTo( dateAddTian(new Date(  ),0-tian));
+        }
+
+        if (tian==null||tian<0||etime==null||"null".equals( etime )||etime.trim().length()<=0){
+            criteria.andEnddateGreaterThanOrEqualTo( dateAddTian(new Date(  ),1));
+        }
+
         List<GuiJi> guiJiList = guiJiMapper.selectByOrderStatusAndExample( guiJiExample );
 
 

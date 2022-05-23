@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.kangyi.util.StringToDate.YMDmsToDate;
 import static com.kangyi.util.StringToDate.dateAddTian;
 
 @Service
@@ -44,13 +44,18 @@ public class YiMiaoServiceImpl implements YiMiaoService {
     }
 
     @Override
-    public List<YiMiao> selectManyByJingWeiDu(BigDecimal bigWeiDu, BigDecimal smallWeiDu, BigDecimal bigJingDu, BigDecimal smalJingDu) {
+    public List<YiMiao> selectManyByJingWeiDu(BigDecimal bigWeiDu, BigDecimal smallWeiDu, BigDecimal bigJingDu, BigDecimal smalJingDu, String etime, String btime) {
         YiMiaoExample yiMiaoExample = new YiMiaoExample();
         YiMiaoExample.Criteria criteria = yiMiaoExample.createCriteria();
+        if (etime!=null&&!"null".equals( etime )&&etime.trim().length()>0){
+            criteria.andEnddateBetween( YMDmsToDate(btime),YMDmsToDate(etime) );
+        }else {
+            criteria.andEnddateGreaterThanOrEqualTo( dateAddTian(new Date(  ),1) );
+        }
         criteria.andJinduBetween( smalJingDu,bigJingDu );
         criteria.andWeiduBetween( smallWeiDu,bigWeiDu );
 
-        criteria.andEnddateGreaterThanOrEqualTo( dateAddTian(new Date(  ),1) );
+
 
 
         List<YiMiao> yiMiaoList = yiMiaoMapper.selectByOrderStatusAndExample( yiMiaoExample );
