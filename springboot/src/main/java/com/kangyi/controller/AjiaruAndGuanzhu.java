@@ -112,7 +112,9 @@ public class AjiaruAndGuanzhu {
         }
 
         //guanzhu
-        if (guanzhuList!=null||jiaruList.size()>0) {
+        if (guanzhuList!=null||guanzhuList.size()>0) {
+            System.out.println("@#$guanzhuListSize "+guanzhuList.size());
+            System.out.println("@#$guanzhuList "+guanzhuList);
             for (Guanzhu j : guanzhuList) {
                 Long orderId = j.getOrderId();
                 gOrderList.add( orderId );
