@@ -295,5 +295,15 @@ public class OrderServiceImpl implements OrderService {
 
     }
 
+    @Override
+    public List<Order> selectManyByUserId(Long userId) {
+        OrderExample orderExample = new OrderExample();
+        OrderExample.Criteria criteria = orderExample.createCriteria();
+        criteria.andUserIdEqualTo( userId );
+        List<Order> orders = orderMapper.selectByExample( orderExample );
+
+        return orders;
+    }
+
 
 }

@@ -174,10 +174,19 @@ export const listObj = {
 };
 
 export const commentCallback = {
-  0: "",
-  1: "评论了我",
-  2: "回复了我",
-  3: "请求加入",
-  4: "",
-  5: ""
-}
+  0: '',
+  1: '评论了我',
+  2: '回复了我',
+  3: '请求加入',
+  4: '',
+  5: '',
+};
+
+export const getTypeId = {
+  0: 'userRemark',
+  1: 'userRemark',
+  2: 'userRemark',
+  3: 'typeId',
+  4: 'typeId',
+  5: 'typeId',
+};

@@ -10,7 +10,8 @@ import {
     callbackFieldsKeys,
     callbackFieldsPositionKeys,
     listObj,
-    commentCallback
+    commentCallback,
+    getTypeId
 } from '@/configuration';
 import axios from 'axios';
 import styles from './styles.less';
@@ -79,14 +80,14 @@ export default () => {
         if (key != "3") {
             const normalObj = {
                 "0": <>
-                    {record.parentRead === 0 && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
+                    {record.parentRead === "0" && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
                 </>,
                 "1": <>
-                    {record.parentRead === 0 && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
+                    {record.parentRead === "0" && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
                     <SubmitModal options="reply" userId={userId} record={record} createTime={createTime} />
                 </>,
                 "2": <>
-                    {record.parentRead === 0 && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
+                    {record.parentRead === "0" && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
                     <SubmitModal options="reply" userId={userId} record={record} createTime={createTime} />
                 </>
             }
@@ -97,7 +98,7 @@ export default () => {
                     <Button type='link' style={{ "color": "red" }} onClick={() => removeFollow(record)}>移除</Button>
                 </>,
                 2: <>
-                    {record.parentRead === 0 && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
+                    {record.parentRead === "0" && <Button type='link' onClick={() => handleRead(record)}>已读</Button>}
                     <SubmitModal options="refuse" userId={userId} record={record} createTime={createTime} />
                 </>
             }
@@ -153,6 +154,7 @@ export default () => {
                 userId: userId.id
             }
         })
+        formRef.current?.reload()
     }
 
     // 跳转博客
@@ -162,7 +164,7 @@ export default () => {
             query: {
                 type: record.type,
                 orderId: record.orderId,
-                typeId: +record.userRemark
+                typeId: +record[getTypeId[key]]
             },
         });
     }
@@ -195,7 +197,7 @@ export default () => {
             search: false,
             render: (_, record) => (
                 <>
-                    {record.type === 4 ? JSON.parse(record.handelRemark).desc : record.handelRemark}
+                    {record?.type === 4 ? (record?.handelRemark ? JSON.parse(record?.handelRemark).desc : record.handelRemark) : record.handelRemark}
                 </>
             )
         },
@@ -213,7 +215,6 @@ export default () => {
                                 <Button type='link' style={{ "color": "red" }} onClick={() => removeFollow(record)}>移除</Button>
                             </>
                             : <>
-                                <Button type='link' onClick={() => handleAccess(record)}>修改</Button>
                                 <Button type='link' style={{ "color": "red" }} onClick={() => removeFollow(record)}>移除</Button>
                                 <Button type='link' onClick={() => getDetail(record)}>详情</Button>
                             </>

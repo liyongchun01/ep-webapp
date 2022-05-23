@@ -3,7 +3,7 @@ import { Card, Form, Input, Button } from 'antd'
 import styles from '../../styles.less'
 import axios from 'axios';
 import moment from 'moment';
-import { callbackFieldsId, callbackFieldsKeys } from '@/configuration';
+import { callbackFieldsId, callbackFieldsKeys, callbackFieldsNameKeys } from '@/configuration';
 
 const { TextArea } = Input;
 export default ({ autoSize, style, blogInfo, userInfo, record, messageType, setInputVisible, formRef }) => {

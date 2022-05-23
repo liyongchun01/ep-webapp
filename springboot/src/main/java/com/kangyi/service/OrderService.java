@@ -23,4 +23,6 @@ public interface OrderService {
     Order selectOneById(Long orderId);
 
     Map<String, Object> getListForPageByIdList(Integer type, String btime, String etime, Integer pno, Integer psize, List<Long> orderList, String sortField, String sortType, String gOrj);
+
+    List<Order> selectManyByUserId(Long userId);
 }

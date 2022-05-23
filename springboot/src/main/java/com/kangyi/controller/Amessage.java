@@ -11,6 +11,7 @@ import com.kangyi.util.StringTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -85,6 +86,7 @@ public class Amessage {
         if (messageType==3) {
             //申请消息3
             if (shenQingType==2) {
+                //我发出的申请
                 List<Jiaru> fromJiaruList = jiaruService.selectManyByStatusUserId( -1, userId, parentRead, sortField, sortType, type );
                 map.put( "fromJiaruList" ,fromJiaruList);
                 Page<Jiaru> p = PageHelper.startPage( pno, psize );
@@ -92,6 +94,7 @@ public class Amessage {
 
 
             }else {
+                //别人发出的申请，我来审核
                 List<Jiaru> toJiaruList = jiaruService.selectManyByStatusToUserId( -1, userId, parentRead, sortField, sortType, type );
                 map.put( "toJiaruList", toJiaruList );
                 Page<Jiaru> p = PageHelper.startPage( pno, psize );
@@ -100,11 +103,23 @@ public class Amessage {
         }else if (messageType==1) {
             //评论文章1
 //        commentService.
+            //加入的
             List<Jiaru> okJJiaruList = jiaruService.selectManyByStatusUserId( 2, userId, -1, sortField, sortType, type );
-            List<Long> orderIdList = null;
-            for (Jiaru jiaru : okJJiaruList) {
-                orderIdList.add( jiaru.getOrderId() );
+            List<Long> orderIdList = new ArrayList<>(  );
+            if (okJJiaruList!=null&&okJJiaruList.size()>0) {
+                for (Jiaru jiaru : okJJiaruList) {
+                    orderIdList.add( jiaru.getOrderId() );
+                }
             }
+            //创建的
+            List<Order> orders= orderService.selectManyByUserId(userId);
+            if (orders!=null&&orders.size()>0) {
+                for (Order order : orders) {
+                    orderIdList.add( order.getOrderId() );
+                }
+            }
+
+            //评论
             List<Comment> pingLunCommentList = commentService.getMessageByOrserIdList( orderIdList, parentRead, sortField, sortType, type );
 //            System.out.println("typeName"+pingLunCommentList.get( 0 ).getTypeName());
 //            System.out.println(pingLunCommentList.get( 0 ));
@@ -118,7 +133,6 @@ public class Amessage {
             List<Comment> huifuCommentList = commentService.getMessageByParetId( userId, parentRead, sortField, sortType, type, messageType );
 //            System.out.println("typeName"+huifuCommentList.get( 0 ).getTypeName());
 //            System.out.println(huifuCommentList.get( 0 ));
-
             map.put( "huifuCommentList" ,huifuCommentList);
             Page<Comment> p = PageHelper.startPage( pno, psize );
             map.put( "count",p.getTotal() );

@@ -11,6 +11,7 @@ import com.kangyi.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -157,9 +158,10 @@ public class CommentServiceImpl implements CommentService {
         CommentExample commentExample = new CommentExample();
         CommentExample.Criteria criteria = commentExample.createCriteria();
 
-        if (orderIdList!=null&&orderIdList.size()>0){
-            criteria.andOrderIdIn( orderIdList );
+        if (orderIdList==null||orderIdList.size()<=0){
+           return new ArrayList<Comment>( );
         }
+        criteria.andOrderIdIn( orderIdList );
         if (parentRead!=-1){
             criteria.andParentReadEqualTo( String.valueOf( parentRead ) );
         }
@@ -181,12 +183,15 @@ public class CommentServiceImpl implements CommentService {
         CommentExample commentExample = new CommentExample();
         CommentExample.Criteria criteria = commentExample.createCriteria();
 
+
+
+        if (parentId==null){
+          return new ArrayList<Comment>(  );
+        }
+        criteria.andParentIdEqualTo( parentId );
+
         if (messageType!=null&&messageType>=0){
             criteria.andMessageTypeEqualTo( (byte) messageType.intValue() );
-        }
-
-        if (parentId!=null&&parentId>0){
-            criteria.andParentIdEqualTo( parentId );
         }
         if (parentRead!=-1){
             criteria.andParentReadEqualTo( String.valueOf( parentRead ) );

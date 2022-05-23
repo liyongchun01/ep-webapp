@@ -135,7 +135,7 @@ public class GuiJiServiceImpl implements GuiJiService {
             criteria.andStarttimeGreaterThanOrEqualTo( dateAddTian(new Date(  ),0-tian));
         }
 
-        if (tian==null||tian<0||etime==null||"null".equals( etime )||etime.trim().length()<=0){
+        if ((tian==null||tian<0)&&(etime==null||"null".equals( etime )||etime.trim().length()<=0)){
             criteria.andEnddateGreaterThanOrEqualTo( dateAddTian(new Date(  ),1));
         }
 
