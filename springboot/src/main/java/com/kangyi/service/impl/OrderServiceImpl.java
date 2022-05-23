@@ -222,14 +222,17 @@ public class OrderServiceImpl implements OrderService {
         OrderExample oe = new OrderExample();
         OrderExample.Criteria criteria = oe.createCriteria();
 
+        if(orderList==null||orderList.size()<=0){
+            return new HashMap<String, Object>(  );
+        }
+        criteria.andOrderIdIn( orderList );
+
         if(sortField!=null&&sortField.trim().length()>0){
             oe.setOrderByClause(ChangeChar.camelToUnderline(sortField,2) +" " +sortType);
 
         }
 
-        if(orderList!=null&&orderList.size()>0){
-            criteria.andOrderIdIn( orderList );
-        }
+
 
 //        if(userId != null&&userId!=-1l){
 //            if(userId==0l){
