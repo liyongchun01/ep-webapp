@@ -1,5 +1,5 @@
 import React from 'react'
-import { callbackFieldsKeys, serviceTypeObject } from "@/configuration";
+import { callbackFieldsKeys } from "@/configuration";
 import ProDescriptions from "@ant-design/pro-descriptions";
 import { Timeline, Collapse } from 'antd';
 import styles from './styles.less'
@@ -8,7 +8,7 @@ const { Panel } = Collapse;
 export default ({ blogInfo }) => {
     let behaviourArr = {}
     if (blogInfo.type == 4) {
-        if (blogInfo?.guiji?.hasOwnProperty("qiekai")) {
+        if (blogInfo?.guiji?.qiekai != null) {
             behaviourArr = Object.entries(JSON.parse(blogInfo?.guiji.qiekai))
         }
     }
@@ -97,7 +97,7 @@ export default ({ blogInfo }) => {
                         {`${blogInfo[callbackFieldsKeys[blogInfo.type]].enddate}`}
                     </ProDescriptions.Item>
                     {
-                        blogInfo?.guiji.hasOwnProperty("qiekai") &&
+                        blogInfo?.guiji?.qiekai != null &&
                         <ProDescriptions.Item label="行为信息" span={3}>
                             <Collapse defaultActiveKey={['1']} ghost>
                                 <Panel header="详情" key="2">
