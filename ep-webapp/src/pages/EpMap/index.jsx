@@ -14,6 +14,7 @@ export default () => {
     const [key, setKey] = useState(1)
     const [newList, setNewList] = useState([])
     const [filterFields, setFilterFields] = useState({ tian: 30 })
+    const [refresh, setRefresh] = useState(true)
 
     const getNewsList = async () => {
         const { data: newone } = await axios.get("http://api.tianapi.com/ncov/index", {
@@ -58,7 +59,6 @@ export default () => {
     }
 
     const onFinish = (val) => {
-        console.log(val)
         if (val.timeRange) {
             const getAllFields = {
                 tian: val.tian,
@@ -72,7 +72,8 @@ export default () => {
             }
             setFilterFields(getPartOfFields)
         }
-
+        setRefresh(false)
+        setRefresh(true)
     }
 
     const filterBar = () => {
@@ -106,9 +107,12 @@ export default () => {
             content={newsAlert()}
             tabBarExtraContent={filterBar()}
         >
-            <Card>
-                <MainMap filterFields={filterFields} type={+key} key={key} />
-            </Card>
+            {
+                refresh && <Card>
+                    <MainMap filterFields={filterFields} type={+key} key={key} />
+                </Card>
+            }
+
         </PageContainer>
     );
 };
