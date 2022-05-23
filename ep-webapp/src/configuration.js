@@ -175,8 +175,8 @@ export const listObj = {
 
 export const commentCallback = {
   0: "",
-  1: "回复了我",
-  2: "评论了我",
+  1: "评论了我",
+  2: "回复了我",
   3: "请求加入",
   4: "",
   5: ""
