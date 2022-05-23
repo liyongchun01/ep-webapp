@@ -43,13 +43,21 @@ public class GuanzhuServiceImpl implements GuanzhuService {
 
     @Override
     public int insertOne(Guanzhu guanzhu) {
+        byte gz;
+        if (guanzhu.getGuanzhu()==1){
+            gz=0;
+        }else
+        {
+            gz=1;
+        }
         String key="guanzhuOId:"+guanzhu.getOrderId()+"guanzhuUId"+guanzhu.getUserId();
-        String SUkey="guanzhuStatus:"+guanzhu.getGuanzhu()+"guanzhuUId"+guanzhu.getUserId();
-        String SOkey="guanzhuStatus:"+guanzhu.getGuanzhu()+"guanzhuOId"+guanzhu.getOrderId();
+        String SUkey="guanzhuStatus:"+gz+"guanzhuUId"+guanzhu.getUserId();
+        String SOkey="guanzhuStatus:"+gz+"guanzhuOId"+guanzhu.getOrderId();
         if (redisUtil.exists( key )){
             redisUtil.del( key );
         }
         if (redisUtil.exists( SUkey )){
+//            System.out.println("@#$redisUtil.del  "+SUkey);
             redisUtil.del( SUkey );
         }
         if (redisUtil.exists( SOkey )){
