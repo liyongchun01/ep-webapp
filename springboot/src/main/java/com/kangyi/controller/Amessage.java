@@ -106,8 +106,8 @@ public class Amessage {
                 orderIdList.add( jiaru.getOrderId() );
             }
             List<Comment> pingLunCommentList = commentService.getMessageByOrserIdList( orderIdList, parentRead, sortField, sortType, type );
-            System.out.println("typeName"+pingLunCommentList.get( 0 ).getTypeName());
-            System.out.println(pingLunCommentList.get( 0 ));
+//            System.out.println("typeName"+pingLunCommentList.get( 0 ).getTypeName());
+//            System.out.println(pingLunCommentList.get( 0 ));
 
             map.put( "pingLunCommentList" ,pingLunCommentList);
             Page<Comment> p = PageHelper.startPage( pno, psize );
@@ -116,8 +116,8 @@ public class Amessage {
         }else if (messageType==2) {
             //2回复评论
             List<Comment> huifuCommentList = commentService.getMessageByParetId( userId, parentRead, sortField, sortType, type, messageType );
-            System.out.println("typeName"+huifuCommentList.get( 0 ).getTypeName());
-            System.out.println(huifuCommentList.get( 0 ));
+//            System.out.println("typeName"+huifuCommentList.get( 0 ).getTypeName());
+//            System.out.println(huifuCommentList.get( 0 ));
 
             map.put( "huifuCommentList" ,huifuCommentList);
             Page<Comment> p = PageHelper.startPage( pno, psize );
@@ -152,10 +152,12 @@ public class Amessage {
     @RequestMapping("/jiaruOk")
     @ResponseBody
     public String jiaruOk(
-            @RequestBody  Map<String, Object> data
+//            @RequestBody  Map<String, Object> data
+            @RequestParam(value = "jiaruId",defaultValue = "") Long  jiaruId,
+            @RequestParam(value = "pno",defaultValue = "") Long  userId
     ){
-        Long jiaruId = Long.valueOf( String.valueOf( data.get( "jiaruId" )));
-        Long userId = Long.valueOf( String.valueOf( data.get( "userId" )));
+//        Long jiaruId = Long.valueOf( String.valueOf( data.get( "jiaruId" )));
+//        Long userId = Long.valueOf( String.valueOf( data.get( "userId" )));
         if (jiaruId==null||"null".equals( jiaruId )){
             return "失败";
         }
@@ -177,11 +179,15 @@ public class Amessage {
     @RequestMapping("/jiaruNo")
     @ResponseBody
     public String jiaruNo(
-            @RequestBody  Map<String, Object> data
-    ){
-        Long jiaruId = Long.valueOf( String.valueOf( data.get( "jiaruId" )));
-        Long userId = Long.valueOf( String.valueOf( data.get( "userId")) );
-        String adminRemark = (String)data.get( "adminRemark" );
+//            @RequestBody  Map<String, Object> data
+            @RequestParam(value = "jiaruId",defaultValue = "") Long  jiaruId,
+            @RequestParam(value = "userId",defaultValue = "") Long  userId,
+            @RequestParam(value = "adminRemark",defaultValue = "") String  adminRemark
+
+            ){
+//        Long jiaruId = Long.valueOf( String.valueOf( data.get( "jiaruId" )));
+//        Long userId = Long.valueOf( String.valueOf( data.get( "userId")) );
+//        String adminRemark = (String)data.get( "adminRemark" );
         if (jiaruId==null||"null".equals( jiaruId )){
             return "失败";
         }
@@ -202,19 +208,28 @@ public class Amessage {
     @RequestMapping("/read")
     @ResponseBody
     public String updataComment(
-            @RequestBody  Map<String, Object> data
-    ){
-        Long commentId = Long.valueOf( String.valueOf( data.get( "commentId")) );
-        Long jiaruId = Long.valueOf( String.valueOf( data.get( "jiaruId")) );
-        Long userId = Long.valueOf( String.valueOf( data.get( "userId" )));
-        Integer messageType = (Integer)data.get( "messageType" );
+//            @RequestBody  Map<String, Object> data
+            @RequestParam(value = "jiaruId",defaultValue = "") Long  jiaruId,
+            @RequestParam(value = "commentId",defaultValue = "") Long  commentId,
+            @RequestParam(value = "userId",defaultValue = "") Long  userId,
+            @RequestParam(value = "messageType",defaultValue = "") Integer  messageType
+
+            ){
+//        Long commentId = Long.valueOf( String.valueOf( data.get( "commentId")) );
+//        Long jiaruId = Long.valueOf( String.valueOf( data.get( "jiaruId")) );
+//        Long userId = Long.valueOf( String.valueOf( data.get( "userId" )));
+//        Integer messageType = (Integer)data.get( "messageType" );
         if (userId==null||"null".equals( userId )){
-            return "失败";
+            return "失败,userId失败";
         }
 
         int i=0;
         if (messageType==3){
             //jiaru的已读
+            Jiaru jiaru = new Jiaru();
+            jiaru.setJiaruId( jiaruId );
+            jiaru.setParentRead( String.valueOf( 1 ) );
+             i = jiaruService.updateOne( jiaruId, jiaru );
 
         }else if(messageType<3&&messageType>0){
             //0系统消息和1评论和2回复
@@ -226,7 +241,7 @@ public class Amessage {
         }
 //        int i=commentService.delectOne(commentId);
         if (i<=0){
-            return "失败";
+            return "失败,sql";
         }else {
             return "成功";
         }

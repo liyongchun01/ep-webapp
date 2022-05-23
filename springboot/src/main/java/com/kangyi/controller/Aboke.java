@@ -55,6 +55,7 @@ public class Aboke {
             @RequestParam(value = "psize",defaultValue = "10") Integer psize,
             @RequestParam(value = "type",defaultValue = "0") Integer type,
             @RequestParam(value = "typeId",defaultValue = "") Long typeId,
+            @RequestParam(value = "userRemark",defaultValue = "") String userRemark,
             @RequestParam(value = "orderId",defaultValue = "") Long orderId,
             @RequestParam(value = "userId",defaultValue = "") Long userId
 
@@ -81,6 +82,16 @@ public class Aboke {
         Map<String,Object> map=commentService.getPageByOrderId(orderId,pno,psize);
 
         Jiaru jiaru=jiaruService.selectOneByTwo(orderId,userId);
+
+        if (typeId==null||typeId<=0){
+            if (userRemark!=null){
+                typeId= Long.valueOf( userRemark );
+            }else {
+                map.put( "msg","没有typeId或userRemark" );
+                return map;
+            }
+        }
+
         Byte jiaruStatus = 0;
         if (jiaru!=null) {
             jiaruStatus =jiaru.getJiaru();
@@ -186,6 +197,7 @@ public class Aboke {
             return "评论失败 comment空";
         }
         comment.setLevel( (byte) 0 );
+        comment.setParentRead( "0" );
         int i=commentService.insertOne(comment);
         if (i<=0){
             return "评论失败 sql失败";
@@ -266,6 +278,12 @@ public class Aboke {
         JSONObject.DEFFAULT_DATE_FORMAT="yyyy-MM-dd HH:mm:ss";
         String st = JSONObject.toJSONString( data );
         Jiaru jiaru= JSON.parseObject( st, Jiaru.class);
+        Long orderId = jiaru.getOrderId();
+        Order order = orderService.selectOneById( orderId );
+        if(order!=null){
+            jiaru.setToUserId( order.getUserId() );
+        }
+
         if (jiaru==null||"null".equals( jiaru )){
             return "失败";
         }

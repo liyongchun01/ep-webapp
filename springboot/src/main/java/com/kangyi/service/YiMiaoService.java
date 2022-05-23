@@ -14,5 +14,5 @@ public interface YiMiaoService {
 
     int delectOneById(Long typeId);
 
-    List<YiMiao> selectManyByJingWeiDu(BigDecimal bigWeiDu, BigDecimal smallWeiDu, BigDecimal bigJingDu, BigDecimal smalJingDu);
+    List<YiMiao> selectManyByJingWeiDu(BigDecimal bigWeiDu, BigDecimal smallWeiDu, BigDecimal bigJingDu, BigDecimal smalJingDu, String etime, String btime);
 }

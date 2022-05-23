@@ -6,6 +6,7 @@ import com.kangyi.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,32 +96,32 @@ public class AjiaruAndGuanzhu {
 
         List<Jiaru> jiaruList = jiaruService.selectManyByStatusUserId( 2, userId, -1, sortField, sortType, type );
         List<Guanzhu> guanzhuList = guanzhuService.selectManyByStatusUserId( 1, userId );
-        List<Long> jOrderList = null;
-        List<Long> gOrderList = null;
-        Map<String, Object> jListForPage = null;
-        Map<String, Object> gLstForPage = null;
+        List<Long> jOrderList = new ArrayList<>(  );
+        List<Long> gOrderList = new ArrayList<>(  );
+        Map<String, Object> jListForPage = new HashMap<>(  );
+        Map<String, Object> gLstForPage = new HashMap<>(  );
 
         //jiaru
         for (Jiaru j : jiaruList) {
             Long orderId = j.getOrderId();
             jOrderList.add( orderId );
         }
-        jListForPage = orderService.getListForPageByIdList( type, btime, etime, pno, psize, jOrderList, sortField, sortType, "jiaru" );
+        jListForPage = orderService.getListForPageByIdList( type, btime, etime, pno, psize, jOrderList, "insertTime", sortType, "jiaru" );
 
         //guanzhu
         for (Guanzhu j : guanzhuList) {
             Long orderId = j.getOrderId();
             gOrderList.add( orderId );
         }
-        gLstForPage = orderService.getListForPageByIdList( type, btime, etime, pno, psize, gOrderList, sortField, sortType, "guanzhu" );
+        gLstForPage = orderService.getListForPageByIdList( type, btime, etime, pno, psize, gOrderList, "insertTime", sortType, "guanzhu" );
 //        jListForPage = orderService.getListForPageByIdList( type, btime, etime, pno, psize, jOrderList, sortField, sortType, "jiaru" );
 
-        if (messageType == 1) {
+        if (messageType == 2) {
             //jiaru
 
             return jListForPage;
 
-        } else if (messageType == 2) {
+        } else if (messageType == 1) {
             //guanzhu
             return gLstForPage;
 

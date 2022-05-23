@@ -146,9 +146,9 @@ public class CommentServiceImpl implements CommentService {
 //            redisUtil.del( Okey );
 //        }
 
-        commentMapper.updateByExampleSelective( comment,commentExample );
+        int i = commentMapper.updateByExampleSelective( comment, commentExample );
 
-        return 0;
+        return i;
     }
 
     @Override
