@@ -137,6 +137,15 @@ public class Amessage {
             Page<Comment> p = PageHelper.startPage( pno, psize );
             map.put( "count",p.getTotal() );
 
+        }else if (messageType==0) {
+            //0系统
+            List<Comment> xiTongCommentList = commentService.getMessageByParetId( userId, parentRead, sortField, sortType, type, messageType );
+//            System.out.println("typeName"+huifuCommentList.get( 0 ).getTypeName());
+//            System.out.println(huifuCommentList.get( 0 ));
+            map.put( "xiTongCommentList" ,xiTongCommentList);
+            Page<Comment> p = PageHelper.startPage( pno, psize );
+            map.put( "count",p.getTotal() );
+
         }
 
 

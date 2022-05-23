@@ -205,7 +205,7 @@ public class GetListGuiji {
 
 
         if (guiJiList==null||guiJiList.size()<=0){
-            System.out.println(num+"个,解析失败 无轨迹数据加入"+s);
+            System.out.println(num+"个重复数据，无轨迹数据加入"+s);
             return null;
         }
         int i1 = guiJiMapper.insertList( guiJiList );
