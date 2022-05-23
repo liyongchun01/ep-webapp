@@ -99,7 +99,8 @@ export default ({ type, filterFields }) => {
                             tian: filterFields?.tian,
                             btime: filterFields?.btime,
                             etime: filterFields?.etime
-                        }
+                        },
+                        headers: { 'Cache-Control': 'no-cache' },
                     })
                     setIsloading(false)
                     data[type]?.forEach((item, index) => {
