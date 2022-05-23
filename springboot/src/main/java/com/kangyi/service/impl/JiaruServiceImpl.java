@@ -68,26 +68,36 @@ public class JiaruServiceImpl implements JiaruService {
 //        }else {
             JiaruExample jiaruExample = new JiaruExample();
             JiaruExample.Criteria criteria = jiaruExample.createCriteria();
-            if(jiaruStatus!=-1) {
+            if(parentRead!=-1) {
+                System.out.println("1"+parentRead);
                 criteria.andParentReadEqualTo( String.valueOf( parentRead ) );
             }
 
             if(jiaruStatus!=-1) {
+                System.out.println("2  "+jiaruStatus);
+
                 criteria.andJiaruEqualTo( (byte) jiaruStatus );
             }
             if (type>1&&type<5){
+                System.out.println("3  "+type);
+
                 criteria.andTypeEqualTo( String.valueOf( type ) );
             }
 
 
             if(sortField!=null&&sortField.trim().length()>0){
+                System.out.println("4  "+sortField);
+
                 jiaruExample.setOrderByClause( ChangeChar.camelToUnderline(sortField,2) +" " +sortType);
 
             }
-            criteria.andFromUserIdEqualTo( userId );
+        System.out.println("5  "+userId);
+
+        criteria.andFromUserIdEqualTo( userId );
             List<Jiaru> jiaruList = jiaruMapper.selectByExample( jiaruExample );
 //            redisUtil.set( key,jiaruList,24*60*60 );
 
+        System.out.println("@#$jiarulist  "+jiaruList);
             return jiaruList;
 //        }
 

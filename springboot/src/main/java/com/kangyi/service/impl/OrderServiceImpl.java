@@ -4,9 +4,10 @@ package com.kangyi.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
-import com.kangyi.mapper.OrderMapper;
-import com.kangyi.pojo.Order;
-import com.kangyi.pojo.OrderExample;
+import com.kangyi.mapper.*;
+import com.kangyi.pojo.*;
+import com.kangyi.service.GuiJiService;
+import com.kangyi.service.HeSuanService;
 import com.kangyi.service.OrderService;
 import com.kangyi.util.ChangeChar;
 import com.kangyi.util.RedisUtil;
@@ -25,6 +26,18 @@ import static com.kangyi.util.StringToDate.YMDmToDate;
 public class OrderServiceImpl implements OrderService {
     @Autowired
      OrderMapper orderMapper;
+    @Autowired
+    HeSuanMapper heSuanMapper;
+    @Autowired
+    GuiJiMapper guiJiMapper;
+    @Autowired
+    YiMiaoMapper yiMiaoMapper;
+    @Autowired
+    GeLiMapper geLiMapper;
+
+    @Autowired
+    GuiJiService guiJiService;
+
     @Autowired
     RedisUtil redisUtil;
 
@@ -232,18 +245,6 @@ public class OrderServiceImpl implements OrderService {
 
         }
 
-
-
-//        if(userId != null&&userId!=-1l){
-//            if(userId==0l){
-//                criteria.andUserIdNotEqualTo( 3l );
-////                System.out.println("@#$非扒取信息");
-//            }else {
-//                criteria.andUserIdEqualTo( userId );
-//            }
-////            System.out.println("@#$orderlist userid "+userId);
-//        }
-
         if(type >0 && type < 5){
             criteria.andTypeEqualTo( type );
 //            System.out.println("@#$orderlist type "+type);
@@ -253,29 +254,10 @@ public class OrderServiceImpl implements OrderService {
         Date beginTimeDate = null;
         if(btime!=null){
             beginTimeDate=YMDmToDate(btime);
-//            btime = btime + " 00:00:00";
-//            try {
-//                beginTimeDate = sdf.parse(btime);
-//            } catch (ParseException e) {
-//                beginTimeDate = null;
-////                System.out.println("日期空的");
-//            }
-//            criteria.andInsertTimeGreaterThanOrEqualTo(beginTimeDate);
         }
         Date endTimeDate = null;
         if(etime!=null){
             endTimeDate=YMDmToDate(etime);
-//            etime = etime + " 23:59:59";
-//            try {
-//                endTimeDate = sdf.parse(etime);
-//                System.out.println("@#$y etime: "+etime);
-//            } catch (ParseException e) {
-//                beginTimeDate = null;
-////                System.out.println("日期空的");
-//                System.out.println("@#$x etime: "+etime);
-//
-//            }
-//            criteria.andInsertTimeLessThanOrEqualTo(endTimeDate);
         }
         if(beginTimeDate != null && endTimeDate != null){
             criteria.andInsertTimeBetween( beginTimeDate,endTimeDate );
@@ -283,10 +265,40 @@ public class OrderServiceImpl implements OrderService {
 
         if(sortField!=null&&sortField.trim().length()>0){
             oe.setOrderByClause( ChangeChar.camelToUnderline(sortField,2) +" " +sortType);
-
         }
 
         List<Order> orders = orderMapper.selectByExample( oe );
+        for (Order order:orders){
+            if (order==null){
+                break;
+            }
+            Integer t = order.getType();
+            if (t==1){
+                //hesuan
+                Long typeId = order.getTypeId();
+                HeSuan heSuan = heSuanMapper.selectByPrimaryKey( typeId );
+                order.setTypeName( heSuan.getHesuanPosition() );
+
+            }else if(t==2){
+                Long typeId = order.getTypeId();
+                YiMiao yiMiao = yiMiaoMapper.selectByPrimaryKey( typeId );
+                order.setTypeName( yiMiao.getYimiaoPosition() );
+
+            }else if(t==3){
+                Long typeId = order.getTypeId();
+                GeLi geLi = geLiMapper.selectByPrimaryKey( typeId );
+                order.setTypeName( geLi.getGelidianPosition() );
+
+            }else  if(t==4){
+                Long orderId = order.getOrderId();
+                Map<String, Object> manyByOrderId = guiJiService.getManyByOrderId( orderId );
+                List<GuiJi> guiJis =(List<GuiJi>)manyByOrderId.get( "guiji" );
+                if (guiJis.size()>0&&guiJis!=null){
+                    GuiJi guiJi = guiJis.get( 0 );
+                    order.setTypeName( guiJi.getGuijiPosition() );
+                }
+            }
+        }
 
         Map<String, Object> map = new HashMap<>(3);
 
