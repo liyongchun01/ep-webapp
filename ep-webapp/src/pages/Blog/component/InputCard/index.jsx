@@ -40,8 +40,9 @@ export default ({ autoSize, style, blogInfo, userInfo, record, messageType, setI
                 >
                     <Form.Item name="content">
                         <TextArea
-                            placeholder="请输入评论"
+                            placeholder={userInfo.id == 0 ? "请登录" : "请输入评论"}
                             autoSize={autoSize}
+                            disabled={userInfo.id == 0}
                         />
                     </Form.Item>
                     <Form.Item wrapperCol={{ offset: 22, span: 16 }}>
