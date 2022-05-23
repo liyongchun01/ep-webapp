@@ -13,6 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.kangyi.util.StringTest.isJsonObject;
+
 @RestController
 @RequestMapping(path = "/boke")
 @CrossOrigin(origins = {"http://localhost:8000"},allowCredentials = "true",allowedHeaders = {"X-Custom-Header"},
@@ -148,12 +150,15 @@ public class Aboke {
 
         }else {
             if(typeId!=null){
-
+                GuiJi guiJi=guiJiService.selectOneById(typeId);
                 String handelRemark = order.getHandelRemark();
+                if (!isJsonObject(handelRemark)){
+                    map.put( "guiji",guiJi );
+                    map.put( "type",type );
+                    return map;
+                }
                 JSONObject json_qiege = JSONObject.parseObject(handelRemark);
                 String desc = json_qiege.getString( "desc" );
-
-                GuiJi guiJi=guiJiService.selectOneById(typeId);
 
                 try {
                     String qiekai = StringTest.StringChangeJSON( desc );
