@@ -102,20 +102,24 @@ public class AjiaruAndGuanzhu {
         Map<String, Object> gLstForPage = new HashMap<>(  );
 
         //jiaru
-        for (Jiaru j : jiaruList) {
-            Long orderId = j.getOrderId();
-            jOrderList.add( orderId );
+        if (jiaruList!=null&&jiaruList.size()>0) {
+            for (Jiaru j : jiaruList) {
+                Long orderId = j.getOrderId();
+                jOrderList.add( orderId );
+            }
+            jListForPage = orderService.getListForPageByIdList( type, btime, etime, pno, psize, jOrderList, "insertTime", sortType, "jiaru" );
+
         }
-        jListForPage = orderService.getListForPageByIdList( type, btime, etime, pno, psize, jOrderList, "insertTime", sortType, "jiaru" );
 
         //guanzhu
-        for (Guanzhu j : guanzhuList) {
-            Long orderId = j.getOrderId();
-            gOrderList.add( orderId );
-        }
-        gLstForPage = orderService.getListForPageByIdList( type, btime, etime, pno, psize, gOrderList, "insertTime", sortType, "guanzhu" );
+        if (guanzhuList!=null||jiaruList.size()>0) {
+            for (Guanzhu j : guanzhuList) {
+                Long orderId = j.getOrderId();
+                gOrderList.add( orderId );
+            }
+            gLstForPage = orderService.getListForPageByIdList( type, btime, etime, pno, psize, gOrderList, "insertTime", sortType, "guanzhu" );
 //        jListForPage = orderService.getListForPageByIdList( type, btime, etime, pno, psize, jOrderList, sortField, sortType, "jiaru" );
-
+        }
         if (messageType == 2) {
             //jiaru
 
