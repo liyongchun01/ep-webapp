@@ -198,7 +198,7 @@ export default () => {
             search: false,
             render: (_, record) => (
                 <>
-                    {/* {record?.type === 4 ? (record?.handelRemark ? JSON.parse(record?.handelRemark).desc : record.handelRemark) : record.handelRemark} */}
+                    {record?.type === 4 ? (record?.handelRemark ? JSON.parse(record?.handelRemark).desc : record.handelRemark) : record.handelRemark}
                 </>
             )
         },
