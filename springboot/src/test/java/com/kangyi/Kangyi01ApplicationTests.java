@@ -240,7 +240,7 @@ Kangyi01ApplicationTests {
 //        System.out.println("@#$ "+object1);
     }
 
-//    @Transactional
+    //    @Transactional
     @Test
     public void testUpdateGuiji(){
 
@@ -272,23 +272,110 @@ Kangyi01ApplicationTests {
         System.out.println(i+"  j"+j);
     }
 
-    @Test
-    public void testcomment(){
-        Comment comment = new Comment();
-        comment.setContent( "hhh" );
-        int i=commentService.insertOne(comment);
-        System.out.println(i);
-    }
+//    @Test
+//    public void testcomment(){
+//        Comment comment = new Comment();
+//        comment.setContent( "hhh" );
+//        int i=commentService.insertOne(comment);
+//        System.out.println(i);
+//    }
 
+    //    @Transactional
     @Test
     public void  testdeleteGuijiAndOrder() {
+        //批量删除轨迹
         GuiJiExample guiJiExample = new GuiJiExample();
         GuiJiExample.Criteria criteria = guiJiExample.createCriteria();
-        criteria.andGuijiIdBetween( 1591l,95270l );
+        criteria.andGuijiIdBetween( 1590l, 79346l );
         criteria.andUserIdEqualTo( 3l );
-        int i = guiJiMapper.deleteByExample( guiJiExample );
-        System.out.println(i);
+        List<GuiJi> guiJiList1 = guiJiMapper.selectByExample( guiJiExample );
+//        int i = guiJiMapper.deleteByExample( guiJiExample );
+//        System.out.println(i);
+        int num = 0;
+        for (GuiJi guiJi : guiJiList1) {
+            JSONArray jsonArray = new JSONArray();
+            ArrayList<Long> orderIdList = new ArrayList<Long>();
+            ArrayList<String> timeList = new ArrayList<String>();
+            List<GuiJi> guiJiList = new ArrayList<>();
 
+            Long orderId1 = guiJi.getOrderId();
+            if (orderId1==0l||orderId1==null)
+            {
+                guiJiMapper.deleteByPrimaryKey( guiJi.getGuijiId() );
+                continue;
+            }
+
+            Order order = orderService.selectOneById( orderId1 );
+            if (order==null){
+                guiJiMapper.deleteByPrimaryKey( guiJi.getGuijiId() );
+                continue;
+            }
+            String handelRemark = order.getHandelRemark();
+            if (handelRemark==null||"null".equals( handelRemark )){
+//                System.out.println("h 空");
+                continue;
+            }
+//            System.out.println("    h "+handelRemark);
+
+            if (!isJsonObject(handelRemark)){
+                continue;
+            }
+            JSONObject jsonObject = JSONObject.fromObject( handelRemark );
+//            System.out.println("   json  "+jsonObject);
+            String  desc = jsonObject.getString( "desc" );
+            if (desc==null||"null".equals( desc )){
+                continue;
+            }else {
+                //这个轨迹的订单有desc,但是没有覆盖这条，说明这个的时间出错了
+                guiJiMapper.deleteByPrimaryKey( guiJi.getGuijiId() );
+
+            }
+            Long orderId = order.getOrderId();
+
+            String city = ifCity( jsonObject.get( "city" ).toString() );
+            try {
+                if (!desc.contains( "【" )) {
+                    System.out.println( "少了中括号!  " + desc );
+//                    System.out.println( list+"少了中括号!" );
+                }
+                Map<String, String> descMap = StringTest.StringChange( desc );
+
+                Set<String> strings = descMap.keySet();
+                for (String a : strings) {
+                    num++;
+                    String jingweiurl = getUrl( num );
+                    timeList.add( descMap.get( a ) );
+                    String url = jingweiurl + city + a;
+                    JSONObject jsonUrl = new JSONObject();
+                    jsonUrl.put( "requestUrl", url );
+                    jsonArray.add( jsonUrl );
+                    orderIdList.add( orderId );
+
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+//            List<GuiJi> guiJiList1 = null;
+            try {
+                guiJiList = futureUtil.addGuijiListOnThrea( jsonArray, timeList, orderIdList );
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            if (guiJiList == null||guiJiList.size()<=0||"null".equals( guiJiList )) {
+                System.out.println( "解析失败" );
+                System.out.println( num + "个  " + desc );
+                continue;
+            }
+//            guiJiList.addAll( guiJiList );
+//            int i1 = guiJiMapper.insertList( guiJiList );
+
+            int i1 = guiJiMapper.genxinList( guiJiList );
+            System.out.println("guijiId"+guiJi.getGuijiId());
+            System.out.println( "orderId "+order.getOrderId()+"   共"+i1 + "个轨迹更新数据库完毕" );
+            System.out.println(" guijiList  "+guiJiList);
+        }
 
     }
 
@@ -299,7 +386,7 @@ Kangyi01ApplicationTests {
         OrderExample.Criteria criteria1 = orderExample.createCriteria();
         criteria1.andUserIdEqualTo( 3l );
 //        criteria1.andOrderIdEqualTo( 10043l );
-        criteria1.andInsertTimeBetween(YMDmsToDate("2022-05-09 18:56:26"),YMDmsToDate("2022-05-21 20:49" ));
+//        criteria1.andInsertTimeBetween(YMDmsToDate("2022-05-09 18:56:26"),YMDmsToDate("2022-05-25 12:23:11" ));
         List<Order> orderList = orderMapper.selectByExample( orderExample );
 
 //        net.sf.json.JSONArray  list = json_data.getJSONArray( "list" );
@@ -324,15 +411,10 @@ Kangyi01ApplicationTests {
 //            System.out.println("   json  "+jsonObject);
             String  desc = jsonObject.getString( "desc" );
             if (desc==null||"null".equals( desc )){
-//                System.out.println("   json  "+jsonObject);
-//                System.out.println("dect  空");
                 continue;
             }
-//            String desc =data.getString("desc") ;
-
             Long orderId = order.getOrderId();
 
-//                String prov =  list.getJSONObject( i ).get( "prov" ).toString();
             String city = ifCity( jsonObject.get( "city" ).toString() );
             try {
                 if (!desc.contains( "【" )) {
