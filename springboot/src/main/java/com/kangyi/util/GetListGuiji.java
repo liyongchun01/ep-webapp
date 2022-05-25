@@ -31,7 +31,7 @@ public class GetListGuiji {
 //    static GuiJi123Mapper guiJi123Mapper;
 
     @Autowired
-     OrderService orderService;
+    OrderService orderService;
 
     @Autowired
     GuiJiMapper guiJiMapper;
@@ -44,7 +44,7 @@ public class GetListGuiji {
         String guijiurl="https://m.sm.cn/api/rest?format=json&from=&method=Maskbuy.areaData";
         String jingweiurl = "https://apis.map.qq.com/ws/geocoder/v1/?key=JYXBZ-3C5CJ-UBRF6-FOPY3-L546H-2BFIS&address=";
         if(prov!=null&&city!=null){
-             guijiurl = "https://m.sm.cn/api/rest?format=json&from=&method=Maskbuy.areaData&prov=" + prov + "" + "&city=" + city;
+            guijiurl = "https://m.sm.cn/api/rest?format=json&from=&method=Maskbuy.areaData&prov=" + prov + "" + "&city=" + city;
         }
         long startTime1 = System.currentTimeMillis();
         String s = HttpURLConnectionUtil.doGet( guijiurl );
@@ -54,55 +54,55 @@ public class GetListGuiji {
         System.out.println("@调用jingweiurl耗时 : " + (System.currentTimeMillis() - startTime1) );
         JSONObject json_s = JSONObject.fromObject(s);
         JSONObject json_data  = json_s.getJSONObject( "data" );
-      if (!"null".equals( json_data.toString() )&&json_data!=null){
+        if (!"null".equals( json_data.toString() )&&json_data!=null){
 //        JSONObject json_data = JSONObject.fromObject(data);
-        net.sf.json.JSONArray  list = json_data.getJSONArray( "list" );
+            net.sf.json.JSONArray  list = json_data.getJSONArray( "list" );
 
 
-          JSONArray jsonArray = new JSONArray();
-          String time=null;
-/*
-* 一个城市一个list，每个list可能有多条desc
-*
-* */
-       for (int i=0;i<list.size();i++){
-           String desc =  list.getJSONObject( i ).get( "desc" ).toString();
-           try {
-               Map<String, String> descMap = StringTest.StringChange( desc );
+            JSONArray jsonArray = new JSONArray();
+            String time=null;
+            /*
+             * 一个城市一个list，每个list可能有多条desc
+             *
+             * */
+            for (int i=0;i<list.size();i++){
+                String desc =  list.getJSONObject( i ).get( "desc" ).toString();
+                try {
+                    Map<String, String> descMap = StringTest.StringChange( desc );
 //               System.out.println("@#$5  "+descMap);
-               Set<String> strings = descMap.keySet();
+                    Set<String> strings = descMap.keySet();
 //               Set<String> urls = new HashSet<> ();
 //               urls.add( url );
 
-/*
-* 判断每个desc的地名多个
-*
-* */
+                    /*
+                     * 判断每个desc的地名多个
+                     *
+                     * */
 //
-               for (String a:strings) {
-                   num++;
-                   jingweiurl = getUrl(num );
-                   time = descMap.get( a );
+                    for (String a:strings) {
+                        num++;
+                        jingweiurl = getUrl(num );
+                        time = descMap.get( a );
 //                   String jingwei = HttpClientUtil.doGet( jingweiurl + prov + city + a );
 //                   JSONObject json_jingwei = JSONObject.fromObject(jingwei);
 //                   GuiJi guiJi = getGuijiJingWeiDu( json_jingwei, time );
 //                   guiJiList.add( guiJi );
 
-                   String url = jingweiurl + prov + city + a;
-                   JSONObject jsonUrl = new JSONObject();
-                   jsonUrl.put( "requestUrl", url );
-                   jsonArray.add( jsonUrl );
-               }
+                        String url = jingweiurl + prov + city + a;
+                        JSONObject jsonUrl = new JSONObject();
+                        jsonUrl.put( "requestUrl", url );
+                        jsonArray.add( jsonUrl );
+                    }
 
-           } catch (Exception e) {
-               e.printStackTrace();
-           }
-       }
-       guiJiList.addAll( getGuijiListOnThrea( jsonArray, time ) );
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            guiJiList.addAll( getGuijiListOnThrea( jsonArray, time ) );
 //          System.out.println("@#$jsonArray "+jsonArray.size());
-      }else {
-          throw new Exception("查不到轨迹!");
-      }
+        }else {
+            throw new Exception("查不到轨迹!");
+        }
         return guiJiList;
     }
 
@@ -118,7 +118,7 @@ public class GetListGuiji {
 //    }
 
 
-//    @Async("MyThreadPool")
+    //    @Async("MyThreadPool")
     public  List<GuiJi> addListGuiji(Integer page) throws Exception {
         List<GuiJi> guiJiList = new ArrayList<>();
         String guijiurl="https://m.sm.cn/api/rest?format=json&from=&method=Maskbuy.areaData";
@@ -136,79 +136,81 @@ public class GetListGuiji {
         if ("null".equals( json_data.toString() )||json_data==null){
             System.out.println("查不到轨迹!");
             return null;
-                }
+        }
 
 //        JSONObject json_data = JSONObject.fromObject(data);
-            net.sf.json.JSONArray  list = json_data.getJSONArray( "list" );
-            JSONArray jsonArray = new JSONArray();
-            ArrayList<Long> orderIdList = new ArrayList<Long>();
-            Map<String, String> newMap = new HashMap<>();
-            ArrayList<String> timeList=new ArrayList<String>(  );
+        net.sf.json.JSONArray  list = json_data.getJSONArray( "list" );
+        JSONArray jsonArray = new JSONArray();
+        ArrayList<Long> orderIdList = new ArrayList<Long>();
+        Map<String, String> newMap = new HashMap<>();
+        ArrayList<String> timeList=new ArrayList<String>(  );
 //            String time=null;
-            /*
-             * 一个城市一个list，每个list可能有多条desc
-             *
-             * */
-            for (int i=0;i<list.size();i++){
+        /*
+         * 一个城市一个list，每个list可能有多条desc
+         *
+         * */
+        for (int i=0;i<list.size();i++){
 
 
-                String desc =  list.getJSONObject( i ).get( "desc" ).toString();
-                String ydata = list.getString( i );
-                orderId = orderService.insertOrder( PACHONG_ADMINID, 4, 2, ydata);
+            String desc =  list.getJSONObject( i ).get( "desc" ).toString();
+            String ydata = list.getString( i );
+            orderId = orderService.insertOrder( PACHONG_ADMINID, 4, 2, ydata);
 //                System.out.println("orderId   "+orderId);
-                Order order = orderService.selectOneById( orderId );
-                if (order==null||"null".equals( order )||orderId==0l){
-//                    System.out.println("order没有");
-                    continue;
-                }
+            Order order = orderService.selectOneById( orderId );
+            if (order==null||"null".equals( order )||orderId==0l){
+                System.out.println("数据重复");
+                continue;
+            }
 
 //                String prov =  list.getJSONObject( i ).get( "prov" ).toString();
-                String city = ifCity(list.getJSONObject( i ).get( "city" ).toString());
-                try {
-                    if(!desc.contains( "【" )) {
-                        System.out.println("少了中括号!  "+s);
-                        System.out.println( list+"少了中括号!" );
+            String city = ifCity(list.getJSONObject( i ).get( "city" ).toString());
+            try {
+                if(!desc.contains( "【" )) {
+                    System.out.println("少了中括号!  "+s);
+                    System.out.println( list+"少了中括号!" );
 
-                    }
-                    Map<String, String> descMap = StringTest.StringChange( desc );
+                }
+                Map<String, String> descMap = StringTest.StringChange( desc );
 
 //               System.out.println("@#$5  "+descMap);
-                    Set<String> strings = descMap.keySet();
+                Set<String> strings = descMap.keySet();
 //               Set<String> urls = new HashSet<> ();
 //               urls.add( url );
 
-                    /*
-                     * 判断每个desc的地名多个
-                     *
-                     * */
+                /*
+                 * 判断每个desc的地名多个
+                 *
+                 * */
 //
-                    for (String a:strings) {
+                for (String a:strings) {
 
 
-                        num++;
-                        jingweiurl = getUrl(num );
-                        timeList.add( descMap.get( a ) );
-                        String url = jingweiurl  + city + a;
-                        JSONObject jsonUrl = new JSONObject();
-                        jsonUrl.put( "requestUrl", url );
-                        jsonArray.add( jsonUrl );
-                        orderIdList.add( orderId );
+                    num++;
+                    jingweiurl = getUrl(num );
+                    timeList.add( descMap.get( a ) );
+                    String url = jingweiurl  + city + a;
+                    JSONObject jsonUrl = new JSONObject();
+                    jsonUrl.put( "requestUrl", url );
+                    jsonArray.add( jsonUrl );
+                    orderIdList.add( orderId );
 
-                    }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
-            }
 
-             guiJiList = addGuijiListOnThrea( jsonArray ,timeList,orderIdList );
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        guiJiList = addGuijiListOnThrea( jsonArray ,timeList,orderIdList );
 
 
         if (guiJiList==null||guiJiList.size()<=0){
-            System.out.println(num+"个重复数据，无轨迹数据加入"+s);
+            System.out.println("无轨迹数据加入 "+s);
+            num=0;
             return null;
         }
         int i1 = guiJiMapper.insertList( guiJiList );
+        num=0;
         System.out.println(i1+"个轨迹加入数据库完毕");
         return guiJiList;
     }
