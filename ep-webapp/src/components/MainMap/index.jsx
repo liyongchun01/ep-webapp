@@ -5,7 +5,7 @@ import axios from 'axios'
 import { Spin } from 'antd'
 import { callbackFieldsId } from '@/configuration';
 
-export default ({ type, filterFields }) => {
+export default ({ type, filterFields, setModiMapCenter, modiMapCenter }) => {
     const [isLoading, setIsloading] = useState(true)
     const [linkParams, setLinkParams] = useState()
     const mapId = useRef() //  地图实例
@@ -44,7 +44,7 @@ export default ({ type, filterFields }) => {
                 const formatLatLng = (x, y) => (new TMap.LatLng(x, y))
                 const map = new TMap.Map('container', {
                     center: new TMap.LatLng(40.0402718, 116.2735831),//设置地图中心点坐标
-                    zoom: 12,   //设置地图缩放级别
+                    zoom: 15,   //设置地图缩放级别
                     pitch: 0,  //设置俯仰角
                     rotation: 0    //设置地图旋转角度
                 })
@@ -54,7 +54,11 @@ export default ({ type, filterFields }) => {
                 ipLocation
                     .locate()
                     .then(({ result }) => {
-                        map.setCenter(result.location)
+                        if (modiMapCenter.length === 0) {
+                            map.setCenter(result.location)
+                        } else {
+                            map.setCenter(new TMap.LatLng(modiMapCenter[0], modiMapCenter[1]))
+                        }
                     })
 
                 const infoWindowList = Array(10)
@@ -87,7 +91,7 @@ export default ({ type, filterFields }) => {
                         zoomOnClick: false, // 点击簇时放大至簇内点分离
                         gridSize: 60, // 聚合算法的可聚合距离
                         averageCenter: true, // 每个聚和簇的中心是否应该是聚类中所有标记的平均值
-                        maxZoom: 10, // 采用聚合策略的最大缩放级别
+                        maxZoom: 14, // 采用聚合策略的最大缩放级别
                     });
                     const { data } = await axios.get(`http://localhost:8083/map/index`, {
                         params: {
@@ -150,6 +154,7 @@ export default ({ type, filterFields }) => {
                         rangeObj.xnJingDu = +mapBounds.getSouthWest().getLng().toFixed(6)
                     }
                     const zoom = map.getZoom()
+                    setModiMapCenter(rangeObj.mapCenter)
                     if (zoom >= 10) {
                         getLocationList(rangeObj)
                     }

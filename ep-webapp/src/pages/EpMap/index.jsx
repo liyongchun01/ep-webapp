@@ -15,6 +15,7 @@ export default () => {
     const [newList, setNewList] = useState([])
     const [filterFields, setFilterFields] = useState({ tian: 30 })
     const [refresh, setRefresh] = useState(true)
+    const [modiMapCenter, setModiMapCenter] = useState([])
 
     const getNewsList = async () => {
         const { data: newone } = await axios.get("http://api.tianapi.com/ncov/index", {
@@ -22,7 +23,9 @@ export default () => {
                 key: "d334721cf6eba2d619a5855420ec352c"
             }
         })
-        setNewList(newone?.newslist[0].news)
+        if (newone) {
+            setNewList(newone?.newslist[0].news)
+        }
     }
 
     useEffect(() => {
@@ -109,7 +112,13 @@ export default () => {
         >
             {
                 refresh && <Card>
-                    <MainMap filterFields={filterFields} type={+key} key={key} />
+                    <MainMap
+                        filterFields={filterFields}
+                        type={+key}
+                        key={key}
+                        modiMapCenter={modiMapCenter}
+                        setModiMapCenter={setModiMapCenter}
+                    />
                 </Card>
             }
 
