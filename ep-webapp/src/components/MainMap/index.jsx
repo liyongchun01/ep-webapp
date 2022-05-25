@@ -5,7 +5,7 @@ import axios from 'axios'
 import { Spin } from 'antd'
 import { callbackFieldsId } from '@/configuration';
 
-export default ({ type, filterFields }) => {
+export default ({ type, filterFields, setModiMapCenter, modiMapCenter }) => {
     const [isLoading, setIsloading] = useState(true)
     const [linkParams, setLinkParams] = useState()
     const mapId = useRef() //  地图实例
@@ -54,7 +54,11 @@ export default ({ type, filterFields }) => {
                 ipLocation
                     .locate()
                     .then(({ result }) => {
-                        map.setCenter(result.location)
+                        if (modiMapCenter.length === 0) {
+                            map.setCenter(result.location)
+                        } else {
+                            map.setCenter(new TMap.LatLng(modiMapCenter[0], modiMapCenter[1]))
+                        }
                     })
 
                 const infoWindowList = Array(10)
@@ -150,6 +154,7 @@ export default ({ type, filterFields }) => {
                         rangeObj.xnJingDu = +mapBounds.getSouthWest().getLng().toFixed(6)
                     }
                     const zoom = map.getZoom()
+                    setModiMapCenter(rangeObj.mapCenter)
                     if (zoom >= 10) {
                         getLocationList(rangeObj)
                     }
