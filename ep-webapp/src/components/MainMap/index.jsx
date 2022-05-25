@@ -44,7 +44,7 @@ export default ({ type, filterFields, setModiMapCenter, modiMapCenter }) => {
                 const formatLatLng = (x, y) => (new TMap.LatLng(x, y))
                 const map = new TMap.Map('container', {
                     center: new TMap.LatLng(40.0402718, 116.2735831),//设置地图中心点坐标
-                    zoom: 12,   //设置地图缩放级别
+                    zoom: 15,   //设置地图缩放级别
                     pitch: 0,  //设置俯仰角
                     rotation: 0    //设置地图旋转角度
                 })
@@ -91,7 +91,7 @@ export default ({ type, filterFields, setModiMapCenter, modiMapCenter }) => {
                         zoomOnClick: false, // 点击簇时放大至簇内点分离
                         gridSize: 60, // 聚合算法的可聚合距离
                         averageCenter: true, // 每个聚和簇的中心是否应该是聚类中所有标记的平均值
-                        maxZoom: 10, // 采用聚合策略的最大缩放级别
+                        maxZoom: 14, // 采用聚合策略的最大缩放级别
                     });
                     const { data } = await axios.get(`http://localhost:8083/map/index`, {
                         params: {
