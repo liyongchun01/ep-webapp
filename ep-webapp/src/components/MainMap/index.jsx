@@ -5,7 +5,7 @@ import axios from 'axios'
 import { Spin } from 'antd'
 import { callbackFieldsId } from '@/configuration';
 
-export default ({ type, filterFields, setModiFields, modiFields }) => {
+export default ({ type, filterFields, setModiFields, modiFields, setRegion }) => {
     const [isLoading, setIsloading] = useState(true)
     const [linkParams, setLinkParams] = useState()
     const mapId = useRef() //  地图实例
@@ -147,6 +147,11 @@ export default ({ type, filterFields, setModiFields, modiFields }) => {
                     const mapCenter = map.getCenter() //获取地图中心点坐标
                     const mapBounds = map.getBounds() //获取当前地图的视野范围
                     const rangeObj = {}
+                    const dynamicCenter = {
+                        lat: mapCenter.lat,
+                        lng: mapCenter.lng
+                    }
+                    setRegion(dynamicCenter)
                     if (mapBounds) {
                         rangeObj.mapCenter = [mapCenter.lat, mapCenter.lng]
                         rangeObj.dbWeiDu = +mapBounds.getNorthEast().getLat().toFixed(6)
