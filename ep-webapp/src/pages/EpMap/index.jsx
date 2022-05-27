@@ -121,8 +121,6 @@ export default () => {
                 }
             })
             getAllFields.resAddress = data?.result?.location
-<<<<<<< HEAD
-=======
             if (data?.status === 347) {
                 setIsError("error")
             } else {
@@ -138,7 +136,6 @@ export default () => {
             setPopoverVisible(false)
             setRefresh(false)
             setRefresh(true)
->>>>>>> d8e43b98bc10babdd9900e5c809e199e356427d8
         }
     }
 
