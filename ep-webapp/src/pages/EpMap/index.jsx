@@ -7,6 +7,7 @@ import { TextLoop } from 'react-text-loop-next';
 import axios from 'axios';
 import styles from './styles.less'
 import moment from 'moment';
+import { CloseOutlined, MenuFoldOutlined } from '@ant-design/icons';
 
 const { RangePicker } = DatePicker;
 export default () => {
@@ -20,6 +21,7 @@ export default () => {
     const [modiFields, setModiFields] = useState({
         modiMapCenter: []
     })
+    const [popoverVisible, setPopoverVisible] = useState(false)
 
     // 逆地址解析
     const reAddressResolution = async () => {
@@ -104,20 +106,23 @@ export default () => {
         }
     }
 
-    const onFinish = (val) => {
-        if (val.timeRange) {
-            const getAllFields = {
-                tian: val.tian,
-                btime: moment(val?.timeRange[0]).format('YYYY-MM-DD hh:mm'),
-                etime: moment(val?.timeRange[1]).format('YYYY-MM-DD hh:mm')
-            }
-            setFilterFields(getAllFields)
-        } else {
-            const getPartOfFields = {
-                tian: val.tian,
-            }
-            setFilterFields(getPartOfFields)
+    const onFinish = async (val) => {
+        const getAllFields = {
+            tian: isNaN(+val.tian) ? null : +val.tian,
+            btime: val.timeRange ? moment(val?.timeRange[0]).format('YYYY-MM-DD hh:mm') : null,
+            etime: val.timeRange ? moment(val?.timeRange[1]).format('YYYY-MM-DD hh:mm') : null
         }
+        if (val.queryAddress) {
+            const { data } = await axios.get(`/ws/geocoder/v1/`, {
+                params: {
+                    address: val.queryAddress,
+                    key: "JYXBZ-3C5CJ-UBRF6-FOPY3-L546H-2BFIS"
+                }
+            })
+            getAllFields.resAddress = data.result.location
+        }
+        setFilterFields(getAllFields)
+        setPopoverVisible(false)
         setRefresh(false)
         setRefresh(true)
     }
@@ -126,21 +131,27 @@ export default () => {
         return (
             <>
                 <Form
-                    className={styles.formStyle}
                     form={form}
                     onFinish={onFinish}
                 >
+                    <Form.Item className={styles.closeStyle}>
+                        <CloseOutlined onClick={() => setPopoverVisible(false)} />
+                    </Form.Item>
+                    <Form.Item label="地点查询" name="queryAddress">
+                        <Input allowClear />
+                    </Form.Item>
                     <Form.Item label="最近几天" name="tian">
                         <Input allowClear />
                     </Form.Item>
-                    <Form.Item label="时间范围" style={{ "margin": "0 10px", "width": "370px" }} name="timeRange">
+                    <Form.Item label="时间范围" name="timeRange">
                         <RangePicker showTime format="YYYY-MM-DD HH:mm" />
                     </Form.Item>
-                    <Form.Item>
+                    <Form.Item style={{ "marginBottom": "5px" }}>
                         <Button type="primary" htmlType="submit">
                             查询
                         </Button>
                     </Form.Item>
+
                 </Form>
             </>
         )
@@ -151,7 +162,17 @@ export default () => {
             tabList={tabList}
             onTabChange={(key) => setKey(key)}
             content={newsAlert()}
-            tabBarExtraContent={filterBar()}
+            tabBarExtraContent={
+                <>
+                    <Popover
+                        visible={popoverVisible}
+                        content={filterBar()}
+                        placement="leftTop"
+                    >
+                        <MenuFoldOutlined onClick={() => setPopoverVisible(true)} />
+                    </Popover>
+                </>
+            }
             extra={outPutWeather()}
         >
             {

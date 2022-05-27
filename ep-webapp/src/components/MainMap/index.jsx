@@ -8,6 +8,7 @@ import { callbackFieldsId } from '@/configuration';
 export default ({ type, filterFields, setModiFields, modiFields, setRegion }) => {
     const [isLoading, setIsloading] = useState(true)
     const [linkParams, setLinkParams] = useState()
+    const getFilter = filterFields
     const mapId = useRef() //  地图实例
     useEffect(() => {
         mainMap()
@@ -56,6 +57,9 @@ export default ({ type, filterFields, setModiFields, modiFields, setRegion }) =>
                     .then(({ result }) => {
                         if (modiFields.modiMapCenter.length === 0) {
                             map.setCenter(result.location)
+                        } else if (getFilter.hasOwnProperty("resAddress")) {
+                            map.setCenter(new TMap.LatLng(getFilter?.resAddress?.lat, getFilter?.resAddress?.lng))
+                            delete getFilter.resAddress // 防止移动中心后 切换tab 依然保持搜索结果
                         } else {
                             map.setCenter(new TMap.LatLng(modiFields.modiMapCenter[0], modiFields.modiMapCenter[1]))
                             map.setZoom(modiFields.modiMapZoom)
