@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { PageContainer } from '@ant-design/pro-layout';
-import { Card, Alert, Button, Skeleton, DatePicker, Form, Input, Popover } from 'antd';
+import { Card, Alert, Button, Skeleton, DatePicker, Form, Input, Popover, message } from 'antd';
 import MainMap from '@/components/MainMap';
 import { tabList } from '@/configuration';
 import { TextLoop } from 'react-text-loop-next';
@@ -22,6 +22,7 @@ export default () => {
         modiMapCenter: []
     })
     const [popoverVisible, setPopoverVisible] = useState(false)
+    const [isError, setIsError] = useState("success")
 
     // 逆地址解析
     const reAddressResolution = async () => {
@@ -119,12 +120,23 @@ export default () => {
                     key: "JYXBZ-3C5CJ-UBRF6-FOPY3-L546H-2BFIS"
                 }
             })
-            getAllFields.resAddress = data.result.location
+            getAllFields.resAddress = data?.result?.location
+            if (data?.status === 347) {
+                setIsError("error")
+            } else {
+                setIsError("success")
+                setFilterFields(getAllFields)
+                setPopoverVisible(false)
+                setRefresh(false)
+                setRefresh(true)
+            }
+        } else {
+            setIsError("success")
+            setFilterFields(getAllFields)
+            setPopoverVisible(false)
+            setRefresh(false)
+            setRefresh(true)
         }
-        setFilterFields(getAllFields)
-        setPopoverVisible(false)
-        setRefresh(false)
-        setRefresh(true)
     }
 
     const filterBar = () => {
@@ -137,7 +149,12 @@ export default () => {
                     <Form.Item className={styles.closeStyle}>
                         <CloseOutlined onClick={() => setPopoverVisible(false)} />
                     </Form.Item>
-                    <Form.Item label="地点查询" name="queryAddress">
+                    <Form.Item
+                        label="地点查询"
+                        name="queryAddress"
+                        validateStatus={isError}
+                        help={isError === "error" ? "请输入正确的地址" : null}
+                    >
                         <Input allowClear />
                     </Form.Item>
                     <Form.Item label="最近几天" name="tian">
@@ -169,7 +186,7 @@ export default () => {
                         content={filterBar()}
                         placement="leftTop"
                     >
-                        <MenuFoldOutlined onClick={() => setPopoverVisible(true)} />
+                        <Button onClick={() => setPopoverVisible(true)} type='primary' icon={<MenuFoldOutlined />}>检索</Button>
                     </Popover>
                 </>
             }
