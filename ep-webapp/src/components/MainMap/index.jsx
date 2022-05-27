@@ -11,7 +11,7 @@ export default ({ type, filterFields, setModiFields, modiFields, setRegion }) =>
     const mapId = useRef() //  地图实例
     useEffect(() => {
         mainMap()
-    }, [type, filterFields])
+    }, [type])
 
     // 防抖函数
     const debounce = (fn, delay) => {
