@@ -119,7 +119,7 @@ export default () => {
                     key: "JYXBZ-3C5CJ-UBRF6-FOPY3-L546H-2BFIS"
                 }
             })
-            getAllFields.resAddress = data.result.location
+            getAllFields.resAddress = data?.result?.location
         }
         setFilterFields(getAllFields)
         setPopoverVisible(false)
