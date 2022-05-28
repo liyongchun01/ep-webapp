@@ -153,7 +153,7 @@
      SELECT LAST_INSERT_ID()
    </selectKey>
 
-    insert ignore into t_guiji (guiji_id, area, starttime,
+   replace into t_guiji (guiji_id, area, starttime,
     endtime, enddate, weidu,
     jindu, guiji_position, user_id,
     order_id)
