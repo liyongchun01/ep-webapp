@@ -42,7 +42,9 @@ export default () => {
                 key: "d334721cf6eba2d619a5855420ec352c"
             }
         })
-        setNewList(newone?.newslist[0].news)
+        if (newone?.newslist) {
+            setNewList(newone?.newslist[0].news)
+        }
     }
 
     // 请求天气
